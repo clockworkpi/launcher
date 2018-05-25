@@ -1,4 +1,9 @@
 #!/bin/bash
-cd /home/cpi/apps/launcher/sys.py/
+
+BASENAME=`dirname "$0"`
+
+cd $BASENAME/sys.py
+
 python run.py
+
 
