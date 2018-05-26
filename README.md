@@ -1,15 +1,12 @@
-# launcher
-The launcher for GameShell
-
+# GameShell launcher
+This is the launcher for GameShell based on 320x240 resolution and D-Pad layout.
 
 # Dependent packages
-
 * validators, numpy, requests, python-mpd2, beeprint, python-pycurl, python-alsaaudio, python-pygame, python-gobject, python-xlib, python-wicd
-* wicd
-* mpd
+* wicd (For Wi-Fi)
+* mpd (For music player)
 
 ## Install dependent packages
-
 ```
 sudo apt-get -y install mpd ncmpcpp git libuser
 sudo apt-get -y install python-wicd  wicd wicd-curses python-pycurl python-alsaaudio python-pygame python-gobject python-xlib   
