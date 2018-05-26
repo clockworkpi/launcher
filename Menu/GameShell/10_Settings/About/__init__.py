@@ -95,10 +95,16 @@ class AboutPage(Page):
         self._Icons = {}
 
     def CpuMhz(self):
-        with open("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq") as f:
-            content = f.readlines()
-        content = [x.strip() for x in content]
 
+        try:
+            with open("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq") as f:
+                content = f.readlines()
+            content = [x.strip() for x in content]
+            
+        except:
+            print("open %s failed" % "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq")
+            content = ["0"]
+        
         mhz = int(content[0]) / 1000.0
 
         cpuscalemhz = {}

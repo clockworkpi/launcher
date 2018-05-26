@@ -9,6 +9,7 @@ from UI.label  import Label
 from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
+from UI.keys_def  import CurKeys
 
 from libs.DBUS  import is_wifi_connected_now,get_wifi_ip
 
@@ -161,6 +162,13 @@ class TinyCloudPage(Page):
 
         self.SetLabels()
 
+    def KeyDown(self,event):
+        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+            if self._FootMsg[3] == "Back":
+                self.ReturnToUpLevelPage()
+                self._Screen.Draw()
+                self._Screen.SwapAndShow()
+            return
         
     def Draw(self):
         if self._DrawOnce == False:
