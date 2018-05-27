@@ -1,6 +1,22 @@
 # GameShell launcher
 This is the launcher for GameShell based on 320x240 resolution and D-Pad layout.
 
+# Directory structure
+```
+/home/cpi/
+├── apps
+│   ├── emulators
+│   └── launcher
+│       ├── Menu
+│       ├── sys.py
+│       └── truetype
+├── games
+│   ├── FreeDM
+│   ├── MAME
+│   └── nxengine
+└── music
+```
+
 # Dependent packages
 * validators, numpy, requests, python-mpd2, beeprint, python-pycurl, python-alsaaudio, python-pygame, python-gobject, python-xlib, python-wicd
 * wicd (For Wi-Fi)
