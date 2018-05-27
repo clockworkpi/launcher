@@ -282,8 +282,10 @@ class UpdatePage(Page):
                             self._Screen.SwapAndShow()
                             
                     elif "gitversion" in json_: ### just use git to  run update
+                        cur_dir = os.getcwd()
+                        os.chdir("/home/cpi/apps/launcher")
                         current_git_version = get_git_revision_short_hash()
-                        
+                        os.chdir(cur_dir)
                         if current_git_version != json_["gitversion"]:
                             self._ConfirmPage._URL = None
                             self._ConfirmPage._MD5 = None
