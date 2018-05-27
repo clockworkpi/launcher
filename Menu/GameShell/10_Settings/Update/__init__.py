@@ -21,6 +21,7 @@ from UI.download     import Download
 from UI.download_process_page import DownloadProcessPage
 
 from libs.roundrects import aa_round_rect
+from libs.DBUS       import is_wifi_connected_now
 
 import config
 
@@ -326,14 +327,20 @@ class UpdatePage(Page):
             self._Screen.SwapAndShow()
 
         if event.key == CurKeys["X"]:
-            if self.CheckUpdate() == True:
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
+            if is_wifi_connected_now():
+                if self.CheckUpdate() == True:
+                    self._Screen.Draw()
+                    self._Screen.SwapAndShow()
+                else:
+                    self._Screen.Draw()
+                    self._Screen._MsgBox.SetText("Checking update failed")
+                    self._Screen._MsgBox.Draw()
+                    self._Screen.SwapAndShow()
             else:
                 self._Screen.Draw()
-                self._Screen._MsgBox.SetText("Checking update failed")
+                self._Screen._MsgBox.SetText("Please Check your Wi-Fi connection")
                 self._Screen._MsgBox.Draw()
-                self._Screen.SwapAndShow()         
+                self._Screen.SwapAndShow()
 
     def Draw(self):
         self.ClearCanvas()

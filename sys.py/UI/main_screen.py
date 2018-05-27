@@ -19,7 +19,7 @@ from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
 from constants   import Width,Height,bg_color
-from util_funcs  import FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
+from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
 from fonts       import fonts
 from keys_def    import CurKeys
 from label       import Label
@@ -29,20 +29,70 @@ from Emulator    import MyEmulator
 class MessageBox(Label):
     _Parent = None
     
-    def Draw(self):
-        my_text = self._FontObj.render( self._Text,True,self._Color)
-        w  = my_text.get_width()
-        h  = my_text.get_height()
-        x  = (self._Parent._Width - w)/2
-        y =  (self._Parent._Height - h)/2
+    def __init__(self):
+        pass
+    
+    def Init(self,text,font_obj,color=pygame.Color(83,83,83)):
+        self._Color = color
+        self._FontObj = font_obj
+        self._Text = text
+
+        self._Width = 0
+        self._Height = 0
+        self._CanvasHWND = pygame.Surface( ( int(self._Parent._Width),int(self._Parent._Height)))
+        self._HWND       = self._Parent._CanvasHWND
+
+    def SetText(self,text):
+        self._Text = text
         
-        padding = 10 
-        pygame.draw.rect(self._CanvasHWND,(255,255,255),(x-padding,y-padding, w+padding*2,h+padding*2))        
+    def Draw(self):
 
-        pygame.draw.rect(self._CanvasHWND,(0,0,0),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        self._CanvasHWND.fill( (255,255,255))
+        
+        words = self._Text.split(' ')
+        space = self._FontObj.size(' ')[0]
+        max_width = self._Parent._Width-40
+        x ,y = (0,0)
+        row_total_width = 0
+        lines = 0
+        
+        for word in words:
+            word_surface = self._FontObj.render(word, True, self._Color)
+            word_width = word_surface.get_width()
+            word_height = word_surface.get_height()
+            row_total_width += word_width
+            if lines == 0:
+                lines += word_height
+            if row_total_width+space  >= max_width:
+                x = 0  # Reset the x.
+                y += word_height  # Start on new row.
+                row_total_width = 0
+                
+                lines += word_height
+                
+            self._CanvasHWND.blit(word_surface, (x, y))
+            x += word_width + space
+            if x > self._Width:
+                self._Width = x
 
-        self._CanvasHWND.blit(my_text,(x,y,w,h))
-
+            if lines >= (self._Parent._Height - 40):
+                break
+        
+        self._Height = lines
+        
+        padding = 5
+        x = (self._Parent._Width - self._Width)/2
+        y = (self._Parent._Height - self._Height)/2
+        print("x %d y %d w %d h %d" %(x,y,self._Width,self._Height ))
+        
+        pygame.draw.rect(self._HWND,(255,255,255),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2))        
+    
+        if self._HWND != None:
+            rect = midRect(self._Parent._Width/2,self._Parent._Height/2,self._Width,self._Height,Width,Height)
+            self._HWND.blit(self._CanvasHWND,rect,(0,0,self._Width,self._Height))
+            
+        pygame.draw.rect(self._HWND,(0,0,0),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2),1)
+            
 
 python_package_flag = "__init__.py"
 emulator_flag       = "action.config"
@@ -74,7 +124,6 @@ class MainScreen(object):
         self._CanvasHWND = pygame.Surface((self._Width,self._Height))
         self._MsgBox= MessageBox()
         self._MsgBox._Parent= self
-        self._MsgBox.SetCanvasHWND(self._CanvasHWND)
         self._MsgBox.Init(" ", self._MsgBoxFont)
         
     def FartherPages(self):
