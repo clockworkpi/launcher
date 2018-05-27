@@ -14,7 +14,7 @@ from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.label  import Label
 from UI.fonts  import fonts
-from UI.util_funcs import midRect,CmdClean
+from UI.util_funcs import midRect,CmdClean,get_git_revision_short_hash
 from UI.keys_def import CurKeys
 from UI.confirm_page import ConfirmPage
 from UI.download     import Download
@@ -110,7 +110,7 @@ class UpdateConfirmPage(ConfirmPage):
             
         if event.key == CurKeys["B"]:
             if self._GIT == True:
-                cmdpath = "cd /home/cpi/apps/launcher ;git pull "
+                cmdpath = "cd /home/cpi/apps/launcher ;git pull; git reset --hard %s " % self._Version
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 self._GIT = False
                 return
@@ -282,20 +282,31 @@ class UpdatePage(Page):
                             self._Screen.SwapAndShow()
                             
                     elif "gitversion" in json_: ### just use git to  run update
-                        if confirm.VERSION != json_["gitversion"]:
+                        cur_dir = os.getcwd()
+                        os.chdir("/home/cpi/apps/launcher")
+                        current_git_version = get_git_revision_short_hash()
+                        os.chdir(cur_dir)
+                        if current_git_version != json_["gitversion"]:
                             self._ConfirmPage._URL = None
                             self._ConfirmPage._MD5 = None
                             self._ConfirmPage._GIT = True
-                        
+                            self._ConfirmPage._Version = json_["gitversion"]
+                            
                             self._Screen.PushPage(self._ConfirmPage)
                             
                             self._Screen.Draw()
                             self._ConfirmPage.SnapMsg("Update to %s ?" % json_["gitversion"] )
                             self._Screen.SwapAndShow()
-                        
+                        else:
+                            self._Screen.Draw()
+                            self._Screen._MsgBox.SetText("Out of update")
+                            self._Screen._MsgBox.Draw()
+                            self._Screen.SwapAndShow()
+                            pygame.time.delay(600)
+                            
                     return True
-                except:
-                    print("r.json error")
+                except Exception, e:
+                    print("r.json() error %s" % str(e))
                 
             else:
                 print(" requests get error %d ", r.status_code)
