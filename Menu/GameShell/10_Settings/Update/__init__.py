@@ -302,7 +302,7 @@ class UpdatePage(Page):
                             self._Screen.SwapAndShow()
                         else:
                             self._Screen.Draw()
-                            self._Screen._MsgBox.SetText("Out of update")
+                            self._Screen._MsgBox.SetText("Launcher is up to date")
                             self._Screen._MsgBox.Draw()
                             self._Screen.SwapAndShow()
                             pygame.time.delay(765)

@@ -83,7 +83,7 @@ class MessageBox(Label):
         padding = 5
         x = (self._Parent._Width - self._Width)/2
         y = (self._Parent._Height - self._Height)/2
-        print("x %d y %d w %d h %d" %(x,y,self._Width,self._Height ))
+#       print("x %d y %d w %d h %d" %(x,y,self._Width,self._Height ))
         
         pygame.draw.rect(self._HWND,(255,255,255),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2))        
     
