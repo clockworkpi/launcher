@@ -110,7 +110,7 @@ class UpdateConfirmPage(ConfirmPage):
             
         if event.key == CurKeys["B"]:
             if self._GIT == True:
-                cmdpath = "cd /home/cpi/apps/launcher ;git pull "
+                cmdpath = "cd /home/cpi/apps/launcher ;git pull; git reset --hard %s " % self._Version
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 self._GIT = False
                 return
@@ -286,7 +286,8 @@ class UpdatePage(Page):
                             self._ConfirmPage._URL = None
                             self._ConfirmPage._MD5 = None
                             self._ConfirmPage._GIT = True
-                        
+                            self._ConfirmPage._Version = json_["gitversion"]
+                            
                             self._Screen.PushPage(self._ConfirmPage)
                             
                             self._Screen.Draw()
