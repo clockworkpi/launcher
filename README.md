@@ -6,7 +6,7 @@ This is the launcher for GameShell based on 320x240 resolution and D-Pad layout.
 /home/cpi/
 ├── apps
 │   ├── emulators
-│   └── launcher
+│   └── launcher <-Here we are
 │       ├── Menu
 │       ├── sys.py
 │       └── truetype
