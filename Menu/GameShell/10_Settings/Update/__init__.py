@@ -14,7 +14,7 @@ from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.label  import Label
 from UI.fonts  import fonts
-from UI.util_funcs import midRect,CmdClean
+from UI.util_funcs import midRect,CmdClean,get_git_revision_short_hash
 from UI.keys_def import CurKeys
 from UI.confirm_page import ConfirmPage
 from UI.download     import Download
@@ -282,7 +282,9 @@ class UpdatePage(Page):
                             self._Screen.SwapAndShow()
                             
                     elif "gitversion" in json_: ### just use git to  run update
-                        if config.VERSION != json_["gitversion"]:
+                        current_git_version = get_git_revision_short_hash()
+                        
+                        if current_git_version != json_["gitversion"]:
                             self._ConfirmPage._URL = None
                             self._ConfirmPage._MD5 = None
                             self._ConfirmPage._GIT = True

@@ -2,6 +2,7 @@
 
 import pygame
 import os
+import subprocess
 
 #from libs import easing
 #from datetime import datetime
@@ -10,6 +11,14 @@ import os
 #from beeprint import pp
 import string
 from Xlib import X,display
+
+
+def get_git_revision_hash():
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
+
+def get_git_revision_short_hash():
+    return subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'])
+
 
 def X_center_mouse():
     d = display.Display()
