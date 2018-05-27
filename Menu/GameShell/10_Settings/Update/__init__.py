@@ -21,6 +21,7 @@ from UI.download     import Download
 from UI.download_process_page import DownloadProcessPage
 
 from libs.roundrects import aa_round_rect
+from libs.DBUS       import is_wifi_connected_now
 
 import config
 
@@ -285,6 +286,8 @@ class UpdatePage(Page):
                         cur_dir = os.getcwd()
                         os.chdir("/home/cpi/apps/launcher")
                         current_git_version = get_git_revision_short_hash()
+                        current_git_version = current_git_version.strip("\n")
+                        current_git_version = current_git_version.strip("\t")
                         os.chdir(cur_dir)
                         if current_git_version != json_["gitversion"]:
                             self._ConfirmPage._URL = None
@@ -302,7 +305,7 @@ class UpdatePage(Page):
                             self._Screen._MsgBox.SetText("Out of update")
                             self._Screen._MsgBox.Draw()
                             self._Screen.SwapAndShow()
-                            pygame.time.delay(600)
+                            pygame.time.delay(765)
                             
                     return True
                 except Exception, e:
@@ -324,14 +327,20 @@ class UpdatePage(Page):
             self._Screen.SwapAndShow()
 
         if event.key == CurKeys["X"]:
-            if self.CheckUpdate() == True:
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
+            if is_wifi_connected_now():
+                if self.CheckUpdate() == True:
+                    self._Screen.Draw()
+                    self._Screen.SwapAndShow()
+                else:
+                    self._Screen.Draw()
+                    self._Screen._MsgBox.SetText("Checking update failed")
+                    self._Screen._MsgBox.Draw()
+                    self._Screen.SwapAndShow()
             else:
                 self._Screen.Draw()
-                self._Screen._MsgBox.SetText("Checking update failed")
+                self._Screen._MsgBox.SetText("Please Check your Wi-Fi connection")
                 self._Screen._MsgBox.Draw()
-                self._Screen.SwapAndShow()         
+                self._Screen.SwapAndShow()
 
     def Draw(self):
         self.ClearCanvas()

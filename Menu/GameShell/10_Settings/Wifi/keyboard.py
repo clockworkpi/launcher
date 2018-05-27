@@ -13,6 +13,8 @@ from UI.util_funcs import midRect
 from UI.keys_def import CurKeys
 from UI.icon_item import IconItem
 
+from libs.roundrects import aa_round_rect
+
 from textarea  import Textarea
 from text_item import TextItem
 from icons     import preload
@@ -43,14 +45,15 @@ class KeyboardSelector(PageSelector):
         
         x       = self._Parent._SecsKeys[sec_idx][row_idx][idx]._PosX
         y       = self._Parent._SecsKeys[sec_idx][row_idx][idx]._PosY
-        w       = self._Parent._SecsKeys[sec_idx][row_idx][idx]._Width
-        h       = self._Parent._SecsKeys[sec_idx][row_idx][idx]._Height
+        w       = self._Parent._SecsKeys[sec_idx][row_idx][idx]._Width+6
+        h       = self._Parent._SecsKeys[sec_idx][row_idx][idx]._Height+1
 
         rect    = midRect(x,y,w,h,self._Parent._Width,self._Parent._Height)
         if rect.width <=0 or rect.height <= 0 :
             return
 
-        pygame.draw.rect(self._Parent._CanvasHWND,(0,0,0),rect,1)
+        aa_round_rect(self._Parent._CanvasHWND,rect, (126,206,244),4,1,(255,255,255))
+#        pygame.draw.rect(self._Parent._CanvasHWND,(0,0,0),rect,1)
 
 class Keyboard(Page):
     _PosX = 0
@@ -328,6 +331,7 @@ class Keyboard(Page):
 
     def Draw(self):
         self.ClearCanvas()
+        self._Ps.Draw()
         for i in range(0,self._SectionNumbers):
             for j in self._SecsKeys[i]:
                 for u in j:
@@ -335,6 +339,5 @@ class Keyboard(Page):
 
         
         self._Textarea.Draw()
-        self._Ps.Draw()
 
 

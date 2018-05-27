@@ -38,7 +38,7 @@ class MultiLabel: ##Multi Line Label
     def SetText(self,text):
         self._Text = text
         
-        self.blit_text(text)
+        self.blit_text(self._CanvasHWND,self._Text,(self._PosX,self._PosY),self._FontObj) 
         
     def Width(self):
         return self._Width

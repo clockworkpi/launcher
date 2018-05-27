@@ -32,7 +32,7 @@ class RomSoConfirmPage(ConfirmPage):
             f = open(config.Battery)
         except IOError:
             print( "RomSoConfirmPage open %s failed" % config.Battery)
-            return 0
+            return 6
         else:
             with f:
                 bat_uevent = {}
