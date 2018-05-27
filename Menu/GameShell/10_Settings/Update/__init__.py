@@ -282,7 +282,7 @@ class UpdatePage(Page):
                             self._Screen.SwapAndShow()
                             
                     elif "gitversion" in json_: ### just use git to  run update
-                        if confirm.VERSION != json_["gitversion"]:
+                        if config.VERSION != json_["gitversion"]:
                             self._ConfirmPage._URL = None
                             self._ConfirmPage._MD5 = None
                             self._ConfirmPage._GIT = True
@@ -292,10 +292,16 @@ class UpdatePage(Page):
                             self._Screen.Draw()
                             self._ConfirmPage.SnapMsg("Update to %s ?" % json_["gitversion"] )
                             self._Screen.SwapAndShow()
-                        
+                        else:
+                            self._Screen.Draw()
+                            self._Screen._MsgBox.SetText("Out of update")
+                            self._Screen._MsgBox.Draw()
+                            self._Screen.SwapAndShow()
+                            pygame.time.delay(600)
+                            
                     return True
-                except:
-                    print("r.json error")
+                except Exception, e:
+                    print("r.json() error %s" % str(e))
                 
             else:
                 print(" requests get error %d ", r.status_code)
