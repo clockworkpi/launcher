@@ -285,6 +285,8 @@ class UpdatePage(Page):
                         cur_dir = os.getcwd()
                         os.chdir("/home/cpi/apps/launcher")
                         current_git_version = get_git_revision_short_hash()
+                        current_git_version = current_git_version.strip("\n")
+                        current_git_version = current_git_version.strip("\t")
                         os.chdir(cur_dir)
                         if current_git_version != json_["gitversion"]:
                             self._ConfirmPage._URL = None
@@ -302,7 +304,7 @@ class UpdatePage(Page):
                             self._Screen._MsgBox.SetText("Out of update")
                             self._Screen._MsgBox.Draw()
                             self._Screen.SwapAndShow()
-                            pygame.time.delay(600)
+                            pygame.time.delay(765)
                             
                     return True
                 except Exception, e:
