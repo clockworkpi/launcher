@@ -82,7 +82,7 @@ class ListPage(Page):
                          ["","Storage",""],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","PowerOFF"]]
+                         ["","PowerOFF","Power off"]]
 
         start_x  = 0
         start_y  = 0

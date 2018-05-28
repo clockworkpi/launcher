@@ -28,6 +28,7 @@ class StoragePage(Page):
     _DskUsg   = None
 
     _HighColor = pygame.Color(51,166,255)
+    _FootMsg    = ["Nav.","","","Back",""]
     
     def __init__(self):
         Page.__init__(self)
@@ -97,7 +98,7 @@ class StoragePage(Page):
 
         rect_ = midRect(self._Width/2,self._Height-30,170,17, Width,Height)
 
-        aa_round_rect(self._CanvasHWND,rect_, (238,238,238),5,0,(238,238,238))
+        aa_round_rect(self._CanvasHWND,rect_, (193,193,193),5,0,(193,193,193))
 
         
         rect2 = midRect(self._Width/2,self._Height-30,int(170*(1.0-usage_percent)),17, Width,Height)

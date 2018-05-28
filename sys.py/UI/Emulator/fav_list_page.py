@@ -383,15 +383,26 @@ class FavListPage(Page):
             
             cur_li = self._MyList[self._PsIndex]
             if cur_li.IsFile():
-                
-                self._Parent.FavDeleteConfirmPage.SetFileName(cur_li._Path)
-                self._Parent.FavDeleteConfirmPage.SetTrashDir(self._Emulator["ROM"])## Fav delete,return to ROM dir,not .Trash
-                
-                self._Screen.PushCurPage()
-                self._Screen.SetCurPage(self._Parent.FavDeleteConfirmPage)
+                """
+                #self._Parent.FavDeleteConfirmPage.SetFileName(cur_li._Path)
+                #self._Parent.FavDeleteConfirmPage.SetTrashDir(self._Emulator["ROM"])## Fav delete,return to ROM dir,not .Trash
+                #self._Screen.PushCurPage()
+                #self._Screen.SetCurPage(self._Parent.FavDeleteConfirmPage)
+                #self._Screen.Draw()
+                #self._Screen.SwapAndShow()
+                """
+
+                #delete directly without confirm dialog
+                stats = os.stat(cur_li._Path)
+                os.chown(self._FileName, stats.st_uid,stats.st_uid) ## normally uid and gid should be the same 
+                self._Screen._MsgBox.SetText("Deleting...")
+                self._Screen._MsgBox.Draw()
+                self._Screen.SwapAndShow()
+                pygame.time.delay(600)
+                self.ReScan()                    
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
-            
+                
     def Draw(self):
         self.ClearCanvas()
         

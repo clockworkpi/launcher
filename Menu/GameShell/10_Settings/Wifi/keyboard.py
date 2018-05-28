@@ -52,7 +52,7 @@ class KeyboardSelector(PageSelector):
         if rect.width <=0 or rect.height <= 0 :
             return
 
-        aa_round_rect(self._Parent._CanvasHWND,rect, (126,206,244),4,1,(255,255,255))
+        aa_round_rect(self._Parent._CanvasHWND,rect, (126,206,244),3,0,(126,206,244))
 #        pygame.draw.rect(self._Parent._CanvasHWND,(0,0,0),rect,1)
 
 class Keyboard(Page):
