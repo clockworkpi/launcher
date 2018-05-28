@@ -67,7 +67,7 @@ class MessageBox(Label):
             if row_total_width+space  >= max_width:
                 x = 0  # Reset the x.
                 y += word_height  # Start on new row.
-                row_total_width = 0
+                row_total_width = word_width
                 
                 lines += word_height
                 
