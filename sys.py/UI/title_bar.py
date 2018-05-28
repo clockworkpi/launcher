@@ -15,6 +15,7 @@ from constants   import ICON_TYPES,Width,Height
 from fonts       import fonts
 from icon_item   import IconItem
 from multi_icon_item import MultiIconItem
+from icon_pool   import MyIconPool
 
 from util_funcs  import midRect,SwapAndShow
 
@@ -228,17 +229,41 @@ class TitleBar:
         self._Icons["soundvolume"] = sound_volume
 
         self.SyncSoundVolume()
+
+
+        round_corners   =  MultiIconItem()
+        round_corners._IconWidth = 10
+        round_corners._IconHeight = 10
+        
+        round_corners._MyType = ICON_TYPES["STAT"]
+        round_corners._Parent = self
+        round_corners._ImgSurf = MyIconPool._Icons["roundcorners"]
+        round_corners.Adjust(0,0,10,10,0)
+
+        self._Icons["round_corners"] = round_corners
         
         if is_wifi_connected_now():
             print("wifi is connected")
             print( wifi_strength())
 
     def ClearCanvas(self):
-        self._CanvasHWND.fill((0,0,0))
+        self._CanvasHWND.fill( self._BgColor )
+
+        self._Icons["round_corners"].NewCoord(5,5)
+        self._Icons["round_corners"]._IconIndex = 0
+        self._Icons["round_corners"].Draw()
+
+        self._Icons["round_corners"].NewCoord(self._Width-5,5)
+        self._Icons["round_corners"]._IconIndex = 1
+        self._Icons["round_corners"].Draw()
+        
+        
+        """
         aa_round_rect(self._CanvasHWND,  
                       (0,0,self._Width,self._Height),self._BgColor,8,0, self._BgColor)
 
         pygame.draw.rect(self._CanvasHWND,self._BgColor,(0,self._Height/2,Width,self._BarHeight), 0 )
+        """
         
     def Draw(self,title):
         self.ClearCanvas()

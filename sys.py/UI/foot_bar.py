@@ -10,7 +10,7 @@ from util_funcs import FileExists,midRect
 from icon_item  import IconItem
 from fonts      import fonts
 from multi_icon_item import MultiIconItem
-
+from icon_pool  import MyIconPool
 from libs.roundrects import aa_round_rect
 
 icon_base_path = "gameshell/footbar_icons/"
@@ -41,7 +41,7 @@ class FootBarIcon(MultiIconItem):
                                           (0,self._IconIndex*self._IconHeight,self._IconWidth,self._IconHeight))
 class FootBar:
     _PosX      = 0
-    _PosY      = Height-20
+    _PosY      = 0
     _Width     = Width
     _Height    = 20
     _BarHeight = 20.5 
@@ -87,6 +87,17 @@ class FootBar:
 
         self.ReadFootBarIcons(icon_base_path)
 
+        round_corners   =  MultiIconItem()
+        round_corners._IconWidth = 10
+        round_corners._IconHeight = 10
+        
+        round_corners._MyType = ICON_TYPES["STAT"]
+        round_corners._Parent = self
+        round_corners._ImgSurf = MyIconPool._Icons["roundcorners"]
+        round_corners.Adjust(0,0,10,10,0)
+
+        self._Icons["round_corners"] = round_corners
+        
     def ResetNavText(self):
         self._Icons["nav"]._Label.SetText("Nav.")
         self._State = "normal"
@@ -128,11 +139,23 @@ class FootBar:
 
     
     def ClearCanvas(self):
-        self._CanvasHWND.fill((0,0,0))
+        self._CanvasHWND.fill( self._BgColor )
+        
+        self._Icons["round_corners"].NewCoord(5,self._Height -5 )
+        self._Icons["round_corners"]._IconIndex = 2
+        self._Icons["round_corners"].Draw()
+
+        self._Icons["round_corners"].NewCoord(self._Width-5,self._Height-5)
+        self._Icons["round_corners"]._IconIndex = 3
+        self._Icons["round_corners"].Draw()
+
+        
+        """
         aa_round_rect(self._CanvasHWND,  
                     (0,0,self._Width,self._Height),self._BgColor,8,0, self._BgColor)
 
         pygame.draw.rect(self._CanvasHWND,self._BgColor,(0,0,Width,self._BarHeight/2), 0 )
+        """
         
     def Draw(self):
         self.ClearCanvas()
@@ -158,4 +181,4 @@ class FootBar:
         pygame.draw.line(self._CanvasHWND,(169,169,169),(0,0),(Width,0),self._BorderWidth)
 
         if self._HWND  != None:
-            self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,Width,self._BarHeight))
+            self._HWND.blit(self._CanvasHWND,(self._PosX,Height - self._Height,Width,self._BarHeight))
