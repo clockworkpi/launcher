@@ -2,6 +2,7 @@
 
 import pygame
 #import math
+import subprocess
 
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
@@ -94,6 +95,19 @@ class AboutPage(Page):
         Page.__init__(self)
         self._Icons = {}
 
+    def Uname(self):
+        
+        out = {}
+        out["key"]="uname"
+        out["label"]= "Kernel:"
+        st = subprocess.check_output(["uname","-srmpo"])
+        st = st.strip("\n")
+        st = st.strip("\t")
+        out["value"] = st
+        self._AList["uname"] = out
+
+        return
+    
     def CpuMhz(self):
 
         try:
@@ -202,8 +216,8 @@ class AboutPage(Page):
         start_y  = 10
         last_height = 0
 
-        for i,u in enumerate( ["processor","armcores","cpuscalemhz","features","memory"] ):
-        #for i,u in enumerate( ["processor","cpucores","cpumhz","flags","memory"] ):
+        for i,u in enumerate( ["processor","armcores","cpuscalemhz","features","memory","uname"] ):
+        #for i,u in enumerate( ["processor","cpucores","cpumhz","flags","memory","uname"] ):
             if u not in self._AList:
                 continue
             
@@ -251,6 +265,7 @@ class AboutPage(Page):
         self.CpuInfo()
         self.MemInfo()
         self.CpuMhz()
+        self.Uname()
         
         self.GenList()
 

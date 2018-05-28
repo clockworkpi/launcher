@@ -152,8 +152,8 @@ class RomListPage(Page):
                         if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
                             dirmap["file"] = v
                             ret.append(dirmap)
-            else:
-                print("not file or dir")
+#            else:
+#                print("not file or dir")
 
         
         return ret
@@ -165,9 +165,7 @@ class RomListPage(Page):
         if alist == False:
             print("listfiles return false")
             return
-        print("rom list alist: ")
-        print(alist)
-        
+                
         self._MyList = []
         start_x  = 0
         start_y  = 0

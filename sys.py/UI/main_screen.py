@@ -46,7 +46,8 @@ class MessageBox(Label):
         self._Text = text
         
     def Draw(self):
-
+        self._Width = 0
+        self._Height = 0
         self._CanvasHWND.fill( (255,255,255))
         
         words = self._Text.split(' ')
@@ -55,7 +56,7 @@ class MessageBox(Label):
         x ,y = (0,0)
         row_total_width = 0
         lines = 0
-        
+
         for word in words:
             word_surface = self._FontObj.render(word, True, self._Color)
             word_width = word_surface.get_width()
@@ -71,7 +72,12 @@ class MessageBox(Label):
                 lines += word_height
                 
             self._CanvasHWND.blit(word_surface, (x, y))
-            x += word_width + space
+            
+            if len(words) == 1: # single line 
+                x += word_width
+            else:
+                x += word_width + space
+            
             if x > self._Width:
                 self._Width = x
 
@@ -83,13 +89,14 @@ class MessageBox(Label):
         padding = 5
         x = (self._Parent._Width - self._Width)/2
         y = (self._Parent._Height - self._Height)/2
-#       print("x %d y %d w %d h %d" %(x,y,self._Width,self._Height ))
+       # print("x %d y %d w %d h %d" %(x,y,self._Width,self._Height ))
         
         pygame.draw.rect(self._HWND,(255,255,255),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2))        
     
         if self._HWND != None:
             rect = midRect(self._Parent._Width/2,self._Parent._Height/2,self._Width,self._Height,Width,Height)
             self._HWND.blit(self._CanvasHWND,rect,(0,0,self._Width,self._Height))
+            #self._HWND.blit(self._CanvasHWND,rect)
             
         pygame.draw.rect(self._HWND,(0,0,0),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2),1)
             

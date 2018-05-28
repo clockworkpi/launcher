@@ -56,7 +56,6 @@ class MultiLabel: ##Multi Line Label
         lines = 0 
         for i,line in enumerate(words[:4]):
             for word in line[:12]:
-                #print(word)
                 word_surface = font.render(word, True, color)
                 word_width = word_surface.get_width()
                 word_height = word_surface.get_height()
@@ -64,7 +63,7 @@ class MultiLabel: ##Multi Line Label
                 if row_total_width+space  >= max_width:
                     x = pos[0]  # Reset the x.
                     y += word_height  # Start on new row.
-                    row_total_width = 0
+                    row_total_width = word_width
                     
                     if lines == 0:
                         lines += word_height
