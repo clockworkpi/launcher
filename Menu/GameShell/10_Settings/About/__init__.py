@@ -86,7 +86,7 @@ class AboutPage(Page):
     _Scrolled = 0
     
     _BGwidth = 320
-    _BGheight = 256
+    _BGheight = 300
 
     _DrawOnce = False
     _Scroller = None
@@ -100,7 +100,7 @@ class AboutPage(Page):
         out = {}
         out["key"]="uname"
         out["label"]= "Kernel:"
-        st = subprocess.check_output(["uname","-srmpo"])
+        st = subprocess.check_output(["uname","-srmo"])
         st = st.strip("\n")
         st = st.strip("\t")
         out["value"] = st
