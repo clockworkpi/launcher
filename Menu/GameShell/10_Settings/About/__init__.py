@@ -278,7 +278,7 @@ class AboutPage(Page):
         
     def ScrollDown(self):
         dis = 10
-        if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 40:
+        if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 50:
             self._PosY -= dis
             self._Scrolled -= dis
         
