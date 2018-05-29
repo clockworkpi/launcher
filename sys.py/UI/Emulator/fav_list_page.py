@@ -118,7 +118,6 @@ class FavListPage(Page):
 
         files_path = glob.glob(path+"/*")
 
-        print(files_path)
         ret = []
 
         for i ,v in enumerate(files_path):
@@ -144,8 +143,8 @@ class FavListPage(Page):
                             dirmap["file"] = v
                             ret.append(dirmap)
                 
-            else:
-                print("not file or dir")
+#            else:
+#                print("not file or dir")
 
         
         return ret
@@ -157,8 +156,8 @@ class FavListPage(Page):
         if alist == False:
             print("listfiles return false")
             return
-        print("fav list alist: ")
-        print(alist)
+#        print("fav list alist: ")
+#        print(alist)
         
         self._MyList = []
         start_x  = 0
