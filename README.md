@@ -1,6 +1,17 @@
 # GameShell launcher
 This is the launcher for GameShell based on 320x240 resolution and D-Pad layout.
 
+# Create the necessary user and group
+* User name: cpi
+* Password: cpi
+* Group ID: 31415 with group name: cpifav
+
+```
+sudo adduser cpi  
+sudo groupadd cpifav -g 31415  
+sudo adduser cpi cpifav  
+```
+
 # Directory structure
 ```
 /home/cpi/
