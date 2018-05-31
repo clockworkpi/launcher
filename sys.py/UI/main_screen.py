@@ -9,7 +9,6 @@ import sys
 from libs import easing
 from datetime import datetime
 
-import base64
 from beeprint import pp
 
 ## local package import
@@ -25,6 +24,8 @@ from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
 from Emulator    import MyEmulator
+
+from skin_manager import SkinManager
 
 class MessageBox(Label):
     _Parent = None
@@ -122,6 +123,7 @@ class MainScreen(object):
     _MsgBox      = None
     _MsgBoxFont  = fonts["veramono20"]
     _IconFont    = fonts["varela15"]
+    _SkinManager = None
     
     def __init__(self):
         self._Pages = []
@@ -132,6 +134,9 @@ class MainScreen(object):
         self._MsgBox= MessageBox()
         self._MsgBox._Parent= self
         self._MsgBox.Init(" ", self._MsgBoxFont)
+
+        self._SkinManager = SkinManager()
+        self._SkinManager.Init()
         
     def FartherPages(self):
         self._PageMax = len(self._Pages)

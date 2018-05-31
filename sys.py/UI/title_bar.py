@@ -31,13 +31,9 @@ class TitleBar:
     _PosY      = 0
     _Width     = Width
     _Height    = 25
-    _IconColor = pygame.Color(114,114,144)
     _BarHeight  = 24.5
     _LOffset    = 3
     _ROffset    = 3
-    _BgColor    = pygame.Color(228,228,228)
-    _TxtColor   = pygame.Color(83,83,83)
-    _BottomLineColor = pygame.Color(169,169,169)
     _Icons      = {}
     _icon_width = 18
     _icon_height = 18
@@ -45,8 +41,11 @@ class TitleBar:
     _CanvasHWND  = None
     _HWND        = None
     _Title       = ""
-
+    
     _InLowBackLight = -1
+
+    _SkinManager = None
+
     
     def __init__(self):
         self._Icons = {}
@@ -240,7 +239,7 @@ class TitleBar:
             print( wifi_strength())
 
     def ClearCanvas(self):
-        self._CanvasHWND.fill( self._BgColor )
+        self._CanvasHWND.fill( self._SkinManager.GiveColor("TitleBg") )
 
         self._Icons["round_corners"].NewCoord(5,5)
         self._Icons["round_corners"]._IconIndex = 0
@@ -267,10 +266,10 @@ class TitleBar:
         time_text_size = fonts["varela12"].size(cur_time)
         title_text_size = fonts["varela16"].size(title)
 
-        self._CanvasHWND.blit(fonts["varela16"].render(title,True,self._TxtColor),midRect(title_text_size[0]/2+self._LOffset,
+        self._CanvasHWND.blit(fonts["varela16"].render(title,True,self._SkinManager.GiveColor("Text")),midRect(title_text_size[0]/2+self._LOffset,
                                                                     title_text_size[1]/2+(self._BarHeight-title_text_size[1])/2,
                                                                     title_text_size[0],title_text_size[1],Width,Height))
-        self._CanvasHWND.blit(fonts["varela12"].render(cur_time,True,self._TxtColor),midRect(Width-time_text_size[0]/2-self._ROffset,
+        self._CanvasHWND.blit(fonts["varela12"].render(cur_time,True,self._SkinManager.GiveColor("Text")),midRect(Width-time_text_size[0]/2-self._ROffset,
                                                                         time_text_size[1]/2+(self._BarHeight-time_text_size[1])/2,
                                                                         time_text_size[0],time_text_size[1],Width,Height))
 
@@ -302,7 +301,7 @@ class TitleBar:
         
         self._Icons["battery"].Draw()
         
-        pygame.draw.line(self._CanvasHWND,self._BottomLineColor,(0,self._BarHeight),(self._Width,self._BarHeight),self._BorderWidth)
+        pygame.draw.line(self._CanvasHWND,self._SkinManager.GiveColor("Line"),(0,self._BarHeight),(self._Width,self._BarHeight),self._BorderWidth)
 
         if self._HWND != None:
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width,self._Height))

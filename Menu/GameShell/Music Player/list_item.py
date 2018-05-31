@@ -65,7 +65,6 @@ class ListItem(object):
     _PlayingProcess = 0 # 0 - 100
     _Parent  = None
     
-    _ActiveBackgroundColor = pygame.Color(232,232,232)
     
     def __init__(self):
         self._Labels = {}

@@ -53,7 +53,8 @@ class FootBar:
     _IconHeight  = 18
     _LabelFont   = fonts["veramono10"]
     _State       = "normal"
-    _BgColor     = pygame.Color(255,255,255)
+    
+    _SkinManager = None
     
     def __init__(self):
         self._Icons = {}
@@ -105,7 +106,7 @@ class FootBar:
         
     def UpdateNavText(self,texts):
         self._State = "tips"
-        my_text = self._LabelFont.render(texts,True,(83,83,83))
+        my_text = self._LabelFont.render(texts,True,self._SkinManager.GiveColor("Text"))
         """
         _w = 0
         for i, x in enumerate(("b","a","y","x")):
@@ -120,7 +121,7 @@ class FootBar:
         final_piece = ""
         for i ,v in enumerate(texts):
             text_slice = texts[:i+1]
-            my_text = self._LabelFont.render(text_slice,True,(83,83,83))
+            my_text = self._LabelFont.render(text_slice,True, self._SkinManager.GiveColor("Text"))
             final_piece = text_slice
             if my_text.get_width() >= left_width:
                 break
@@ -139,7 +140,7 @@ class FootBar:
 
     
     def ClearCanvas(self):
-        self._CanvasHWND.fill( self._BgColor )
+        self._CanvasHWND.fill( self._SkinManager.GiveColor("White") )
         
         self._Icons["round_corners"].NewCoord(5,self._Height -5 )
         self._Icons["round_corners"]._IconIndex = 2
@@ -178,7 +179,7 @@ class FootBar:
                     self._Icons[x].Draw()
 
 
-        pygame.draw.line(self._CanvasHWND,(169,169,169),(0,0),(Width,0),self._BorderWidth)
+        pygame.draw.line(self._CanvasHWND,self._SkinManager.GiveColor("Line"),(0,0),(Width,0),self._BorderWidth)
 
         if self._HWND  != None:
             self._HWND.blit(self._CanvasHWND,(self._PosX,Height - self._Height,Width,self._BarHeight))

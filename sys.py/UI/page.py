@@ -9,18 +9,14 @@ import math
 
 from libs import easing
 
-import base64
-from beeprint import pp
+#import base64
+#from beeprint import pp
 
 ### local import
 from constants    import ALIGN,icon_width,icon_height,Width,Height,ICON_TYPES
 from util_funcs   import midRect
 from keys_def     import CurKeys
-
-from blueselector_b64 import blueselector
-
-
-blueselector_surf = pygame.image.frombuffer(base64.b64decode(blueselector),(92,92),"RGBA")
+from icon_pool    import MyIconPool
 
 class PageStack:
     def __init__(self):
@@ -107,6 +103,7 @@ class Page(object):
 
     _SelectedIconTopOffset=20
     _EasingDur   = 30
+    
     def __init__(self):
         self._Icons = []
 
@@ -132,9 +129,9 @@ class Page(object):
                 if cnt >= (self._IconNumbers -1):
                     break
                 cnt+=1
-                #icon的实际surface是要另行赋值的,这儿只创建空的icon,输入了坐标等信息
+        
         ps = PageSelector()
-        ps._IconSurf = blueselector_surf
+        ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
         ps.Init(icon_width/2, TitleBar._BarHeight+icon_height/2,92,92,128)
         self._Ps = ps
@@ -158,7 +155,7 @@ class Page(object):
             it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
-        ps._IconSurf = blueselector_surf
+        ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
         ps.Init(start_x,start_y,92,92,128)
         
@@ -211,7 +208,7 @@ class Page(object):
                 it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
-        ps._IconSurf = blueselector_surf
+        ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
         ps.Init(start_x,start_y,92,92,128)
         
@@ -247,9 +244,9 @@ class Page(object):
                 if cnt >= (self._IconNumbers -1):
                     break
                 cnt+=1
-                #icon的实际surface是要另行赋值的,这儿只创建空的icon,输入了坐标等信息
+                
         ps = PageSelector()
-        ps._IconSurf = blueselector_surf        
+        ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
         ps.Init(icon_width/2,icon_height/2,92,92,128)
         self._Ps = ps
@@ -291,7 +288,7 @@ class Page(object):
 
        
             ps = PageSelector()
-            ps._IconSurf = blueselector_surf
+            ps._IconSurf = MyIconPool._Icons["blueselector"]
             ps._Parent = self
             ps.Init(start_x,start_y-self._SelectedIconTopOffset,92,92,128)
             
@@ -324,10 +321,10 @@ class Page(object):
             it._Index = i
             it.Init(start_x+i*icon_width,start_y,icon_width,icon_height,0)
             self._Icons.append(it)
-            #icon的实际surface是要另行赋值的,这儿只创建空的icon,输入了坐标等信息
+            
         if self._IconNumbers > 0:
             ps = PageSelector()
-            ps._IconSurf = blueselector_surf        
+            ps._IconSurf = MyIconPool._Icons["blueselector"]
             ps._Parent = self
             ps.Init(start_x,start_y,icon_width+4,icon_height+4,128)
             self._Ps = ps
@@ -546,7 +543,7 @@ class Page(object):
                     print("OnTopLevel ",self._Screen._PageIndex)
 
     def ClearCanvas(self):
-        self._CanvasHWND.fill((255,255,255)) 
+        self._CanvasHWND.fill(self._Screen._SkinManager.GiveColor("White")) 
 
     def ClearIcons(self):
         for i in range(0,self._IconNumbers):
