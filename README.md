@@ -48,7 +48,7 @@ sudo apt-get -y install python-pip
 sudo pip install validators numpy requests python-mpd2
 ```
 
-## Create “mpd_cpi.conf” config
+## Create “.mpd_cpi.conf” config
 
 vim ~/.mpd_cpi.conf
 
