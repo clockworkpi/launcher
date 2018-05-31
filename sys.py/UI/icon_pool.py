@@ -6,12 +6,12 @@ from sys import exit
 import os
 import sys
 
-
+from util_funcs  import SkinMap
 ##pool only store surfaces
 
 class IconPool(object):
 
-    _GameShellIconPath = "gameshell/icons/"
+    _GameShellIconPath = SkinMap("gameshell/icons/")
     _Icons = {}
     def __init__(self):
         self._Icons= {}

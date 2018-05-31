@@ -6,18 +6,19 @@ from sys import exit
 import os
 import sys
 
-from datetime import datetime
-
+import config
 
 if not pygame.font.get_init():
     pygame.font.init()
 
+
+skinpath = "../skin/"+config.SKIN+"/truetype"
 fonts_path = {}
 
-fonts_path["varela"]   = "../truetype/VarelaRound-Regular.ttf"
-fonts_path["veramono"] = "../truetype/VeraMono.ttf"
-fonts_path["noto"]     = "../truetype/NotoSansMono-Regular.ttf"
-fonts_path["notocjk"]     = "../truetype/NotoSansCJK-Regular.ttf"
+fonts_path["varela"]   = "%s/VarelaRound-Regular.ttf" % skinpath
+fonts_path["veramono"] = "%s/VeraMono.ttf" % skinpath
+fonts_path["noto"]     = "%s/NotoSansMono-Regular.ttf" % skinpath
+fonts_path["notocjk"]     = "%s/NotoSansCJK-Regular.ttf" % skinpath
 
 fonts = {}
 fonts["varela12"] = pygame.font.Font(fonts_path["varela"],12)

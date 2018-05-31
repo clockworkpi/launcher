@@ -17,7 +17,7 @@ from icon_item   import IconItem
 from multi_icon_item import MultiIconItem
 from icon_pool   import MyIconPool
 
-from util_funcs  import midRect,SwapAndShow
+from util_funcs  import midRect,SwapAndShow,SkinMap
 
 from config import Battery
 
@@ -25,7 +25,7 @@ from libs.roundrects import aa_round_rect
 
 from libs.DBUS        import is_wifi_connected_now,wifi_strength
 
-icon_base_path = "gameshell/titlebar_icons/"
+icon_base_path = SkinMap("gameshell/titlebar_icons/")
 class TitleBar:
     _PosX      = 0
     _PosY      = 0
@@ -179,13 +179,6 @@ class TitleBar:
         self._CanvasHWND = pygame.Surface((self._Width,self._Height))
         self._HWND       = screen
         
-        icon_snd = IconItem()
-        icon_snd._MyType = ICON_TYPES["STAT"]
-        icon_snd._Parent = self
-        icon_snd._ImageName = icon_base_path+"ic_volume_up_black.png"
-        icon_snd.Adjust(start_x,self._icon_height/2+(self._BarHeight-self._icon_height)/2,self._icon_width,self._icon_height,0)
-        icon_snd.ChangeImgSurfColor(self._IconColor)
-
 
         icon_wifi_status = MultiIconItem()
         icon_wifi_status._MyType = ICON_TYPES["STAT"]
