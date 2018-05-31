@@ -520,7 +520,7 @@ class Page(object):
                 self._Screen._CurrentPage = child_page
         elif cur_icon._MyType == ICON_TYPES["FUNC"]:
             print("IconClick API: %d"%(cur_icon._Index))
-            print("%s"% cur_icon._CmdPath)
+            #print("%s"% cur_icon._CmdPath)
             api_cb = getattr(cur_icon._CmdPath,"API",None)
             if api_cb != None:
                 if callable(api_cb):

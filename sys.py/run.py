@@ -135,9 +135,7 @@ def event_process(event,main_screen):
     global sound_patch
     global everytime_keydown 
     if event != None:
-
         pygame.event.clear()
-        
         if event.type == pygame.ACTIVEEVENT:
             print(" ACTIVEEVENT !")
             return
@@ -270,7 +268,14 @@ def socket_thread(main_screen):
         datagram = conn.recv(1024)
         if datagram:
             tokens = datagram.strip().split()
-            
+
+            if tokens[0].lower() == "esc":
+                escevent = pygame.event.Event(pygame.KEYDOWN,{'scancode':9,'key': 27, 'unicode': u'\x1b', 'mod': 0})
+                current_page_key_down_cb = getattr(main_screen._CurrentPage,"KeyDown",None)
+                if current_page_key_down_cb != None:
+                    if callable( current_page_key_down_cb ):
+                        main_screen._CurrentPage.KeyDown(escevent)
+                
             if tokens[0].lower() == "quit":
                 conn.close()
                 on_exit_cb = getattr(main_screen,"OnExitCb",None)
@@ -282,6 +287,16 @@ def socket_thread(main_screen):
                 exit()
                                 
             if tokens[0].lower() == "poweroff":
+                escevent = pygame.event.Event(pygame.KEYDOWN,{'scancode':9,'key': 27, 'unicode': u'\x1b', 'mod': 0})
+                for i in range(0,5):
+                    current_page_key_down_cb = getattr(main_screen._CurrentPage,"KeyDown",None)
+                    if current_page_key_down_cb != None:
+                        if callable( current_page_key_down_cb ):
+                            main_screen._CurrentPage.KeyDown(escevent)
+                    
+                    if main_screen._MyPageStack.Length() == 0: ## on Top Level 
+                        break
+                
                 if main_screen._CurrentPage._Name == "GameShell":
                     for i in main_screen._CurrentPage._Icons:
                         if i._MyType == ICON_TYPES["FUNC"]:
