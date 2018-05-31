@@ -12,12 +12,12 @@ from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def import CurKeys
 from UI.icon_item import IconItem
+from UI.icon_pool    import MyIconPool
 
 from libs.roundrects import aa_round_rect
 
 from textarea  import Textarea
 from text_item import TextItem
-from icons     import preload
 
 import myvars
 
@@ -135,7 +135,7 @@ class Keyboard(Page):
 
                     if val == "_L" or val == "_R":
                         it  = KeyboardIcon()
-                        it._ImgSurf = preload.ICONS_PRELOAD[val]
+                        it._ImgSurf = MyIconPool._Icons[val]
                         it._Parent = self
                         it._Str = val
                         it.Init(start_x+it._ImgSurf.get_width()/2  ,start_y,it._ImgSurf.get_width(),it._ImgSurf.get_height(),0)

@@ -15,6 +15,7 @@ import time
 import gobject
 
 
+import socket
 import pygame
 from sys import exit
 import os
@@ -29,7 +30,7 @@ else:
 
 
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS
+from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
@@ -254,6 +255,42 @@ def gobject_pygame_event_timer(main_screen):
     
     return True 
 
+
+@misc.threaded
+def socket_thread(main_screen):
+    socket_path = "/tmp/gameshell"
+    if os.path.exists(socket_path):
+        os.remove(socket_path)
+
+    server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    server.bind(socket_path)
+    while True:
+        server.listen(1)
+        conn, addr = server.accept()
+        datagram = conn.recv(1024)
+        if datagram:
+            tokens = datagram.strip().split()
+            
+            if tokens[0].lower() == "quit":
+                conn.close()
+                on_exit_cb = getattr(main_screen,"OnExitCb",None)
+                if on_exit_cb != None:
+                    if callable( on_exit_cb ):
+                        main_screen.OnExitCb(None)
+                
+                gobject_main_loop.quit()
+                exit()
+                                
+            if tokens[0].lower() == "poweroff":
+                if main_screen._CurrentPage._Name == "GameShell":
+                    for i in main_screen._CurrentPage._Icons:
+                        if i._MyType == ICON_TYPES["FUNC"]:
+                            if i._Label.GetText() == "PowerOFF":
+                                api_cb = getattr(i._CmdPath,"API",None)
+                                if api_cb != None:
+                                    if callable(api_cb):
+                                        i._CmdPath.API(main_screen)   
+                
 def big_loop():
     global sound_patch
     
@@ -284,6 +321,8 @@ def big_loop():
     gobject.timeout_add(DT,gobject_pygame_event_poll_timer,main_screen)
     gobject.timeout_add(3000,title_bar.GObjectRoundRobin)
 
+
+    socket_thread(main_screen)
     
     gobject_loop()
     
@@ -319,6 +358,7 @@ if __name__ == '__main__':
     if pygame.image.get_extended() == False:
         print("This pygame does not support PNG")
         exit()
+
     
     big_loop()
     

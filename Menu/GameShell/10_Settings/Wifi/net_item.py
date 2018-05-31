@@ -8,8 +8,8 @@ from UI.label  import Label
 from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.multi_icon_item  import MultiIconItem
+from UI.icon_pool   import MyIconPool
 
-from icons  import preload
 
 class NetItemMultiIcon(MultiIconItem):
     _CanvasHWND = None
@@ -140,13 +140,13 @@ class NetItem(object):
         
 
         lock_icon = NetItemIcon()
-        lock_icon._ImgSurf = preload.ICONS_PRELOAD["lock"]
+        lock_icon._ImgSurf = MyIconPool._Icons["lock"]
         lock_icon._CanvasHWND = self._Parent._CanvasHWND
         lock_icon._Parent = self
         self._Icons["lock"] = lock_icon
         
         done_icon = NetItemIcon()
-        done_icon._ImgSurf = preload.ICONS_PRELOAD["done"]
+        done_icon._ImgSurf = MyIconPool._Icons["done"]
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         

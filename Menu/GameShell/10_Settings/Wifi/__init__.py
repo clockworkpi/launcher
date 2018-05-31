@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*- 
 
-
 ## local UI import
 import pages
 import myvars
@@ -10,11 +9,8 @@ try:
 except:
     print("No icons package")
 """
-from icons import preload
 
 def Init(main_screen):
-    
-    preload.load_icons()
     pages.InitPasswordPage(main_screen)
     pages.InitScanPage(main_screen)
 

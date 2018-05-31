@@ -17,7 +17,6 @@ from UI.util_funcs import midRect
 # ------------------------
 
 import myvars # icons_path
-from icons import preload
 
 class ListItemIcon(IconItem):
 

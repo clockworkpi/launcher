@@ -19,7 +19,7 @@ from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
 from constants   import Width,Height,bg_color
-from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
+from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable,SkinMap
 from fonts       import fonts
 from keys_def    import CurKeys
 from label       import Label
@@ -353,7 +353,7 @@ class MainScreen(object):
         return False
 
     def ReadTheDirIntoPages(self,_dir,pglevel,cur_page):
-
+        
         if FileExists(_dir) == False and os.path.isdir(_dir) == False:
             return
         
@@ -371,8 +371,8 @@ class MainScreen(object):
                     iconitem = IconItem()
                     iconitem._CmdPath = ""
                     iconitem.AddLabel(i2,self._IconFont)
-                    if FileExists(_dir+"/"+i2+".png"):
-                        iconitem._ImageName = _dir+"/"+i2+".png"
+                    if FileExists( SkinMap(_dir+"/"+i2+".png") ):
+                        iconitem._ImageName = SkinMap(_dir+"/"+i2+".png")
                     else:
                         untitled = UntitledIcon()
                         untitled.Init()
@@ -446,8 +446,8 @@ class MainScreen(object):
                     iconitem._CmdPath = _dir+"/"+i
                     MakeExecutable(iconitem._CmdPath)
                     iconitem._MyType  = ICON_TYPES["EXE"]
-                    if FileExists(_dir+"/"+ReplaceSuffix(i2,"png")):
-                        iconitem._ImageName = _dir+"/"+ReplaceSuffix(i2,"png")
+                    if FileExists( SkinMap( _dir+"/"+ReplaceSuffix(i2,"png"))):
+                        iconitem._ImageName = SkinMap(_dir+"/"+ReplaceSuffix(i2,"png"))
                     else:
                         untitled = UntitledIcon()
                         untitled.Init()
