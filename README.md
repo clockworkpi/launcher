@@ -47,3 +47,38 @@ sudo apt-get -y install python-wicd  wicd wicd-curses python-pycurl python-alsaa
 sudo apt-get -y install python-pip   
 sudo pip install validators numpy requests python-mpd2
 ```
+
+## Create “mpd_cpi.conf” config
+
+vim ~/.mpd_cpi.conf
+
+```
+music_directory    "/home/cpi/music"
+playlist_directory    "/home/cpi/music/playlists"
+db_file    "/home/cpi/music/tag_cache"
+log_file    "/tmp/mpd.log"
+pid_file    "/tmp/mpd.pid"
+state_file    "/home/cpi/music/mpd_state"
+sticker_file    "/home/cpi/music/sticker.sql"
+user    "cpi"
+bind_to_address    "/tmp/mpd.socket"
+auto_update    "yes"
+auto_update_depth "3" 
+input {
+    plugin "curl"
+}
+
+audio_output {
+    type    "alsa"
+    name    "My ALSA Device"
+}
+
+audio_output {
+    type    "fifo"
+    name    "my_fifo"
+    path    "/tmp/mpd.fifo"
+    format    "44100:16:2"
+}
+
+filesystem_charset    "UTF-8"
+```
