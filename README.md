@@ -48,7 +48,7 @@ sudo apt-get -y install python-pip
 sudo pip install validators numpy requests python-mpd2
 ```
 
-## Create “.mpd_cpi.conf” config
+# Create “.mpd_cpi.conf” config
 
 vim ~/.mpd_cpi.conf
 
@@ -63,7 +63,7 @@ sticker_file    "/home/cpi/music/sticker.sql"
 user    "cpi"
 bind_to_address    "/tmp/mpd.socket"
 auto_update    "yes"
-auto_update_depth "3" 
+auto_update_depth    "3" 
 input {
     plugin "curl"
 }
