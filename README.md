@@ -27,6 +27,12 @@ sudo adduser cpi cpifav
 │   └── nxengine
 └── music
 ```
+## Create the necessary directories
+```
+mkdir -p /home/cpi/apps/emulators  
+mkdir -p /home/cpi/games  
+mkdir -p /home/cpi/music  
+```
 
 # Dependent packages
 * validators, numpy, requests, python-mpd2, beeprint, python-pycurl, python-alsaaudio, python-pygame, python-gobject, python-xlib, python-wicd
