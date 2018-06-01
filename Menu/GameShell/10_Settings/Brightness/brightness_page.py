@@ -62,7 +62,7 @@ class BSlider(Slider):
         
     def Further(self):
         self._Value+=1
-        if self._Value < 9:
+        if self._Value < 9 :
             if self.OnChangeCB != None:
                 if callable(self.OnChangeCB):
                     self.OnChangeCB(self._Value)
@@ -103,6 +103,9 @@ class BrightnessPage(Page):
     _MySlider = None
     _FootMsg = ["Nav","","","Back","Enter"]
 
+    _Max = 8
+    _Min = 0
+    
     def Init(self):
         self._CanvasHWND = self._Screen._CanvasHWND
         self._Width =  self._Screen._Width
@@ -144,19 +147,16 @@ class BrightnessPage(Page):
         try:
             f = open(BackLight,'w')
         except IOError:
-            print("Open write %s failed" % BackLight)
+            print("Open write %s failed %d" % (BackLight,newbrt+1))
             return False
         else:
             with f:
                 f.write(str(newbrt))
                 return True
         
-    def WhenSliderDrag(self,value): ##value 0-100
-        if value < 0 or value > 8:
+    def WhenSliderDrag(self,value): ##value 
+        if value < self._Min or value > self._Max:
             return
-
-        if value == 0: ## 0 == total black
-            value = 1
         
         self.SetBackLight(value)
         
