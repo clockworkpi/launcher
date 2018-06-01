@@ -202,27 +202,28 @@ def event_process(event,main_screen):
                 exit()
 
             if event.key == pygame.K_KP_PLUS:
-                
-                main_screen.Draw()
-                sound_patch.VolumeUp()
-                sound_patch.Draw()
-                
-                main_screen.SwapAndShow()
-                #pygame.time.delay(200)
-                #main_screen.Draw()
-                #main_screen.SwapAndShow()
+                if main_screen._CurrentPage._Name != "Sound volume": ## name from Menu/GameShell/10_Settings/Sound/pages.py
+                    main_screen.Draw()
+                    sound_patch.VolumeUp()
+                    sound_patch.Draw()
+                    
+                    main_screen.SwapAndShow()
+                    #pygame.time.delay(200)
+                    #main_screen.Draw()
+                    #main_screen.SwapAndShow()
                 
             if event.key == pygame.K_KP_MINUS:
-                main_screen.Draw()
-                
-                sound_patch.VolumeDown()
-                sound_patch.Draw()
-                
-                main_screen.SwapAndShow()
-                #pygame.time.delay(200)
-                #main_screen.Draw()
-                #main_screen.SwapAndShow()
-                
+                if main_screen._CurrentPage._Name != "Sound volume":
+                    main_screen.Draw()
+                    
+                    sound_patch.VolumeDown()
+                    sound_patch.Draw()
+                    
+                    main_screen.SwapAndShow()
+                    #pygame.time.delay(200)
+                    #main_screen.Draw()
+                    #main_screen.SwapAndShow()
+                    
             
             ###########################################################
             if event.key == pygame.K_ESCAPE:
