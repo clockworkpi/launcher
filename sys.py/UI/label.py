@@ -51,6 +51,7 @@ class Label:
         self._CanvasHWND = _canvashwnd
 
     def Draw(self):
+        self._FontObj.set_bold(False) ## avoing same font tangling set_bold to others
         my_text = self._FontObj.render( self._Text,True,self._Color)
         
         self._CanvasHWND.blit(my_text,(self._PosX,self._PosY,self._Width,self._Height))

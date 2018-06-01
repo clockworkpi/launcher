@@ -27,7 +27,7 @@ class ListItemIcon(IconItem):
     
     def Draw(self):
         self._CanvasHWND.blit(self._ImgSurf,(self._PosX,self._PosY+(self._Parent._Height-self._Height)/2,self._Width,self._Height))
-        
+
 class ListItem(object):
     _PosX = 0
     _PosY = 0

@@ -26,7 +26,7 @@ from UI.scroller   import ListScroller
 
 from rom_so_confirm_page import RomSoConfirmPage
 
-from list_item  import ListItem
+from UI.Emulator.list_item  import ListItem
 import config
     
 class RomStack:

@@ -135,7 +135,7 @@ class MPDSpectrumPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","","","Back","Pause"]
+    _FootMsg = ["Nav","","","Back",""]
     _MyList = []
     _ListFont = fonts["veramono12"]
 
