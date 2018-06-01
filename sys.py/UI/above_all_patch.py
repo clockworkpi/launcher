@@ -78,17 +78,20 @@ class SoundPatch(AboveAllPatch):
     def VolumeUp(self):
         m = alsaaudio.Mixer()
         vol = m.getvolume()[0]
-        
+
+ #       print("VolumeUp vol %d " % vol)
         for i,v in enumerate(self.snd_segs):
             if  vol >= v[0] and vol <= v[1]:
                 self._Needle = i
                 break
-        
+          
         self._Needle += 1
+        
         if self._Needle > len(self.snd_segs) -1:
             self._Needle = len(self.snd_segs) -1
-        
-        m.setvolume( self.snd_segs[self._Needle][1] ) ## prefer bigger one  
+
+#        print("Set volume %d" % self.snd_segs[self._Needle][1] )
+        m.setvolume( self.snd_segs[self._Needle][0] +  (self.snd_segs[self._Needle][1] - self.snd_segs[self._Needle][0])/2   ) ## prefer bigger one  
 
         self._Value = self.snd_segs[self._Needle][1]
 
