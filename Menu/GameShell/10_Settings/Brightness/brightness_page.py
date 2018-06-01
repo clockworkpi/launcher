@@ -151,7 +151,7 @@ class BrightnessPage(Page):
             return False
         else:
             with f:
-                f.write(str(newbrt+1
+                f.write(str(newbrt+1))
                 return True
         
     def WhenSliderDrag(self,value): ##value 
