@@ -393,7 +393,7 @@ class FavListPage(Page):
 
                 #delete directly without confirm dialog
                 stats = os.stat(cur_li._Path)
-                os.chown(self._FileName, stats.st_uid,stats.st_uid) ## normally uid and gid should be the same 
+                os.chown(cur_li._Path, stats.st_uid,stats.st_uid) ## normally uid and gid should be the same 
                 self._Screen._MsgBox.SetText("Deleting...")
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
