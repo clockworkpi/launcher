@@ -414,7 +414,14 @@ class FavListPage(Page):
                 self._Ps.Draw()
                 
                 for i in self._MyList:
+                    if i._PosY > self._Height + self._Height/2:
+                        break
+
+                    if i._PosY < 0:
+                        continue
+                    
                     i.Draw()
+                
                 self._Scroller.UpdateSize( len(self._MyList)*ListItem._Height, self._PsIndex*ListItem._Height)
                 self._Scroller.Draw()
     

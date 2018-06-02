@@ -326,6 +326,12 @@ class MusicLibListPage(Page):
                         i._Active = True
                     else:
                         i._Active = False
+
+                    if i._PosY > self._Height + self._Height/2:
+                        break
+
+                    if i._PosY < 0:
+                        continue
                     
                     i.Draw()
                     
@@ -339,5 +345,11 @@ class MusicLibListPage(Page):
                         i._Active = True
                     else:
                         i._Active = False
-                    
+
+                    if i._PosY > self._Height + self._Height/2:
+                        break
+
+                    if i._PosY < 0:
+                        continue
+                        
                     i.Draw()    
