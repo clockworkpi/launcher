@@ -56,8 +56,7 @@ class BSlider(Slider):
         scale.Adjust(0,0,82,63,0)
         self._Icons["scale"] = scale
 
-    def SetValue(self,brt):#pct 0-100
-        
+    def SetValue(self,brt):
         self._Value = brt
         
     def Further(self):
@@ -89,6 +88,7 @@ class BSlider(Slider):
         icon_idx = self._Value - 1
         if icon_idx < 0:
             icon_idx = 0
+        
         self._Icons["scale"]._IconIndex = icon_idx
         self._Icons["scale"].Draw()
         """
