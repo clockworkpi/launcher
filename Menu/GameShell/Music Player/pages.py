@@ -28,7 +28,7 @@ def InitListPage(main_screen):
     myvars.PlayListPage = PlayListPage()
     
     myvars.PlayListPage._Screen = main_screen
-    myvars.PlayListPage._Name = "Music List"
+    myvars.PlayListPage._Name = "Play List"
     myvars.PlayListPage.Init()
 
 def InitSpectrumPage(main_screen):
