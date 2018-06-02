@@ -316,6 +316,9 @@ class RomListPage(Page):
     def Click(self):
         if len(self._MyList) == 0:
             return
+
+        if self._PsIndex > len(self._MyList) - 1:
+            return
         
         cur_li = self._MyList[self._PsIndex]
         
