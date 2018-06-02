@@ -253,7 +253,7 @@ class MusicLibListPage(Page):
         
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["Left"]:
+        if event.key == CurKeys["Menu"] or event.key == CurKeys["Left"] or event.key == CurKeys["A"]:
             
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
