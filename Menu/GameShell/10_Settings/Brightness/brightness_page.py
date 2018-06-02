@@ -62,18 +62,18 @@ class BSlider(Slider):
         
     def Further(self):
         self._Value+=1
-        if self._Value < 9 :
-            if self.OnChangeCB != None:
-                if callable(self.OnChangeCB):
-                    self.OnChangeCB(self._Value)
-        else:
-            self._Value = 8
+        if self._Value > 9:
+            self._Value = 9
+            
+        if self.OnChangeCB != None:
+            if callable(self.OnChangeCB):
+                self.OnChangeCB(self._Value)
                     
     def StepBack(self):
         self._Value-=1
 
-        if self._Value < 0:
-            self._Value = 0
+        if self._Value < 1:
+            self._Value = 1
 
         if self.OnChangeCB != None:
             if callable(self.OnChangeCB):
@@ -86,7 +86,10 @@ class BSlider(Slider):
 
         self._Icons["scale"].NewCoord(self._Width/2,self._Height/2 )
 
-        self._Icons["scale"]._IconIndex = self._Value
+        icon_idx = self._Value - 1
+        if icon_idx < 0:
+            icon_idx = 0
+        self._Icons["scale"]._IconIndex = icon_idx
         self._Icons["scale"].Draw()
         """
         pygame.draw.line(self._CanvasHWND,(255,0,0), (posx,self._PosY),(self._Width,self._PosY),3) ## range line
@@ -103,8 +106,6 @@ class BrightnessPage(Page):
     _MySlider = None
     _FootMsg = ["Nav","","","Back","Enter"]
 
-    _Max = 8
-    _Min = 0
     
     def Init(self):
         self._CanvasHWND = self._Screen._CanvasHWND
@@ -141,23 +142,21 @@ class BrightnessPage(Page):
 
     def OnLoadCb(self):
          brt  = self.ReadBackLight()
+         
          self._MySlider.SetValue( brt)
          
     def SetBackLight(self,newbrt):
         try:
             f = open(BackLight,'w')
         except IOError:
-            print("Open write %s failed %d" % (BackLight,newbrt+1))
+            print("Open write %s failed %d" % (BackLight,newbrt))
             return False
         else:
             with f:
-                f.write(str(newbrt+1))
+                f.write(str(newbrt))
                 return True
         
     def WhenSliderDrag(self,value): ##value 
-        if value < self._Min or value > self._Max:
-            return
-        
         self.SetBackLight(value)
         
     def KeyDown(self,event):
