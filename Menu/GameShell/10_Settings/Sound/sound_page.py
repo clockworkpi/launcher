@@ -32,8 +32,9 @@ class SoundSlider(Slider):
     _NeedleSurf = None
     _Scale      = None
     _Parent     = None
-    _Segs       = [0,15,29, 45,55,65, 75,90,100]
+    
     snd_segs = [ [0,20],[21,40],[41,50],[51,60],[61,70],[71,85],[86,90],[91,95],[96,100] ]
+
     
     def __init__(self):
         Slider.__init__(self)
@@ -58,20 +59,23 @@ class SoundSlider(Slider):
         self._Scale._IconHeight = 63
         self._Scale.Adjust(0,0,82,63,0)
         
-    def SetValue(self,pct):#pct 0-100
-
+    def SetValue(self,vol):#pct 0-100
         for i,v in enumerate(self.snd_segs):
-            if pct  >= v[0] and pct <= v[1]:
-                self._Value = i
+            if vol  >= v[0] and vol <= v[1]:
+                self._Value = i # self._Value :  0 - 8
+                break
         
     def Further(self):
         self._Value+=1
-        if self._Value < len(self._Segs):
-            if self.OnChangeCB != None:
-                if callable(self.OnChangeCB):
-                    self.OnChangeCB( self._Segs[ self._Value ] )
-        else:
-            self._Value = len(self._Segs)-1
+
+        if self._Value > len(self.snd_segs)-1:
+            self._Value = len(self.snd_segs) -1
+
+        vol = self.snd_segs[self._Value][0] + (self.snd_segs[self._Value][1] - self.snd_segs[self._Value][0])/2 
+        
+        if self.OnChangeCB != None:
+            if callable(self.OnChangeCB):
+                self.OnChangeCB( vol )
         
     def StepBack(self):
         self._Value-=1
@@ -79,9 +83,11 @@ class SoundSlider(Slider):
         if self._Value < 0:
             self._Value = 0
 
+        vol =  self.snd_segs[self._Value][0]
+        
         if self.OnChangeCB != None:
             if callable(self.OnChangeCB):
-                self.OnChangeCB(self._Segs[self._Value] )
+                self.OnChangeCB( vol )
     
     def Draw(self):
         
@@ -89,7 +95,7 @@ class SoundSlider(Slider):
         self._BGpng.Draw()
 
         self._Scale.NewCoord(self._Width/2,self._Height/2)
-        
+
         self._Scale._IconIndex = self._Value
         
         self._Scale.Draw()
