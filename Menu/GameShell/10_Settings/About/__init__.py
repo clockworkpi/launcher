@@ -204,7 +204,7 @@ class AboutPage(Page):
                     memory = {}
                     memory["key"] = "memory"
                     memory["label"] = "Memory:"
-                    memory["value"] = str( int(parts[1].strip())/1000.0) +" Mb"
+                    memory["value"] = str( int(parts[1].strip())/1000.0) +" MB"
                     self._AList["memory"] = memory                    
                     break
         
