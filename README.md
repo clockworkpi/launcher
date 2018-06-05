@@ -1,5 +1,6 @@
 # GameShell launcher
 This is the launcher for GameShell based on 320x240 resolution and D-Pad layout.
+![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
 
 # Create the necessary user and group
 * User name: cpi
