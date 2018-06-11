@@ -312,7 +312,13 @@ class FavListPage(Page):
             # check ROM_SO exists
             if FileExists(self._Emulator["ROM_SO"]):
                 escaped_path = CmdClean( cur_li._Path)
-                cmdpath = " ".join( (self._Emulator["LAUNCHER"],self._Emulator["ROM_SO"], escaped_path))
+                
+                custom_config = ""
+                if self._Emulator["RETRO_CONFIG"] != "" and len(self._Emulator["RETRO_CONFIG"]) > 5:
+                    custom_config = " -c " + self._Emulator["RETRO_CONFIG"]
+                        
+                cmdpath = " ".join( (self._Emulator["LAUNCHER"],self._Emulator["ROM_SO"], custom_config, escaped_path))
+                
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 return
             else:
