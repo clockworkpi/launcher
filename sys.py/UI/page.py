@@ -186,8 +186,8 @@ class Page(object):
             it = self._Icons[0]
             it._Parent = self
             it._Index = 0
-            it.Adjust(start_x,start_y,icon_width-6,icon_height-6,0)
-            it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
+            it.Adjust(start_x,start_y,icon_width,icon_height,0)
+            #it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         elif self._IconNumbers == 2:
             start_x = (self._Width - self._PageIconMargin - self._IconNumbers*icon_width) / 2 + icon_width/2
@@ -197,17 +197,16 @@ class Page(object):
                 it = self._Icons[i]
                 it._Parent = self
                 it._Index = i
-                it.Adjust(start_x+i*self._PageIconMargin + i*icon_width,start_y, icon_width-6, icon_height-6,0)
-                it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
+                it.Adjust(start_x+i*self._PageIconMargin + i*icon_width,start_y, icon_width, icon_height,0)
+                #it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
                 
         elif self._IconNumbers > 2:
             for i in range(0,self._IconNumbers):
                 it = self._Icons[i]
                 it._Parent = self
                 it._Index = i
-                it.Adjust(start_x+i*self._PageIconMargin + i*icon_width,start_y,icon_width-6,icon_height-6,0)
-                
-                it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
+                it.Adjust(start_x+i*self._PageIconMargin + i*icon_width,start_y,icon_width,icon_height,0)
+                #it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
         ps._IconSurf = MyIconPool._Icons["blueselector"]
