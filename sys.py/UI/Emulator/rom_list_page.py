@@ -140,7 +140,7 @@ class RomListPage(Page):
                     ret.append(dirmap)
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
-                if stats.st_gid == self._Parent._FavGID:
+                if stats.st_gid == self._Parent._FavGID: ##skip fav roms
                     continue
                 
                 bname = os.path.basename(v)  ### filter extension
