@@ -136,6 +136,7 @@ class MainScreen(object):
     _IconFont    = fonts["varela15"]
     _SkinManager = None
     
+    
     def __init__(self):
         self._Pages = []
         self._MyPageStack = PageStack()

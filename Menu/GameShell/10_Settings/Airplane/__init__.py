@@ -88,8 +88,6 @@ class AirplanePage(Page):
 
     _DrawOnce = False
     _Scroller = None
-
-    _InAirPlaneMode = False
     
     def __init__(self):
         Page.__init__(self)
@@ -143,22 +141,20 @@ class AirplanePage(Page):
             self._Scrolled += dis
 
     def ToggleMode(self):
-        print("ToggleMode")
         out = commands.getstatusoutput('rfkill list | grep yes | cut -d " " -f3')
         print out
         if out[1] == "yes":
-            self._InAirPlaneMode = True
-
             self._Screen._MsgBox.SetText("Turning On")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("rfkill unblock all")
+            self._Screen._TitleBar._InAirPlaneMode = False
         
         else:
-            self._InAirPlaneMode = False
             self._Screen._MsgBox.SetText("Turning Off")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("rfkill block all")
-            
+            self._Screen._TitleBar._InAirPlaneMode = True
+
         
     def OnLoadCb(self):
         self._Scrolled = 0
@@ -166,9 +162,9 @@ class AirplanePage(Page):
         self._DrawOnce = False
         out = commands.getstatusoutput('rfkill list | grep yes | cut -d " " -f3')
         if out[1] == "yes":
-            self._InAirPlaneMode = True
+            self._Screen._TitleBar._InAirPlaneMode = True
         else:
-            self._InAirPlaneMode = False
+            self._Screen._TitleBar._InAirPlaneMode = False
         
         
     def OnReturnBackCb(self):
