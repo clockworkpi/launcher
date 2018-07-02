@@ -59,6 +59,8 @@ myscriptname = os.path.basename(os.path.realpath(__file__))
 
 everytime_keydown = time.time()
 
+passout_time_stage = 0
+
 last_brt = -1
 
 def gobject_loop():
@@ -73,7 +75,7 @@ def gobject_loop():
 
 
 def RestoreLastBackLightBrightness(main_screen):
-    global last_brt
+    global last_brt,passout_time_stage
     
     if last_brt == -1:
         return
@@ -95,17 +97,21 @@ def RestoreLastBackLightBrightness(main_screen):
                 f.close()
                 last_brt = -1
                 main_screen._TitleBar._InLowBackLight = -1
+                passout_time_stage = 0
             else:
                 
                 f.close()
                 return
 
 def InspectionTeam(main_screen):
-    global everytime_keydown,last_brt
+    global everytime_keydown,last_brt,passout_time_stage
     
     cur_time = time.time()
-
-    if cur_time - everytime_keydown > 40:
+    time_1 = config.PowerLevels[config.PowerLevel][0]
+    time_2 = config.PowerLevels[config.PowerLevel][1]
+    time_3 = config.PowerLevels[config.PowerLevel][2]
+    
+    if cur_time - everytime_keydown > time_1 and passout_time_stage = 0:
         print("timeout, dim screen %d" % int(cur_time - everytime_keydown))
 
         try:
@@ -119,6 +125,7 @@ def InspectionTeam(main_screen):
                 brt=int(content[0])
                 if brt > 1:
                     last_brt = brt ## remember brt for restore
+
                     brt = 1
                     f.seek(0)
                     f.write(str(brt))
@@ -126,7 +133,35 @@ def InspectionTeam(main_screen):
                     f.close()
 
                     main_screen._TitleBar._InLowBackLight = 0
-                    
+
+        if time_2 != 0:
+            passout_time_stage = 1 # next 
+        everytime_keydown = cur_time
+    
+    elif cur_time - everytime_keydown > time_2 and passout_time_stage = 1:
+        print("timeout, close screen %d" % int(cur_time - everytime_keydown))
+
+        try:
+            f = open(config.BackLight,"r+")
+        except IOError:
+            pass
+        else:
+            with f:
+                brt = 0
+                f.seek(0)
+                f.write(str(brt))
+                f.truncate()
+                f.close()
+                main_screen._TitleBar._InLowBackLight = 0
+
+        if time_3 != 0:
+            passout_time_stage = 2 # next 
+        everytime_keydown = cur_time
+        
+    elif cur_time - everytime_keydown > time_3 and passout_time_stage = 1:
+        print("Power Off now")
+        
+        passout_time_stage = 0
         everytime_keydown = cur_time
         
     return True
@@ -183,6 +218,11 @@ def event_process(event,main_screen):
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
+            return
+
+        if event.type == POWEROPT:
+            everytime_keydown = time.time()
+
             return
         if event.type == pygame.KEYUP:
             
@@ -377,6 +417,13 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
+
+    with open(".powerlevel","r") as f:
+        powerlevel = f.read()
+    
+    powerlevel = powerlevel.strip()
+    if powerlevel != "":
+        config.PowerLevel = powerlevel
     
     big_loop()
     

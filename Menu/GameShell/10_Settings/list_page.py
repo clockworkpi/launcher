@@ -77,6 +77,7 @@ class ListPage(Page):
 
         #                ""   pkgname, label
         alist         = [["","Airplane","Airplane Mode"],
+                         ["","PowerOptions","Power Options"],
                          ["","Wifi","Wi-Fi"],
                          ["","Sound","Sound Volume"],
                          ["","Brightness","BackLight Brightness"],
