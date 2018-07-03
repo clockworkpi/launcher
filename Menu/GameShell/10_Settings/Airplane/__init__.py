@@ -190,6 +190,7 @@ class AirplanePage(Page):
 
         else:
             data = self.EasingData(0,43)
+            data.reverse()
             for _,v in enumerate(data):
                 self._airwire_y += v
                 self._dialog_index = 3
