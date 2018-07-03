@@ -167,7 +167,7 @@ class InfoPage(Page):
         else:
             time2["value"] = "%d secs" % self._Time2
             
-        time2["label"] = "Screen off"
+        time2["label"] = "Screen OFF"
 
         time3 = {}
         time3["key"] = "time3"
@@ -176,7 +176,7 @@ class InfoPage(Page):
             time3["value"] = "Never"
         else:
             time3["value"] = "%d secs" % self._Time3
-        time3["label"] = "Power Off"
+        time3["label"] = "Power OFF"
         
         self._AList["time1"] = time1
         self._AList["time2"] = time2
