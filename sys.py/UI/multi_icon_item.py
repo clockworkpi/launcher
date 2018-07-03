@@ -23,6 +23,27 @@ class MultiIconItem(IconItem):
             self._ImgSurf = pygame.image.load( self._ImageName ).convert_alpha() 
             
 
+    def DrawTopLeft(self):
+        if self._Align==ALIGN["VCenter"]: #default
+            if self._Label != None:
+                self._Label._PosX = self._PosX - self._Label._Width/2 + self._Parent._PosX
+                self._Label._PosY = self._PosY + self._Height/2 +6  + self._Parent._PosY
+                
+        elif self._Align ==ALIGN["HLeft"]:
+            if self._Label != None:
+                self._Label._PosX = self._PosX + self._Width/2 + 3 + self._Parent._PosX
+                self._Label._PosY = self._PosY - self._Label._Height/2 + self._Parent._PosY
+
+        if self._Label!=None:
+            self._Label.Draw()
+
+
+        if self._ImgSurf != None:
+            self._Parent._CanvasHWND.blit(self._ImgSurf,pygame.Rect(self._PosX+self._Parent._PosX,
+                                                                    self._PosY+self._Parent._PosY,
+                                                                    self._Width,self._Height),
+                                          (0,self._IconIndex*self._IconHeight,self._IconWidth,self._IconHeight))
+        
     def Draw(self):
         if self._Align==ALIGN["VCenter"]: #default
             if self._Label != None:
@@ -36,9 +57,11 @@ class MultiIconItem(IconItem):
 
         if self._Label!=None:
             self._Label.Draw()
-        
+
+
         if self._ImgSurf != None:
             self._Parent._CanvasHWND.blit(self._ImgSurf,midRect(self._PosX+self._Parent._PosX,
                                                                 self._PosY+self._Parent._PosY,
                                                                 self._Width,self._Height,Width,Height),
                                           (0,self._IconIndex*self._IconHeight,self._IconWidth,self._IconHeight))
+            
