@@ -125,15 +125,11 @@ class FavListPage(Page):
             if os.path.isdir(v) and self._Emulator["FILETYPE"] == "dir": ## like DOSBOX
                 gameshell_bat = self._Emulator["EXT"][0]
                 if FileExists(v+"/"+gameshell_bat):
-                    stats = os.stat(v)
-                    if stats.st_gid != self._Parent._FavGID: ## only favs
-                        continue
-                    
                     dirmap["gamedir"] = v.decode("utf8")
                     ret.append(dirmap)            
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
-                if stats.st_gid != self._Parent._FavGID: ## only favs
+                if stats.st_gid != self._Parent._FavGID:
                     continue
                 bname = os.path.basename(v)  ### filter extension
                 if len(bname)> 1:
