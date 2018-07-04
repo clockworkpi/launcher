@@ -3,6 +3,7 @@
 import pygame
 import os
 import sys
+import commands
 
 from datetime import datetime
 
@@ -46,6 +47,7 @@ class TitleBar:
 
     _SkinManager = None
 
+    _InAirPlaneMode = False
     
     def __init__(self):
         self._Icons = {}
@@ -237,7 +239,13 @@ class TitleBar:
         if is_wifi_connected_now():
             print("wifi is connected")
             print( wifi_strength())
-
+        else:
+            out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
+            if out[1] == "yes":
+                self._InAirPlaneMode = True
+            else:
+                self._InAirPlaneMode = False
+            
     def ClearCanvas(self):
         self._CanvasHWND.fill( self._SkinManager.GiveColor("TitleBg") )
 
@@ -291,9 +299,13 @@ class TitleBar:
             else:
                 self._Icons["wifistatus"]._IconIndex = 0
                 self._Icons["wifistatus"].Draw()
-                print("strength error")
+                print("wifi strength error")
         else:
-            self._Icons["wifistatus"]._IconIndex = 0
+            if self._InAirPlaneMode == False:
+                self._Icons["wifistatus"]._IconIndex = 0
+            else:
+                self._Icons["wifistatus"]._IconIndex = 5 ## airplane mode icon
+            
             self._Icons["wifistatus"].NewCoord(start_x+self._icon_width+5,self._icon_height/2+(self._BarHeight-self._icon_height)/2)
             self._Icons["wifistatus"].Draw()
         

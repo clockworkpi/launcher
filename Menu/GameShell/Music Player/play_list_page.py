@@ -64,6 +64,7 @@ class PlayListPage(Page):
     _ListFont = fonts["notosanscjk15"]
 
     _Scroller = None
+    _CurSongTime="0:0"
     
     _BGpng  = None
     _BGwidth = 75
@@ -110,12 +111,13 @@ class PlayListPage(Page):
             
         self.SyncPlaying()
 
-    def GObjectInterval(self): ## 250 ms 
+    def GObjectInterval(self): ## 250 ms
+        self.SyncPlaying()
+        
         if self._Screen.CurPage() == self:
-            self.SyncPlaying()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-
+            
         return True
     
     def SyncPlaying(self):
@@ -138,13 +140,14 @@ class PlayListPage(Page):
                         else:
                             self._MyList[posid]._Playing = True
                     if "time" in current_song:
+                        self._CurSongTime = current_song["time"]
                         times_ = current_song["time"].split(":")
                         if len(times_)> 1:
                             cur = float(times_[0])
                             end = float(times_[1])
                             pros = int((cur/end)*100.0)
                             self._MyList[posid]._PlayingProcess = pros
-                        
+                            
                 
     def InPlayList(self,path):
         for i,v in enumerate(self._MyList):
@@ -271,6 +274,7 @@ class PlayListPage(Page):
             self.Click()
 
         if event.key == CurKeys["Start"]: # start spectrum
+            myvars.SpectrumPage._Neighbor = self
             self._Screen.PushPage(myvars.SpectrumPage)
             self._Screen.Draw()
             self._Screen.SwapAndShow()

@@ -45,8 +45,8 @@ class MessageBox(Label):
 
     def SetText(self,text):
         self._Text = text
-        
-    def Draw(self):
+
+    def PreDraw(self):
         self._Width = 0
         self._Height = 0
         self._CanvasHWND.fill( (255,255,255))
@@ -87,20 +87,31 @@ class MessageBox(Label):
         
         self._Height = lines
         
-        padding = 5
-        x = (self._Parent._Width - self._Width)/2
-        y = (self._Parent._Height - self._Height)/2
-       # print("x %d y %d w %d h %d" %(x,y,self._Width,self._Height ))
+    def DrawWith(self, x_,y_, withborder):
         
-        pygame.draw.rect(self._HWND,(255,255,255),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2))        
+        self.PreDraw()
+
+        x_ = x_ - self._Width/2
+        y_ = y_ - self._Height/2
+        
+        padding = 5
+       
+        pygame.draw.rect(self._HWND,(255,255,255),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2))        
     
         if self._HWND != None:
-            rect = midRect(self._Parent._Width/2,self._Parent._Height/2,self._Width,self._Height,Width,Height)
+            rect = pygame.Rect(x_,y_,self._Width,self._Height)
             self._HWND.blit(self._CanvasHWND,rect,(0,0,self._Width,self._Height))
             #self._HWND.blit(self._CanvasHWND,rect)
-            
-        pygame.draw.rect(self._HWND,(0,0,0),(x-padding,y-padding, self._Width+padding*2,self._Height+padding*2),1)
-            
+
+        if withborder == True:
+            pygame.draw.rect(self._HWND,(0,0,0),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
+        
+    def Draw(self):        
+        x = (self._Parent._Width)/2
+        y = (self._Parent._Height)/2
+        
+        self.DrawWith(x,y,True)
+        
 
 python_package_flag = "__init__.py"
 emulator_flag       = "action.config"
@@ -124,6 +135,7 @@ class MainScreen(object):
     _MsgBoxFont  = fonts["veramono20"]
     _IconFont    = fonts["varela15"]
     _SkinManager = None
+    
     
     def __init__(self):
         self._Pages = []
@@ -406,6 +418,7 @@ class MainScreen(object):
                         obj["ROM"] = ""
                         obj["ROM_SO"] =""
                         obj["EXT"]    = []
+                        obj["FILETYPE"] = "file"
                         obj["LAUNCHER"] = ""
                         obj["TITLE"]    = "Game"
                         obj["SO_URL"]   = ""

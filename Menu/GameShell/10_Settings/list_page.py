@@ -10,7 +10,7 @@ from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
-from UI.util_funcs import midRect
+from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys
 from UI.scroller   import ListScroller
 
@@ -76,19 +76,21 @@ class ListPage(Page):
         self._PsIndex = 0
 
         #                ""   pkgname, label
-        alist         = [["","Wifi","Wi-Fi"],
+        alist         = [["","Airplane","Airplane Mode"],
+                         ["","PowerOptions","Power Options"],
+                         ["","Wifi","Wi-Fi"],
                          ["","Sound","Sound Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"]]
+                         ["","PowerOFF","Power off"],]
 
         start_x  = 0
         start_y  = 0
 
-        sys.path.append(myvars.basepath)# add self as import path
         
+        sys.path.append(myvars.basepath)# add self as import path
         for i,v in enumerate(alist):
             li = ListItem()
             li._Parent = self
@@ -102,13 +104,15 @@ class ListPage(Page):
             else:
                 li.Init(v[1])
             
-            if v[1] == "Wifi" or v[1] == "Sound" or v[1] == "Brightness" or v[1] == "Storage" or v[1] == "Update" or v[1] == "About" or v[1] == "PowerOFF":
+            #if v[1] == "Wifi" or v[1] == "Sound" or v[1] == "Brightness" or v[1] == "Storage" or v[1] == "Update" or v[1] == "About" or v[1] == "PowerOFF" or v[1] == "HelloWorld":
+            if FileExists(myvars.basepath+"/"+ v[1]):
                 li._LinkObj = __import__(v[1])
                 init_cb   = getattr(li._LinkObj,"Init",None)
                 if init_cb != None:
                     if callable(init_cb):
                         li._LinkObj.Init(self._Screen)
-            self._MyList.append(li)
+                
+                self._MyList.append(li)
 
         self._Scroller = ListScroller()
         self._Scroller._Parent = self
