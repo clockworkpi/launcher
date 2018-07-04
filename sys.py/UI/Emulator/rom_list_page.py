@@ -133,12 +133,14 @@ class RomListPage(Page):
 
         for i ,v in enumerate(files_path):
             dirmap = {}
-            if os.path.isdir(v) and self._Emulator["FILETYPE"] == "dir": ## like DOSBOX
-                gameshell_bat = self._Emulator["EXT"][0]
-                if FileExists(v+"/"+gameshell_bat):
-                    dirmap["gamedir"] = v.decode("utf8")
-                    ret.append(dirmap)
-            if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
+            #if os.path.isdir(v):
+            #    dir_base_name = os.path.basename(v)
+            #    if dir_base_name == ".Trash" or dir_base_name == ".Fav":
+            #        pass
+            #    else:
+            #        dirmap["directory"] = v
+            #        ret.append(dirmap)
+            if os.path.isfile(v):
                 stats = os.stat(v)
                 if stats.st_gid == self._Parent._FavGID:
                     continue
@@ -197,8 +199,6 @@ class RomListPage(Page):
                 li.Init(v["directory"])
             elif "file" in v:
                 li.Init(v["file"])
-            elif "gamedir" in v:
-                li.Init(v["gamedir"])
             else:
                 li.Init("NoName")
 
@@ -336,25 +336,16 @@ class RomListPage(Page):
             self._Screen._MsgBox.SetText("Launching...")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
-
-            if self._Emulator["FILETYPE"] == "dir":
-                path = cur_li._Path +"/"+self._Emulator["EXT"][0]
-            else:
-                path = cur_li._Path
-            
-            print("Run  ",path)
+            print("Run  ",cur_li._Path)
 
             # check ROM_SO exists
             if FileExists(self._Emulator["ROM_SO"]):
-                if self._Emulator["FILETYPE"] == "dir":
-                    escaped_path = CmdClean(path)
-                else:
-                    escaped_path = CmdClean(path)
+                escaped_path = CmdClean( cur_li._Path)
                 
                 custom_config = ""
                 if self._Emulator["RETRO_CONFIG"] != "" and len(self._Emulator["RETRO_CONFIG"]) > 5:
                     custom_config = " -c " + self._Emulator["RETRO_CONFIG"]
-                
+                    
                 cmdpath = " ".join( (self._Emulator["LAUNCHER"],self._Emulator["ROM_SO"], custom_config, escaped_path))
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 return

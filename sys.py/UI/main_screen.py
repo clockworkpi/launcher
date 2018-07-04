@@ -406,7 +406,6 @@ class MainScreen(object):
                         obj["ROM"] = ""
                         obj["ROM_SO"] =""
                         obj["EXT"]    = []
-                        obj["FILETYPE"] = "file"
                         obj["LAUNCHER"] = ""
                         obj["TITLE"]    = "Game"
                         obj["SO_URL"]   = ""
