@@ -143,7 +143,7 @@ class InfoPage(Page):
             time1["label"] = "Never"
         else:
             time1["label"] = "%d secs" % self._Time1
-        time1["value"] = "Screen dimming"
+        time1["value"] = "Dim Screen"
         
         time2 = {}
         time2["key"] = "time2"
@@ -152,7 +152,7 @@ class InfoPage(Page):
         else:
             time2["label"] = "%d secs" % self._Time2
             
-        time2["value"] = "Screen off"
+        time2["value"] = "TurnOff Screen"
 
         time3 = {}
         time3["key"] = "time3"
@@ -303,17 +303,17 @@ class PowerOptionsPage(Page):
         
         supersaving = {}
         supersaving["key"] = "super"
-        supersaving["label"] = "Power saving"
+        supersaving["label"] = "Super Power saving"
         supersaving["value"] = "supersaving"
 
         powersaving = {}
         powersaving["key"] = "saving"
-        powersaving["label"] = "Balanced"
+        powersaving["label"] = "Power saving"
         powersaving["value"] = "powersaving"
 
         balance_saving = {}
         balance_saving["key"] = "balance"
-        balance_saving["label"] = "Performance"
+        balance_saving["label"] = "Balance"
         balance_saving["value"] = "balance_saving"
         
         
@@ -377,7 +377,7 @@ class PowerOptionsPage(Page):
 
         self._InfoPage = InfoPage()
         self._InfoPage._Screen = self._Screen
-        self._InfoPage._Name   = "Power option detail"
+        self._InfoPage._Name   = "Power mode detail"
         self._InfoPage.Init()
         
     def ScrollDown(self):
@@ -409,9 +409,6 @@ class PowerOptionsPage(Page):
             return
         
         cur_li = self._MyList[self._PsIndex]
-        if cur_li._Active == True:
-            return
-        
         for i in self._MyList:
             i._Active = False
 
