@@ -226,8 +226,7 @@ def event_process(event,main_screen):
 
         if event.type == POWEROPT:
             everytime_keydown = time.time()
-            RestoreLastBackLightBrightness(main_screen)
-            
+
             return
         if event.type == pygame.KEYUP:
             
