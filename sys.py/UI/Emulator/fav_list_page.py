@@ -122,18 +122,18 @@ class FavListPage(Page):
 
         for i ,v in enumerate(files_path):
             dirmap = {}
-            #if os.path.isdir(v):
-            #    continue
-            #    dir_base_name = os.path.basename(v)
-            #    if dir_base_name == ".Trash" or dir_base_name == ".Fav":
-            #        pass
-            #    else:
-            #        dirmap["directory"] = v
-            #        ret.append(dirmap)
+            if os.path.isdir(v) and self._Emulator["FILETYPE"] == "dir": ## like DOSBOX
+                gameshell_bat = self._Emulator["EXT"][0]
+                if FileExists(v+"/"+gameshell_bat):
+                    stats = os.stat(v)
+                    if stats.st_gid != self._Parent._FavGID: ## only favs
+                        continue
                     
-            if os.path.isfile(v):
+                    dirmap["gamedir"] = v.decode("utf8")
+                    ret.append(dirmap)            
+            if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
-                if stats.st_gid != self._Parent._FavGID:
+                if stats.st_gid != self._Parent._FavGID: ## only favs
                     continue
                 bname = os.path.basename(v)  ### filter extension
                 if len(bname)> 1:
@@ -190,6 +190,9 @@ class FavListPage(Page):
                 li.Init(v["directory"])
             elif "file" in v:
                 li.Init(v["file"])
+                
+            elif "gamedir" in v:
+                li.Init(v["gamedir"])
             else:
                 li.Init("NoName")
             
@@ -307,11 +310,16 @@ class FavListPage(Page):
             self._Screen._MsgBox.SetText("Launching...")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
-            print("Run ",cur_li._Path)
+            if self._Emulator["FILETYPE"] == "dir":
+                path = cur_li._Path +"/"+self._Emulator["EXT"][0]
+            else:
+                path = cur_li._Path
+                
+            print("Run ",path)
             
             # check ROM_SO exists
             if FileExists(self._Emulator["ROM_SO"]):
-                escaped_path = CmdClean( cur_li._Path)
+                escaped_path = CmdClean( path)
                 
                 custom_config = ""
                 if self._Emulator["RETRO_CONFIG"] != "" and len(self._Emulator["RETRO_CONFIG"]) > 5:
