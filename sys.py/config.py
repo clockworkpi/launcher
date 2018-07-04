@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-CurKeySet = "GameShell" ## >>>    PC or GameShell   <<<
+CurKeySet = "PC" ## >>>    PC or GameShell   <<<
 
 DontLeave = False
 
