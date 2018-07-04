@@ -30,7 +30,7 @@ else:
 
 
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT
+from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
@@ -59,8 +59,6 @@ myscriptname = os.path.basename(os.path.realpath(__file__))
 
 everytime_keydown = time.time()
 
-passout_time_stage = 0
-
 last_brt = -1
 
 def gobject_loop():
@@ -75,7 +73,7 @@ def gobject_loop():
 
 
 def RestoreLastBackLightBrightness(main_screen):
-    global last_brt,passout_time_stage
+    global last_brt
     
     if last_brt == -1:
         return
@@ -97,21 +95,17 @@ def RestoreLastBackLightBrightness(main_screen):
                 f.close()
                 last_brt = -1
                 main_screen._TitleBar._InLowBackLight = -1
-                passout_time_stage = 0
             else:
                 
                 f.close()
                 return
 
 def InspectionTeam(main_screen):
-    global everytime_keydown,last_brt,passout_time_stage
+    global everytime_keydown,last_brt
     
     cur_time = time.time()
-    time_1 = config.PowerLevels[config.PowerLevel][0]
-    time_2 = config.PowerLevels[config.PowerLevel][1]
-    time_3 = config.PowerLevels[config.PowerLevel][2]
-    
-    if cur_time - everytime_keydown > time_1 and passout_time_stage == 0:
+
+    if cur_time - everytime_keydown > 40:
         print("timeout, dim screen %d" % int(cur_time - everytime_keydown))
 
         try:
@@ -123,9 +117,8 @@ def InspectionTeam(main_screen):
                 content = f.readlines()
                 content = [x.strip() for x in content]
                 brt=int(content[0])
-                if brt > 0:
+                if brt > 1:
                     last_brt = brt ## remember brt for restore
-
                     brt = 1
                     f.seek(0)
                     f.write(str(brt))
@@ -133,39 +126,7 @@ def InspectionTeam(main_screen):
                     f.close()
 
                     main_screen._TitleBar._InLowBackLight = 0
-
-        if time_2 != 0:
-            passout_time_stage = 1 # next 
-        everytime_keydown = cur_time
-    
-    elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
-        print("timeout, close screen %d" % int(cur_time - everytime_keydown))
-
-        try:
-            f = open(config.BackLight,"r+")
-        except IOError:
-            pass
-        else:
-            with f:
-                brt = 0
-                f.seek(0)
-                f.write(str(brt))
-                f.truncate()
-                f.close()
-                main_screen._TitleBar._InLowBackLight = 0
-
-        if time_3 != 0:
-            passout_time_stage = 2 # next 
-        everytime_keydown = cur_time
-        
-    elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
-        print("Power Off now")
-
-        if config.CurKeySet != "PC":
-            cmdpath = "sudo halt -p"
-            pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
-        
-        passout_time_stage = 0
+                    
         everytime_keydown = cur_time
         
     return True
@@ -222,12 +183,6 @@ def event_process(event,main_screen):
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
-            return
-
-        if event.type == POWEROPT:
-            everytime_keydown = time.time()
-            RestoreLastBackLightBrightness(main_screen)
-            
             return
         if event.type == pygame.KEYUP:
             
@@ -422,16 +377,6 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
-
-    if FileExists(".powerlevel") == False:
-        os.system("touch .powerlevel")
-    
-    with open(".powerlevel","r") as f:
-        powerlevel = f.read()
-    
-    powerlevel = powerlevel.strip()
-    if powerlevel != "":
-        config.PowerLevel = powerlevel
     
     big_loop()
     
