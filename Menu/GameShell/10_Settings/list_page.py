@@ -82,8 +82,7 @@ class ListPage(Page):
                          ["","Storage",""],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],
-                         ["","HelloWorld","HelloWorld"],]
+                         ["","PowerOFF","Power off"]]
 
         start_x  = 0
         start_y  = 0
@@ -103,7 +102,7 @@ class ListPage(Page):
             else:
                 li.Init(v[1])
             
-            if v[1] == "Wifi" or v[1] == "Sound" or v[1] == "Brightness" or v[1] == "Storage" or v[1] == "Update" or v[1] == "About" or v[1] == "PowerOFF" or v[1] == "HelloWorld":
+            if v[1] == "Wifi" or v[1] == "Sound" or v[1] == "Brightness" or v[1] == "Storage" or v[1] == "Update" or v[1] == "About" or v[1] == "PowerOFF":
                 li._LinkObj = __import__(v[1])
                 init_cb   = getattr(li._LinkObj,"Init",None)
                 if init_cb != None:

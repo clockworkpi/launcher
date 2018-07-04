@@ -117,9 +117,7 @@ class Page(object):
         rows = int( (self._IconNumbers * icon_width)/Width + 1)
         if rows < 1:
             rows = 1
-
-        cnt = 0
-
+            cnt = 0
         for i in range(0,rows):
             for j in range(0,cols):
                 start_x = icon_width/2  + j*icon_width
@@ -233,7 +231,7 @@ class Page(object):
         rows = int((self._IconNumbers * icon_width)/self._Width + 1)
         if rows < 1:
             rows = 1
-        cnt = 0
+            cnt = 0
         for i in range(0,rows):
             for j in range(0,cols):
                 start_x = icon_width/2  + j*icon_width
@@ -269,9 +267,9 @@ class Page(object):
                 it._Parent = self
                 it._Index = i
                 it.Adjust(start_x+i*icon_width,start_y,icon_width,icon_height,0)
+                ps = PageSelector()
+                ps._IconSurf = blueselector_surf
 
-            ps = PageSelector()
-            ps._IconSurf = MyIconPool._Icons["blueselector"]
             ps._Parent = self
             ps.Init(start_x,start_y,92,92,128)
             self._Ps = ps
@@ -364,7 +362,7 @@ class Page(object):
             diffa = []
             for i in range(0,dff):
                 diffa.append(0)
-            all_pieces.extend( diffa)
+                all_pieces.extend( diffa)
                 
         return all_pieces
 
@@ -408,9 +406,8 @@ class Page(object):
             
             if self._Icons[self._PrevIconIndex]._PosY < self._Height/2:
                 self._Icons[self._PrevIconIndex]._PosY+=data2[i]
-
-            self.DrawIcons()
-            self._Screen.SwapAndShow()        
+                self.DrawIcons()
+                self._Screen.SwapAndShow()        
                 
     def IconsEasingLeft(self,icon_ew):
 
