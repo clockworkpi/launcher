@@ -115,68 +115,53 @@ class InfoPage(Page):
     _Time2 = 120
     _Time3 = 300
 
-    def ConvertSecToMin(self, secs):
-        sec_str = ""
-        min_str = ""
-        if secs > 60:
-            m = int(secs/60)
-            s = secs % 60
-            if m > 1:
-                min_str =  "%d minutes " % m
-            else:
-                min_str =  "%d minute " % m
-            
-            if s == 1:
-                sec_str = "%d second" % s
-            elif s > 1:
-                sec_str = "%d seconds" % s
-        elif secs > 0:
-            if secs > 1:
-                sec_str = "%d seconds" % secs
-            else:
-                sec_str = "%d second" % secs
-        
-        elif secs == 0:
-            sec_str = "Never"
-        
-        return min_str + sec_str
-
     def RefreshList(self):
         ## after GenList ,reuse
-        self._AList["time1"]["value"] = self.ConvertSecToMin(self._Time1)
-        self._AList["time2"]["value"] = self.ConvertSecToMin(self._Time2)
-        self._AList["time3"]["value"] = self.ConvertSecToMin(self._Time3)
+        if self._Time1 == 0:
+            self._AList["time1"]["label"] = "Never"
+        else:
+            self._AList["time1"]["label"] = "%d secs" % self._Time1
 
-        for i,v in enumerate( self._AList ):
-            self._MyList[i].SetSmallText(  self._AList[v]["value"] )
+        if self._Time2 == 0:
+            self._AList["time2"]["label"] = "Never"
+        else:
+            self._AList["time2"]["label"] = "%d secs" % self._Time2
+
+        if self._Time3 == 0:
+            self._AList["time3"]["label"] = "Never"
+        else:
+            self._AList["time3"]["label"] = "%d secs" % self._Time3
+
+        for i,v in enumerate( self._AList):
+            self._MyList[i]._Labels["Text"].SetText(  self._AList[v]["label"] )
         
     def GenList(self):
 
         time1 = {}
         time1["key"] = "time1"
         if self._Time1 == 0:
-            time1["value"] = "Never"
+            time1["label"] = "Never"
         else:
-            time1["value"] = "%d secs" % self._Time1
-        time1["label"] = "Screen dimming"
+            time1["label"] = "%d secs" % self._Time1
+        time1["value"] = "Screen dimming"
         
         time2 = {}
         time2["key"] = "time2"
         if self._Time2 == 0:
-            time2["value"] = "Never"
+            time2["label"] = "Never"
         else:
-            time2["value"] = "%d secs" % self._Time2
+            time2["label"] = "%d secs" % self._Time2
             
-        time2["label"] = "Screen off"
+        time2["value"] = "Screen off"
 
         time3 = {}
         time3["key"] = "time3"
         
         if self._Time3 == 0:
-            time3["value"] = "Never"
+            time3["label"] = "Never"
         else:
-            time3["value"] = "%d secs" % self._Time3
-        time3["label"] = "Power Off"
+            time3["label"] = "%d secs" % self._Time3
+        time3["value"] = "Power Off"
         
         self._AList["time1"] = time1
         self._AList["time2"] = time2
