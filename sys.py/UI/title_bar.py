@@ -240,7 +240,7 @@ class TitleBar:
             print("wifi is connected")
             print( wifi_strength())
         else:
-            out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
+            out = commands.getstatusoutput('rfkill list | grep yes | cut -d " " -f3')
             if out[1] == "yes":
                 self._InAirPlaneMode = True
             else:

@@ -174,7 +174,7 @@ class AirplanePage(Page):
             self._Scrolled += dis
 
     def ToggleModeAni(self): ## with animation
-        out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
+        out = commands.getstatusoutput('rfkill list | grep yes | cut -d " " -f3')
         if out[1] == "yes":
             data = self.EasingData(0,43)
             for _,v in enumerate(data):
@@ -185,7 +185,7 @@ class AirplanePage(Page):
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
                 
-            commands.getstatusoutput("sudo rfkill unblock all")
+            commands.getstatusoutput("rfkill unblock all")
             self._Screen._TitleBar._InAirPlaneMode = False
 
         else:
@@ -197,23 +197,23 @@ class AirplanePage(Page):
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
 
-            commands.getstatusoutput("sudo rfkill block all")
+            commands.getstatusoutput("rfkill block all")
             self._Screen._TitleBar._InAirPlaneMode = True
 
         
     def ToggleMode(self):
-        out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
+        out = commands.getstatusoutput('rfkill list | grep yes | cut -d " " -f3')
         print out
         if out[1] == "yes":
             self._Screen._MsgBox.SetText("Turning On")
             self._Screen._MsgBox.Draw()
-            commands.getstatusoutput("sudo rfkill unblock all")
+            commands.getstatusoutput("rfkill unblock all")
             self._Screen._TitleBar._InAirPlaneMode = False
         
         else:
             self._Screen._MsgBox.SetText("Turning Off")
             self._Screen._MsgBox.Draw()
-            commands.getstatusoutput("sudo rfkill block all")
+            commands.getstatusoutput("rfkill block all")
             self._Screen._TitleBar._InAirPlaneMode = True
 
         
@@ -221,7 +221,7 @@ class AirplanePage(Page):
         self._Scrolled = 0
         self._PosY = 0
         self._DrawOnce = False
-        out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
+        out = commands.getstatusoutput('rfkill list | grep yes | cut -d " " -f3')
         if out[1] == "yes":
             self._Screen._TitleBar._InAirPlaneMode = True
             self._airwire_y = 50+43
