@@ -135,11 +135,6 @@ class RomListPage(Page):
             dirmap = {}
             if os.path.isdir(v) and self._Emulator["FILETYPE"] == "dir": ## like DOSBOX
                 gameshell_bat = self._Emulator["EXT"][0]
-                
-                stats = os.stat(v)
-                if stats.st_gid == self._Parent._FavGID: ##skip fav roms
-                    continue
-                
                 if FileExists(v+"/"+gameshell_bat):
                     dirmap["gamedir"] = v.decode("utf8")
                     ret.append(dirmap)
