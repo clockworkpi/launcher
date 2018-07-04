@@ -299,7 +299,7 @@ class TitleBar:
             else:
                 self._Icons["wifistatus"]._IconIndex = 0
                 self._Icons["wifistatus"].Draw()
-                print("wifi strength error")
+                print("strength error")
         else:
             if self._InAirPlaneMode == False:
                 self._Icons["wifistatus"]._IconIndex = 0
