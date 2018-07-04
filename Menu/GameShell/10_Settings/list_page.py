@@ -76,14 +76,14 @@ class ListPage(Page):
         self._PsIndex = 0
 
         #                ""   pkgname, label
-        alist         = [["","Airplane","Airplane Mode"],
-                         ["","Wifi","Wi-Fi"],
+        alist         = [["","Wifi","Wi-Fi"],
                          ["","Sound","Sound Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],]
+                         ["","PowerOFF","Power off"],
+                         ["","HelloWorld","HelloWorld"],]
 
         start_x  = 0
         start_y  = 0
