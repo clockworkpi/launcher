@@ -1,4 +1,5 @@
-*.pyc
 retroarch-core-options.cfg
 *.lpl
-
+*.swp
+.bsv
+sys.py/.powerlevel
