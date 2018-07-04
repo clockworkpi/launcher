@@ -422,9 +422,6 @@ if __name__ == '__main__':
         exit()
 
 
-    if FileExists(".powerlevel") == False:
-        os.system("touche .powerlevel")
-    
     with open(".powerlevel","r") as f:
         powerlevel = f.read()
     
