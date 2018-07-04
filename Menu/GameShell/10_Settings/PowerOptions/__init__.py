@@ -9,7 +9,7 @@ from libs.roundrects import aa_round_rect
 #import gobject
 #from wicd import misc 
 ## local UI import
-from UI.constants import Width,Height,ICON_TYPES,POWEROPT
+from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
@@ -70,14 +70,6 @@ class PageListItem(object):
         self._Icons  = {}
         self._Fonts  = {}
 
-    def SetSmallText(self,text):
-        
-        l = Label()
-        l._PosX = 40
-        l.SetCanvasHWND(self._Parent._CanvasHWND)
-        l.Init(text,self._Fonts["small"])
-        self._Labels["Small"] = l
-    
     def Init(self,text):
 
         l = Label()
@@ -89,7 +81,7 @@ class PageListItem(object):
         
     def Draw(self):
         
-        self._Labels["Text"]._PosY = self._PosY+ (self._Height-  self._Labels["Text"]._Height)/2
+        self._Labels["Text"]._PosY = self._PosY
         
         if self._Active == True:
             self._Parent._Icons["done"].NewCoord( self._Parent._Width-30,self._PosY+5)
@@ -98,182 +90,15 @@ class PageListItem(object):
         self._Labels["Text"].Draw(self._Active)
             
         if "Small" in self._Labels:
-            self._Labels["Small"]._PosX = self._Width - self._Labels["Small"]._Width -10
-            self._Labels["Small"]._PosY = self._PosY + (self._Height-  self._Labels["Small"]._Height)/2
+            self._Labels["Small"]._PosX = self._Labels["Text"]._Width + 16 
+            self._Labels["Small"]._PosY = self._PosY 
             self._Labels["Small"].Draw()
         
         pygame.draw.line(self._Parent._CanvasHWND,(169,169,169),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 
-class InfoPage(Page):
-    _FootMsg =  ["Nav.","","","Back",""]
-    _MyList = []
-    _ListFontObj = fonts["varela15"]    
-    _AList = {}
-
-    _Time1 = 40
-    _Time2 = 120
-    _Time3 = 300
-
-    def RefreshList(self):
-        ## after GenList ,reuse
-        if self._Time1 == 0:
-            self._AList["time1"]["label"] = "Never"
-        else:
-            self._AList["time1"]["label"] = "%d secs" % self._Time1
-
-        if self._Time2 == 0:
-            self._AList["time2"]["label"] = "Never"
-        else:
-            self._AList["time2"]["label"] = "%d secs" % self._Time2
-
-        if self._Time3 == 0:
-            self._AList["time3"]["label"] = "Never"
-        else:
-            self._AList["time3"]["label"] = "%d secs" % self._Time3
-
-        for i,v in enumerate( self._AList):
-            self._MyList[i]._Labels["Text"].SetText(  self._AList[v]["label"] )
-        
-    def GenList(self):
-
-        time1 = {}
-        time1["key"] = "time1"
-        if self._Time1 == 0:
-            time1["label"] = "Never"
-        else:
-            time1["label"] = "%d secs" % self._Time1
-        time1["value"] = "Dim Screen"
-        
-        time2 = {}
-        time2["key"] = "time2"
-        if self._Time2 == 0:
-            time2["label"] = "Never"
-        else:
-            time2["label"] = "%d secs" % self._Time2
-            
-        time2["value"] = "TurnOff Screen"
-
-        time3 = {}
-        time3["key"] = "time3"
-        
-        if self._Time3 == 0:
-            time3["label"] = "Never"
-        else:
-            time3["label"] = "%d secs" % self._Time3
-        time3["value"] = "Power Off"
-        
-        self._AList["time1"] = time1
-        self._AList["time2"] = time2
-        self._AList["time3"] = time3
-        
-        self._MyList = []
-        
-        start_x  = 0
-        start_y  = 0
-        
-        for i,v in enumerate( self._AList):
-            print(v)
-            li = PageListItem()
-            li._Parent = self
-            li._PosX   = start_x
-            li._PosY   = start_y + i*PageListItem._Height
-            li._Width  = Width
-            li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
-            
-            if self._AList[v]["label"] != "":
-                li.Init(  self._AList[v]["label"] )
-            else:
-                li.Init( self._AList[v]["key"] )
-
-            li._Flag = self._AList[v]["key"]
-
-            li.SetSmallText( self._AList[v]["value"] )
-            
-            self._MyList.append(li)
-            
-    def Init(self):
-        if self._Screen != None:
-            if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
-                self._CanvasHWND = self._Screen._CanvasHWND
-
-        self._PosX = self._Index*self._Screen._Width 
-        self._Width = self._Screen._Width ## equal to screen width
-        self._Height = self._Screen._Height
-
-        ps = ListPageSelector()
-        ps._Parent = self
-        self._Ps = ps
-        self._PsIndex = 0
-        
-        self.GenList()
-
-        
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-        
-
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-
-    def Click(self):
-        cur_li = self._MyList[self._PsIndex]
-        print(cur_li._Flag)        
-
-        
-    def OnLoadCb(self):
-        self.RefreshList()
-
-    def OnReturnBackCb(self):
-        pass
-        """
-        self.ReturnToUpLevelPage()
-        self._Screen.Draw()
-        self._Screen.SwapAndShow()
-        """
-    
-    def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
-            self.ReturnToUpLevelPage()
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
-        
-        if event.key == CurKeys["Up"]:
-            self.ScrollUp()
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
-        if event.key == CurKeys["Down"]:
-            self.ScrollDown()
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
-                                        
-    def Draw(self):
-        self.ClearCanvas()
-        self._Ps.Draw()
-
-        for i in self._MyList:
-            i.Draw()
-
 class PowerOptionsPage(Page):
-    _FootMsg =  ["Nav.","","Detail","Back","Select"]
+    _FootMsg =  ["Nav.","","","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     
@@ -286,7 +111,6 @@ class PowerOptionsPage(Page):
 
     _DrawOnce = False
     _Scroller = None
-    _InfoPage = None
     
     def __init__(self):
         Page.__init__(self)
@@ -374,11 +198,6 @@ class PowerOptionsPage(Page):
         self._Scroller._PosY = 2
         self._Scroller.Init()
         self._Scroller.SetCanvasHWND(self._HWND)
-
-        self._InfoPage = InfoPage()
-        self._InfoPage._Screen = self._Screen
-        self._InfoPage._Name   = "Power mode detail"
-        self._InfoPage.Init()
         
     def ScrollDown(self):
         if len(self._MyList) == 0:
@@ -413,7 +232,7 @@ class PowerOptionsPage(Page):
             i._Active = False
 
         cur_li._Active = True
-        print(cur_li._Value)
+        print(cur_li._Value)        
         with open(".powerlevel","w") as f:
             f.write(cur_li._Value)
 
@@ -422,8 +241,6 @@ class PowerOptionsPage(Page):
         self._Screen._MsgBox.SetText("Applying...")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
-
-        pygame.event.post( pygame.event.Event(POWEROPT, message=""))
         
         pygame.time.delay(1000)
         
@@ -447,12 +264,10 @@ class PowerOptionsPage(Page):
                 i._Active = True
         
     def OnReturnBackCb(self):
-        pass
-        """
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
-        """
+        
     def KeyDown(self,event):
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
             self.ReturnToUpLevelPage()
@@ -470,21 +285,8 @@ class PowerOptionsPage(Page):
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-
-        if event.key == CurKeys["Y"]:
-            cur_li = self._MyList[self._PsIndex]
-            time1 = config.PowerLevels[cur_li._Value][0]
-            time2 = config.PowerLevels[cur_li._Value][1]
-            time3 = config.PowerLevels[cur_li._Value][2]
-            
-            self._InfoPage._Time1 = time1
-            self._InfoPage._Time2 = time2
-            self._InfoPage._Time3 = time3
-            
-            self._Screen.PushPage(self._InfoPage)
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()            
-    
+        
+                                
     def Draw(self):
 
         self.ClearCanvas()

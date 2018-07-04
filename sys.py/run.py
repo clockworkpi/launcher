@@ -30,7 +30,7 @@ else:
 
 
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT
+from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
@@ -111,7 +111,7 @@ def InspectionTeam(main_screen):
     time_2 = config.PowerLevels[config.PowerLevel][1]
     time_3 = config.PowerLevels[config.PowerLevel][2]
     
-    if cur_time - everytime_keydown > time_1 and passout_time_stage == 0:
+    if cur_time - everytime_keydown > time_1 and passout_time_stage = 0:
         print("timeout, dim screen %d" % int(cur_time - everytime_keydown))
 
         try:
@@ -138,7 +138,7 @@ def InspectionTeam(main_screen):
             passout_time_stage = 1 # next 
         everytime_keydown = cur_time
     
-    elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
+    elif cur_time - everytime_keydown > time_2 and passout_time_stage = 1:
         print("timeout, close screen %d" % int(cur_time - everytime_keydown))
 
         try:
@@ -158,12 +158,8 @@ def InspectionTeam(main_screen):
             passout_time_stage = 2 # next 
         everytime_keydown = cur_time
         
-    elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
+    elif cur_time - everytime_keydown > time_3 and passout_time_stage = 1:
         print("Power Off now")
-
-        if config.CurKeySet != "PC":
-            cmdpath = "sudo halt -p"
-            pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
         
         passout_time_stage = 0
         everytime_keydown = cur_time
