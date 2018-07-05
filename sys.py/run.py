@@ -407,7 +407,7 @@ def big_loop():
     gobject.timeout_add(3000,title_bar.GObjectRoundRobin)
 
 
-    socket_thread(main_screen)
+#    socket_thread(main_screen)
     
     gobject_loop()
     
