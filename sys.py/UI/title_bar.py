@@ -61,12 +61,10 @@ class TitleBar:
             SwapAndShow()
         else:
             self._InLowBackLight+=1
-
             if self._InLowBackLight > 10:
                 self.CheckBatteryStat()
                 self.SyncSoundVolume()
                 self.UpdateWifiStrength()
-                SwapAndShow()
                 self._InLowBackLight = 0
         
         return True

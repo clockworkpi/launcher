@@ -76,7 +76,12 @@ def gobject_loop():
 
 def RestoreLastBackLightBrightness(main_screen):
     global last_brt,passout_time_stage
-    
+
+    main_screen._CounterScreen.StopCounter()
+
+    passout_time_stage = 0
+    main_screen._TitleBar._InLowBackLight = -1
+
     if last_brt == -1:
         return
 
@@ -96,10 +101,7 @@ def RestoreLastBackLightBrightness(main_screen):
                 f.truncate()
                 f.close()
                 last_brt = -1
-                main_screen._TitleBar._InLowBackLight = -1
-                passout_time_stage = 0
-            else:
-                
+            else:                
                 f.close()
                 return
 
@@ -159,14 +161,27 @@ def InspectionTeam(main_screen):
         everytime_keydown = cur_time
         
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
-        print("Power Off now")
-
-        if config.CurKeySet != "PC":
-            cmdpath = "sudo halt -p"
-            pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
+        print("Power Off counting down")
         
-        passout_time_stage = 0
-        everytime_keydown = cur_time
+        main_screen._CounterScreen.Draw()
+        main_screen._CounterScreen.SwapAndShow()
+        main_screen._CounterScreen.StartCounter()
+
+        if main_screen._CounterScreen._Counting == True:
+            return True
+        
+        try:
+            f = open(config.BackLight,"r+")
+        except IOError:
+            pass
+        else:
+            with f:
+                brt = last_brt
+                f.seek(0)
+                f.write(str(brt))
+                f.truncate()
+                f.close()
+                main_screen._TitleBar._InLowBackLight = 0
         
     return True
 
@@ -273,6 +288,7 @@ def event_process(event,main_screen):
             ###########################################################
             if event.key == pygame.K_ESCAPE:
                 pygame.event.clear()
+
             
             key_down_cb = getattr(main_screen,"KeyDown",None)
             if key_down_cb != None:
@@ -368,6 +384,7 @@ def big_loop():
     main_screen.ReadTheDirIntoPages("../Menu",0,None)
     main_screen.FartherPages()
 
+    
     title_bar._SkinManager = main_screen._SkinManager
     foot_bar._SkinManager  = main_screen._SkinManager
     

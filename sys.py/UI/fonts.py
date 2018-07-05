@@ -38,6 +38,7 @@ fonts["varela27"] = pygame.font.Font(fonts_path["varela"],27)
 fonts["varela28"] = pygame.font.Font(fonts_path["varela"],28)
 fonts["varela34"] = pygame.font.Font(fonts_path["varela"],34)
 fonts["varela40"] = pygame.font.Font(fonts_path["varela"],40)
+fonts["varela120"] = pygame.font.Font(fonts_path["varela"],120)
 
 fonts["veramono25"] = pygame.font.Font(fonts_path["veramono"],25)
 fonts["veramono24"] = pygame.font.Font(fonts_path["veramono"],24)

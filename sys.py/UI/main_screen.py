@@ -26,6 +26,7 @@ from untitled_icon import UntitledIcon
 from Emulator    import MyEmulator
 
 from skin_manager import SkinManager
+from counter_screen import CounterScreen
 
 class MessageBox(Label):
     _Parent = None
@@ -135,7 +136,8 @@ class MainScreen(object):
     _MsgBoxFont  = fonts["veramono20"]
     _IconFont    = fonts["varela15"]
     _SkinManager = None
-    
+
+    _CounterScreen = None
     
     def __init__(self):
         self._Pages = []
@@ -149,6 +151,12 @@ class MainScreen(object):
 
         self._SkinManager = SkinManager()
         self._SkinManager.Init()
+
+        self._CounterScreen = CounterScreen()
+        self._CounterScreen._HWND = self._HWND
+        
+        self._CounterScreen.Init()
+
         
     def FartherPages(self):
         self._PageMax = len(self._Pages)
@@ -515,8 +523,9 @@ class MainScreen(object):
             self.SwapAndShow()
         
         if event.key == CurKeys["Space"]:
-            self.Draw()
-            self.SwapAndShow()
+            self._CounterScreen.Draw()
+            self._CounterScreen.SwapAndShow()
+            self._CounterScreen.StartCounter()
             
         ## leave rest to Pages
         current_page_key_down_cb = getattr(self._CurrentPage,"KeyDown",None)
