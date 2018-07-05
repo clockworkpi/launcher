@@ -191,7 +191,7 @@ def InspectionTeam(main_screen):
         if time_3 != 0:
             passout_time_stage = 2 # next
 
-        gobject_flash_led1 = gobject.timeout_add(100,GobjectFlashLed1,main_screen)
+        gobject_flash_led1 = gobject.timeout_add(200,GobjectFlashLed1,main_screen)
         
         everytime_keydown = cur_time
         
