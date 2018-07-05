@@ -57,15 +57,6 @@ class CounterScreen(FullScreen):
             self.SwapAndShow()
 
 
-        """
-        if self._inter_counter == 2:
-            commands.getstatusoutput("echo 0 > /proc/driver/led1")
-            #turn off
-
-        elif self._inter_counter == 7:
-            commands.getstatusoutput("echo 1 > /proc/driver/led1")
-            #turn on
-        """
         
         return self._Counting
     
@@ -83,28 +74,12 @@ class CounterScreen(FullScreen):
             return
         self._Counting = False
         self._Number = 10
-        commands.getstatusoutput("echo 0 > /proc/driver/led1")
 
         if self._GobjectIntervalId != -1:
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1
-
-        commands.getstatusoutput("echo 0 > /proc/driver/led1")
-        pygame.time.delay(800)
-        commands.getstatusoutput("echo 0 > /proc/driver/led1")
         
-        try:
-            f = open("/proc/driver/led1","w")
-        except IOError:
-            print( "RestoreLastBackLightBrightness open %s failed, try to adjust brightness in Settings" % config.BackLight)
-            pass
-        else:
-            with f:
-                f.seek(0)
-                f.write("0")
-                f.truncate()
-                f.close()
-                
+        return
                     
     def Init(self):
         self._CanvasHWND = pygame.Surface((self._Width,self._Height))

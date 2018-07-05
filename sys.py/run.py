@@ -82,12 +82,32 @@ def GobjectFlashLed1(main_screen):
     gobject_flash_led1_counter+=1
 
     if gobject_flash_led1_counter == 2:
-        commands.getstatusoutput("echo 1 > /proc/driver/led1")
-        #turn off
+        try:
+            f = open("/proc/driver/led1","w")
+        except IOError:
+            print( "open /proc/driver/led1 IOError")
+            pass
+        else:
+            with f:
+                f.seek(0)
+                f.write("1")
+                f.truncate()
+                f.close()
+    
 
     elif gobject_flash_led1_counter == 4:
-        commands.getstatusoutput("echo 0 > /proc/driver/led1")
-
+        try:
+            f = open("/proc/driver/led1","w")
+        except IOError:
+            print( "open /proc/driver/led1 IOError")
+            pass
+        else:
+            with f:
+                f.seek(0)
+                f.write("0")
+                f.truncate()
+                f.close()
+    
     if gobject_flash_led1_counter == 10:
         gobject_flash_led1_counter = 0
     
@@ -127,6 +147,19 @@ def RestoreLastBackLightBrightness(main_screen):
             else:                
                 f.close()
 
+    try:
+        f = open("/proc/driver/led1","w")
+    except IOError:
+        print( "open /proc/driver/led1 IOError")
+        pass
+    else:
+        with f:
+            f.seek(0)
+            f.write("0")
+            f.truncate()
+            f.close()
+    
+            
     if main_screen._CounterScreen._Counting==True:
         main_screen._CounterScreen.StopCounter()
         main_screen.Draw()
