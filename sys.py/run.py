@@ -104,11 +104,6 @@ def RestoreLastBackLightBrightness(main_screen):
         gobject.source_remove(gobject_flash_led1)
         gobject_flash_led1 = -1
 
-    if main_screen._CounterScreen._Counting==True:
-        main_screen._CounterScreen.StopCounter()
-        main_screen.Draw()
-        main_screen.SwapAndShow()
-        return False
     
     if last_brt == -1:
         return True
@@ -131,8 +126,13 @@ def RestoreLastBackLightBrightness(main_screen):
                 last_brt = -1
             else:                
                 f.close()
-                return True
 
+    if main_screen._CounterScreen._Counting==True:
+        main_screen._CounterScreen.StopCounter()
+        main_screen.Draw()
+        main_screen.SwapAndShow()
+        return False
+        
     return True
 
 def InspectionTeam(main_screen):
