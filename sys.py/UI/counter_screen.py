@@ -37,6 +37,9 @@ class CounterScreen(FullScreen):
             self._Number-=1
             print("sub Number %d " % self._Number)
             self._inter_counter = 0
+            
+            self.Draw()
+            self.SwapAndShow()
 
         
         if self._inter_counter == 2:
@@ -58,9 +61,6 @@ class CounterScreen(FullScreen):
                 cmdpath += "sudo halt -p"
                 pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
 
-        self.Draw()
-        self.SwapAndShow()
-        
         return self._Counting
     
     def StartCounter(self):

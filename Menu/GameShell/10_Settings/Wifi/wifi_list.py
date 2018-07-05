@@ -471,6 +471,7 @@ class WifiList(Page):
         self._PrevWicdState = state
         
     def SetConnectingStatus(self,fast):
+        
         wireless_connecting = self._Wireless.CheckIfWirelessConnecting()
 
         """

@@ -420,7 +420,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
 
     pygame.event.set_allowed(None) 
-    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS])
+    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS,POWEROPT])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
 
