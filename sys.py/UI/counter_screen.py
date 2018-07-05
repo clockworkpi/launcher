@@ -35,6 +35,8 @@ class CounterScreen(FullScreen):
         self._inter_counter+=1
         if self._inter_counter >= 10:
             self._Number-=1
+            if self._Number < 0:
+                self._Number = 0
             print("sub Number %d " % self._Number)
             self._inter_counter = 0
             
