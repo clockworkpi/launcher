@@ -85,10 +85,12 @@ class CounterScreen(FullScreen):
         self._Number = 10
         commands.getstatusoutput("echo 0 > /proc/driver/led1")
 
-    
         if self._GobjectIntervalId != -1:
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1
+
+        commands.getstatusoutput("echo 0 > /proc/driver/led1")            
+        commands.getstatusoutput("echo 0 > /proc/driver/led1")            
         
     def Init(self):
         self._CanvasHWND = pygame.Surface((self._Width,self._Height))
