@@ -19,7 +19,7 @@ SKIN="default"
 ## three timer values in seconds: dim screen, close screen,PowerOff
 ## zero means no action
 PowerLevels = {}
-PowerLevels["supersaving"] = [10,30,100]
+PowerLevels["supersaving"] = [10,15,20]
 PowerLevels["powersaving"] = [40,120,300]
 PowerLevels["balance_saving"] = [40,0,0]
 

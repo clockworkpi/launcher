@@ -33,8 +33,19 @@ class CounterScreen(FullScreen):
     def GObjectInterval(self):
 
         self._inter_counter+=1
+
+        if self._Number == 0:
+            self._Counting = False    
+            print("do the real shutdown")
+            if config.CurKeySet != "PC":
+                cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
+                cmdpath += "sleep 3;"
+                cmdpath += "sudo halt -p"
+                pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
+            return False
+    
         if self._inter_counter >= 10:
-            self._Number-=1
+            self._Number -= 1
             if self._Number < 0:
                 self._Number = 0
             print("sub Number %d " % self._Number)
@@ -52,23 +63,13 @@ class CounterScreen(FullScreen):
             commands.getstatusoutput("echo 1 > /proc/driver/led1")
             #turn on
         
-        if self._Number == 0:
-            self._Counting = False
-            
-            print("do the real shutdown")
-            
-            if config.CurKeySet != "PC":
-                cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
-                cmdpath += "sleep 3;"
-                cmdpath += "sudo halt -p"
-                pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
-
         return self._Counting
     
     def StartCounter(self):
         if self._Counting == True:
             return
-        
+
+        self._Number = 10
         self._Counting = True
         
         self._GobjectIntervalId = gobject.timeout_add(100,self.GObjectInterval)
