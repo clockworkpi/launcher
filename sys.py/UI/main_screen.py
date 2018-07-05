@@ -518,15 +518,17 @@ class MainScreen(object):
             self.EasingAllPageRight()
             #self.SwapAndShow()
         """
+        
         if event.key == pygame.K_t:
             self.DrawRun()
             self.SwapAndShow()
         
+        """
         if event.key == CurKeys["Space"]:
             self._CounterScreen.Draw()
             self._CounterScreen.SwapAndShow()
             self._CounterScreen.StartCounter()
-            
+        """ 
         ## leave rest to Pages
         current_page_key_down_cb = getattr(self._CurrentPage,"KeyDown",None)
         if current_page_key_down_cb != None:
