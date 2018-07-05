@@ -134,7 +134,7 @@ def InspectionTeam(main_screen):
                     f.truncate()
                     f.close()
 
-                    main_screen._TitleBar._InLowBackLight = 0
+        main_screen._TitleBar._InLowBackLight = 0
 
         if time_2 != 0:
             passout_time_stage = 1 # next 
@@ -154,7 +154,8 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
-                main_screen._TitleBar._InLowBackLight = 0
+        
+        main_screen._TitleBar._InLowBackLight = 0
 
         if time_3 != 0:
             passout_time_stage = 2 # next 
@@ -179,7 +180,8 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
-                main_screen._TitleBar._InLowBackLight = 0
+                
+        main_screen._TitleBar._InLowBackLight = 0
 
         passout_time_stage = 4
         

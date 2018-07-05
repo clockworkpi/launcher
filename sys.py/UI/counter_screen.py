@@ -4,7 +4,7 @@ import pygame
 import gobject
 import commands
 ## local package import
-from constants   import Width,Height
+from constants   import Width,Height,RUNSYS
 from label       import Label
 from fonts       import fonts
 from full_screen import FullScreen
