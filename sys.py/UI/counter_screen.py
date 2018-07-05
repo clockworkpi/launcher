@@ -89,7 +89,8 @@ class CounterScreen(FullScreen):
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1
 
-        commands.getstatusoutput("echo 0 > /proc/driver/led1")            
+        commands.getstatusoutput("echo 0 > /proc/driver/led1")
+        pygame.time.delay(800)
         commands.getstatusoutput("echo 0 > /proc/driver/led1")            
         
     def Init(self):
