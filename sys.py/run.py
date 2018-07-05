@@ -3,6 +3,7 @@
 import dbus
 import dbus.service
 import sys
+import commands
 from wicd import misc 
 ##misc.to_bool
 ##misc.misc.noneToString
@@ -63,6 +64,9 @@ passout_time_stage = 0
 
 last_brt = -1
 
+gobject_flash_led1 = -1
+gobject_flash_led1_counter = 0
+
 def gobject_loop():
     """
     here to receive dbus signal 
@@ -73,17 +77,34 @@ def gobject_loop():
         gobject_main_loop.quit()
         exit(-1)
 
+def GobjectFlashLed1(main_screen):
+    gobject_flash_led1_counter+=1
 
+    if gobject_flash_led1_counter == 2:
+        commands.getstatusoutput("echo 0 > /proc/driver/led1")
+        #turn off
+
+    elif gobject_flash_led1_counter == 7:
+        commands.getstatusoutput("echo 1 > /proc/driver/led1")
+
+    return True
+
+    
 def RestoreLastBackLightBrightness(main_screen):
     global last_brt,passout_time_stage
-
-    main_screen._CounterScreen.StopCounter()
-
-    passout_time_stage = 0
-    main_screen._TitleBar._InLowBackLight = -1
-
     if last_brt == -1:
         return
+
+    if gobject_flash_led1 != -1:
+        gobject.source_remove(GobjectFlashLed1)
+        gobject_flash_led1 = -1
+    
+    main_screen._CounterScreen.StopCounter()
+    main_screen.Draw()
+    main_screen.SwapAndShow()
+    
+    passout_time_stage = 0
+    main_screen._TitleBar._InLowBackLight = -1
 
     try:
         f = open(config.BackLight,"r+")
@@ -106,7 +127,7 @@ def RestoreLastBackLightBrightness(main_screen):
                 return
 
 def InspectionTeam(main_screen):
-    global everytime_keydown,last_brt,passout_time_stage
+    global everytime_keydown,last_brt,passout_time_stage,gobject_flash_led1
     
     cur_time = time.time()
     time_1 = config.PowerLevels[config.PowerLevel][0]
@@ -142,7 +163,7 @@ def InspectionTeam(main_screen):
     
     elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
         print("timeout, close screen %d" % int(cur_time - everytime_keydown))
-
+        
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -154,11 +175,15 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
+
         
         main_screen._TitleBar._InLowBackLight = 0
 
         if time_3 != 0:
-            passout_time_stage = 2 # next 
+            passout_time_stage = 2 # next
+
+        gobject_flash_led1 = gobject.timeout_add(100,GobjectFlashLed1,main_screen)
+        
         everytime_keydown = cur_time
         
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:

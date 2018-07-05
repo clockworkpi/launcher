@@ -54,7 +54,8 @@ class CounterScreen(FullScreen):
             self.Draw()
             self.SwapAndShow()
 
-        
+
+        """
         if self._inter_counter == 2:
             commands.getstatusoutput("echo 0 > /proc/driver/led1")
             #turn off
@@ -62,6 +63,7 @@ class CounterScreen(FullScreen):
         elif self._inter_counter == 7:
             commands.getstatusoutput("echo 1 > /proc/driver/led1")
             #turn on
+        """
         
         return self._Counting
     
@@ -72,7 +74,7 @@ class CounterScreen(FullScreen):
         self._Number = 10
         self._Counting = True
         
-        self._GobjectIntervalId = gobject.timeout_add(100,self.GObjectInterval)
+#        self._GobjectIntervalId = gobject.timeout_add(100,self.GObjectInterval)
         
     def StopCounter(self):
         if self._Counting == False:
@@ -81,10 +83,11 @@ class CounterScreen(FullScreen):
         self._Number = 10
         commands.getstatusoutput("echo 0 > /proc/driver/led1")
 
+        """
         if self._GobjectIntervalId != -1:
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1
-    
+        """
     def Init(self):
         self._CanvasHWND = pygame.Surface((self._Width,self._Height))
         self._TopLabel = Label()

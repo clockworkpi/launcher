@@ -125,7 +125,7 @@ class MainScreen(object):
     _PosX  = 0
     _PosY  = TitleBar._BarHeight+1
     _Width = Width 
-    _Height = Height -FootBar._BarHeight -TitleBar._BarHeight-1
+    _Height = Height -FootBar._BarHeight -TitleBar._BarHeight
     _MyPageStack = None
     _CurrentPage = None # pointer to the current displaying Page Class
     _CanvasHWND  = None
