@@ -169,7 +169,7 @@ def InspectionTeam(main_screen):
         main_screen._CounterScreen.Draw()
         main_screen._CounterScreen.SwapAndShow()
         main_screen._CounterScreen.StartCounter()
-
+        
         
         try:
             f = open(config.BackLight,"r+")
@@ -202,7 +202,9 @@ def event_process(event,main_screen):
             pygame.event.clear(GMEVT)
             return
         if event.type == RUNEVT:
-
+            everytime_keydown = time.time()
+            RestoreLastBackLightBrightness(main_screen)
+            
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
@@ -225,6 +227,8 @@ def event_process(event,main_screen):
             return
 
         if event.type == RUNSYS:
+            everytime_keydown = time.time()
+            RestoreLastBackLightBrightness(main_screen)
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
