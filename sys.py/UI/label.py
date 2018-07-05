@@ -4,6 +4,8 @@ import pygame
 
 #import base64
 #from beeprint import pp
+from constants import Width,Height
+from util_funcs  import midRect
 
 class Label:
     _PosX=0
@@ -50,6 +52,11 @@ class Label:
     def SetCanvasHWND(self,_canvashwnd):
         self._CanvasHWND = _canvashwnd
 
+    def DrawCenter(self,bold=False):
+        self._FontObj.set_bold(bold) ## avoing same font tangling set_bold to others
+        my_text = self._FontObj.render( self._Text,True,self._Color)        
+        self._CanvasHWND.blit(my_text,midRect(self._PosX,self._PosY,self._Width,self._Height,Width,Height))
+        
     def Draw(self,bold=False):
         self._FontObj.set_bold(bold) ## avoing same font tangling set_bold to others
         my_text = self._FontObj.render( self._Text,True,self._Color)

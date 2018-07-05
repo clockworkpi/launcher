@@ -373,6 +373,7 @@ class WifiList(Page):
         self._CanvasHWND = None
     
     def ShowBox(self,msg):
+        
         self._MsgBox._Text = msg
         self._ShowingMessageBox = True
         self._Screen.Draw()
@@ -471,6 +472,7 @@ class WifiList(Page):
         self._PrevWicdState = state
         
     def SetConnectingStatus(self,fast):
+        
         wireless_connecting = self._Wireless.CheckIfWirelessConnecting()
 
         """
@@ -526,6 +528,9 @@ class WifiList(Page):
                 return True
 
     def DbusDaemonStatusChangedSig(self,state=None,info=None):
+        if self._Screen._CurrentPage != self:
+            return
+
         print("in DbusDaemonStatusChangedSig")
         """
         dbus.UInt32(2L)

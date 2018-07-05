@@ -76,7 +76,12 @@ def gobject_loop():
 
 def RestoreLastBackLightBrightness(main_screen):
     global last_brt,passout_time_stage
-    
+
+    main_screen._CounterScreen.StopCounter()
+
+    passout_time_stage = 0
+    main_screen._TitleBar._InLowBackLight = -1
+
     if last_brt == -1:
         return
 
@@ -96,10 +101,7 @@ def RestoreLastBackLightBrightness(main_screen):
                 f.truncate()
                 f.close()
                 last_brt = -1
-                main_screen._TitleBar._InLowBackLight = -1
-                passout_time_stage = 0
-            else:
-                
+            else:                
                 f.close()
                 return
 
@@ -132,7 +134,7 @@ def InspectionTeam(main_screen):
                     f.truncate()
                     f.close()
 
-                    main_screen._TitleBar._InLowBackLight = 0
+        main_screen._TitleBar._InLowBackLight = 0
 
         if time_2 != 0:
             passout_time_stage = 1 # next 
@@ -152,21 +154,36 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
-                main_screen._TitleBar._InLowBackLight = 0
+        
+        main_screen._TitleBar._InLowBackLight = 0
 
         if time_3 != 0:
             passout_time_stage = 2 # next 
         everytime_keydown = cur_time
         
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
-        print("Power Off now")
-
-        if config.CurKeySet != "PC":
-            cmdpath = "sudo halt -p"
-            pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
+        print("Power Off counting down")
         
-        passout_time_stage = 0
-        everytime_keydown = cur_time
+        main_screen._CounterScreen.Draw()
+        main_screen._CounterScreen.SwapAndShow()
+        main_screen._CounterScreen.StartCounter()
+        
+        
+        try:
+            f = open(config.BackLight,"r+")
+        except IOError:
+            pass
+        else:
+            with f:
+                brt = last_brt
+                f.seek(0)
+                f.write(str(brt))
+                f.truncate()
+                f.close()
+                
+        main_screen._TitleBar._InLowBackLight = 0
+
+        passout_time_stage = 4
         
     return True
 
@@ -186,7 +203,9 @@ def event_process(event,main_screen):
             pygame.event.clear(GMEVT)
             return
         if event.type == RUNEVT:
-
+            everytime_keydown = time.time()
+            RestoreLastBackLightBrightness(main_screen)
+            
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
@@ -209,6 +228,8 @@ def event_process(event,main_screen):
             return
 
         if event.type == RUNSYS:
+            everytime_keydown = time.time()
+            RestoreLastBackLightBrightness(main_screen)
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
@@ -226,7 +247,6 @@ def event_process(event,main_screen):
 
         if event.type == POWEROPT:
             everytime_keydown = time.time()
-            RestoreLastBackLightBrightness(main_screen)
             
             return
         if event.type == pygame.KEYUP:
@@ -273,6 +293,7 @@ def event_process(event,main_screen):
             ###########################################################
             if event.key == pygame.K_ESCAPE:
                 pygame.event.clear()
+
             
             key_down_cb = getattr(main_screen,"KeyDown",None)
             if key_down_cb != None:
@@ -368,6 +389,7 @@ def big_loop():
     main_screen.ReadTheDirIntoPages("../Menu",0,None)
     main_screen.FartherPages()
 
+    
     title_bar._SkinManager = main_screen._SkinManager
     foot_bar._SkinManager  = main_screen._SkinManager
     
@@ -385,7 +407,7 @@ def big_loop():
     gobject.timeout_add(3000,title_bar.GObjectRoundRobin)
 
 
-    socket_thread(main_screen)
+#    socket_thread(main_screen)
     
     gobject_loop()
     
@@ -402,7 +424,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
 
     pygame.event.set_allowed(None) 
-    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS])
+    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS,POWEROPT])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
 
