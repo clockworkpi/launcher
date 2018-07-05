@@ -72,6 +72,8 @@ class CounterScreen(FullScreen):
         self._GobjectIntervalId = gobject.timeout_add(100,self.GObjectInterval)
         
     def StopCounter(self):
+        if self._Counting == False:
+            return
         self._Counting = False
         self._Number = 10
         commands.getstatusoutput("echo 0 > /proc/driver/led1")
