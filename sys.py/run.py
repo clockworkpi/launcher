@@ -92,6 +92,10 @@ def GobjectFlashLed1(main_screen):
     
 def RestoreLastBackLightBrightness(main_screen):
     global last_brt,passout_time_stage
+
+    passout_time_stage = 0
+    main_screen._TitleBar._InLowBackLight = -1
+    
     if last_brt == -1:
         return
 
@@ -103,8 +107,6 @@ def RestoreLastBackLightBrightness(main_screen):
     main_screen.Draw()
     main_screen.SwapAndShow()
     
-    passout_time_stage = 0
-    main_screen._TitleBar._InLowBackLight = -1
 
     try:
         f = open(config.BackLight,"r+")
