@@ -163,12 +163,13 @@ def InspectionTeam(main_screen):
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
         print("Power Off counting down")
         
+        if main_screen._CounterScreen._Counting == True:
+            return True
+        
         main_screen._CounterScreen.Draw()
         main_screen._CounterScreen.SwapAndShow()
         main_screen._CounterScreen.StartCounter()
 
-        if main_screen._CounterScreen._Counting == True:
-            return True
         
         try:
             f = open(config.BackLight,"r+")
