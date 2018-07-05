@@ -78,6 +78,7 @@ def gobject_loop():
         exit(-1)
 
 def GobjectFlashLed1(main_screen):
+    global gobject_flash_led1_counter
     gobject_flash_led1_counter+=1
 
     if gobject_flash_led1_counter == 2:
@@ -87,26 +88,30 @@ def GobjectFlashLed1(main_screen):
     elif gobject_flash_led1_counter == 7:
         commands.getstatusoutput("echo 1 > /proc/driver/led1")
 
+    if gobject_flash_led1_counter == 10:
+        gobject_flash_led1_counter = 0
+    
     return True
 
     
 def RestoreLastBackLightBrightness(main_screen):
-    global last_brt,passout_time_stage
+    global last_brt,passout_time_stage,gobject_flash_led1
 
     passout_time_stage = 0
     main_screen._TitleBar._InLowBackLight = -1
     
-    if last_brt == -1:
-        return
-
     if gobject_flash_led1 != -1:
-        gobject.source_remove(GobjectFlashLed1)
+        gobject.source_remove(gobject_flash_led1)
         gobject_flash_led1 = -1
+
+    if main_screen._CounterScreen._Counting==True:
+        main_screen._CounterScreen.StopCounter()
+        main_screen.Draw()
+        main_screen.SwapAndShow()
+        return False
     
-    main_screen._CounterScreen.StopCounter()
-    main_screen.Draw()
-    main_screen.SwapAndShow()
-    
+    if last_brt == -1:
+        return True
 
     try:
         f = open(config.BackLight,"r+")
@@ -126,7 +131,9 @@ def RestoreLastBackLightBrightness(main_screen):
                 last_brt = -1
             else:                
                 f.close()
-                return
+                return True
+
+    return True
 
 def InspectionTeam(main_screen):
     global everytime_keydown,last_brt,passout_time_stage,gobject_flash_led1
@@ -229,10 +236,7 @@ def event_process(event,main_screen):
             main_screen.SwapAndShow()
             pygame.event.clear(GMEVT)
             return
-        if event.type == RUNEVT:
-            everytime_keydown = time.time()
-            RestoreLastBackLightBrightness(main_screen)
-            
+        if event.type == RUNEVT:            
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
@@ -255,8 +259,6 @@ def event_process(event,main_screen):
             return
 
         if event.type == RUNSYS:
-            everytime_keydown = time.time()
-            RestoreLastBackLightBrightness(main_screen)
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
@@ -282,7 +284,8 @@ def event_process(event,main_screen):
             return
         if event.type == pygame.KEYDOWN:
             everytime_keydown = time.time()
-            RestoreLastBackLightBrightness(main_screen)
+            if RestoreLastBackLightBrightness(main_screen) == False:
+                return
             ###########################################################
             if event.key == pygame.K_q:
                 on_exit_cb = getattr(main_screen,"OnExitCb",None)

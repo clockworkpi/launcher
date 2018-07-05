@@ -37,14 +37,16 @@ class CounterScreen(FullScreen):
         if self._Number == 0:
             self._Counting = False    
             print("do the real shutdown")
+            
             if config.CurKeySet != "PC":
                 cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
                 cmdpath += "sleep 3;"
                 cmdpath += "sudo halt -p"
-                pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
+                pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))\
+            
             return False
     
-        if self._inter_counter >= 10:
+        if self._inter_counter >=2:
             self._Number -= 1
             if self._Number < 0:
                 self._Number = 0
@@ -74,7 +76,7 @@ class CounterScreen(FullScreen):
         self._Number = 10
         self._Counting = True
         
-#        self._GobjectIntervalId = gobject.timeout_add(100,self.GObjectInterval)
+        self._GobjectIntervalId = gobject.timeout_add(500,self.GObjectInterval)
         
     def StopCounter(self):
         if self._Counting == False:
@@ -83,11 +85,11 @@ class CounterScreen(FullScreen):
         self._Number = 10
         commands.getstatusoutput("echo 0 > /proc/driver/led1")
 
-        """
+    
         if self._GobjectIntervalId != -1:
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1
-        """
+        
     def Init(self):
         self._CanvasHWND = pygame.Surface((self._Width,self._Height))
         self._TopLabel = Label()
