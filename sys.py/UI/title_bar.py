@@ -59,7 +59,8 @@ class TitleBar:
             self.SyncSoundVolume()
             self.UpdateWifiStrength()
             SwapAndShow()
-        else:
+            print("TitleBar Gobjectroundrobin")
+        elif self._InLowBackLight >= 0:
             self._InLowBackLight+=1
             if self._InLowBackLight > 10:
                 self.CheckBatteryStat()
