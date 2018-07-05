@@ -82,11 +82,11 @@ def GobjectFlashLed1(main_screen):
     gobject_flash_led1_counter+=1
 
     if gobject_flash_led1_counter == 2:
-        commands.getstatusoutput("echo 0 > /proc/driver/led1")
+        commands.getstatusoutput("echo 1 > /proc/driver/led1")
         #turn off
 
-    elif gobject_flash_led1_counter == 7:
-        commands.getstatusoutput("echo 1 > /proc/driver/led1")
+    elif gobject_flash_led1_counter == 4:
+        commands.getstatusoutput("echo 0 > /proc/driver/led1")
 
     if gobject_flash_led1_counter == 10:
         gobject_flash_led1_counter = 0
