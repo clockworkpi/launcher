@@ -59,7 +59,7 @@ class TitleBar:
             self.SyncSoundVolume()
             self.UpdateWifiStrength()
             SwapAndShow()
-            print("TitleBar Gobjectroundrobin")
+#            print("TitleBar Gobjectroundrobin")
         elif self._InLowBackLight >= 0:
             self._InLowBackLight+=1
             if self._InLowBackLight > 10:
@@ -122,7 +122,7 @@ class TitleBar:
             f = open(Battery)
         except IOError:
             self._Icons["battery"] = self._Icons["battery_unknown"]
-            print("CheckBatteryStat open failed")
+#            print("CheckBatteryStat open failed")
             return False
         else:
             with f:
