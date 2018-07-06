@@ -330,13 +330,19 @@ class PowerOptionsPage(Page):
         balance_saving["key"] = "balance"
         balance_saving["label"] = "Performance"
         balance_saving["value"] = "balance_saving"
+
+        server_saving = {}
+        server_saving["key"] = "server"
+        server_saving["label"] = "Server"
+        server_saving["value"] = "server"
         
         
         self._AList["supersaving"] = supersaving
         self._AList["powersaving"] = powersaving
+        self._AList["server"]      = server_saving
         self._AList["balance_saving"] = balance_saving
         
-        for i,u in enumerate( ["supersaving","powersaving","balance_saving"] ):
+        for i,u in enumerate( ["supersaving","powersaving","server","balance_saving"] ):
             if u not in self._AList:
                 continue
             

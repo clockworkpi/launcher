@@ -21,6 +21,7 @@ SKIN="default"
 PowerLevels = {}
 PowerLevels["supersaving"] = [10,30,120]
 PowerLevels["powersaving"] = [40,120,300]
+PowerLevels["server"]      = [40,120,0]
 PowerLevels["balance_saving"] = [40,0,0]
 
 PowerLevel = "balance_saving"
