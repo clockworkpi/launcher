@@ -407,7 +407,7 @@ class MainScreen(object):
                     iconitem.AddLabel(i2,self._IconFont)
                     if FileExists( _dir+"/"+i+"/"+i2+".png"): ### 20_Prog/Prog.png , cut 20_ 
                         iconitem._ImageName = _dir+"/"+i+"/"+i2+".png"
-                    if FileExists( SkinMap(_dir+"/"+i2+".png") ):
+                    elif FileExists( SkinMap(_dir+"/"+i2+".png") ):
                         iconitem._ImageName = SkinMap(_dir+"/"+i2+".png")
                     else:
                         untitled = UntitledIcon()
