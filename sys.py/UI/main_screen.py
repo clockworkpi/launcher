@@ -137,6 +137,7 @@ class MainScreen(object):
     _IconFont    = fonts["varela15"]
     _SkinManager = None
 
+    _Closed      = False
     _CounterScreen = None
     
     def __init__(self):
@@ -349,6 +350,8 @@ class MainScreen(object):
         self._CanvasHWND.fill((255,255,255))
         
     def SwapAndShow(self):
+        if self._Closed == True:
+            return
         if self._HWND != None:
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width,self._Height))
             pygame.display.update()
@@ -363,6 +366,15 @@ class MainScreen(object):
         else:
             return name
 
+    def IsExecPackage(self,dirname):
+        files = os.listdir(dirname)
+        bname = os.path.basename(dirname)
+        bname = self.ExtraName(bname)
+        for i in sorted(files):
+            if i == bname+".sh":
+                return True
+        return False
+    
     def IsEmulatorPackage(self,dirname):
         files = os.listdir(dirname)
         for i in sorted(files):
@@ -396,7 +408,9 @@ class MainScreen(object):
                     iconitem = IconItem()
                     iconitem._CmdPath = ""
                     iconitem.AddLabel(i2,self._IconFont)
-                    if FileExists( SkinMap(_dir+"/"+i2+".png") ):
+                    if FileExists( _dir+"/"+i+"/"+i2+".png"): ### 20_Prog/Prog.png , cut 20_ 
+                        iconitem._ImageName = _dir+"/"+i+"/"+i2+".png"
+                    elif FileExists( SkinMap(_dir+"/"+i2+".png") ):
                         iconitem._ImageName = SkinMap(_dir+"/"+i2+".png")
                     else:
                         untitled = UntitledIcon()
@@ -455,7 +469,12 @@ class MainScreen(object):
                         iconitem._CmdPath = em
                         iconitem._MyType  = ICON_TYPES["Emulator"]
                         cur_page._Icons.append(iconitem)
-                        
+
+                    elif self.IsExecPackage(_dir+"/"+i):
+                        iconitem._MyType  = ICON_TYPES["EXE"]                        
+                        iconitem._CmdPath = _dir+"/"+i+"/"+i2+".sh"
+                        MakeExecutable(iconitem._CmdPath)
+                        cur_page._Icons.append(iconitem)
                     else:                            
                         iconitem._MyType  = ICON_TYPES["DIR"]
                         iconitem._LinkPage = Page()
@@ -541,6 +560,9 @@ class MainScreen(object):
         self._MsgBox.Draw()
     
     def Draw(self):
+        if self._Closed == True:
+            return
+        
         self._CurrentPage.Draw()
         #if self._HWND != None:
         #    self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width,self._Height))
