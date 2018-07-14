@@ -137,6 +137,7 @@ class MainScreen(object):
     _IconFont    = fonts["varela15"]
     _SkinManager = None
 
+    _Closed      = False
     _CounterScreen = None
     
     def __init__(self):
@@ -349,6 +350,8 @@ class MainScreen(object):
         self._CanvasHWND.fill((255,255,255))
         
     def SwapAndShow(self):
+        if self._Closed == True:
+            return
         if self._HWND != None:
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width,self._Height))
             pygame.display.update()
@@ -557,6 +560,9 @@ class MainScreen(object):
         self._MsgBox.Draw()
     
     def Draw(self):
+        if self._Closed == True:
+            return
+        
         self._CurrentPage.Draw()
         #if self._HWND != None:
         #    self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width,self._Height))
