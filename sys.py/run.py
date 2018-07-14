@@ -119,7 +119,7 @@ def RestoreLastBackLightBrightness(main_screen):
 
     passout_time_stage = 0
     main_screen._TitleBar._InLowBackLight = -1
-    main_screen._Closed = True
+    main_screen._Closed = False
     
     if gobject_flash_led1 != -1:
         gobject.source_remove(gobject_flash_led1)
