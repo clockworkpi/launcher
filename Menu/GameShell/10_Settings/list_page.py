@@ -84,7 +84,8 @@ class ListPage(Page):
                          ["","Storage",""],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],]
+                         ["","PowerOFF","Power off"],
+                         ["","ButtonsLayout","Buttons Layout"],]
 
         start_x  = 0
         start_y  = 0
