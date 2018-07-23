@@ -131,8 +131,24 @@ class FootBar:
 
         self.Draw()
         
+    def GetButtonsLayoutMode(self):
+        lm = "xbox"
+        try:
+            with open(".buttonslayout", "r") as f:
+                lm = f.read()
+        except:
+            None
+        if lm not in ["xbox","snes"]:
+            lm = "xbox"
+        return lm
+        
     def SetLabelTexts(self,texts):
-        for idx,x in enumerate(("nav","x","y","a","b")):
+        
+        barr = ["nav","x","y","a","b"]
+        if self.GetButtonsLayoutMode() == "snes":
+            barr = ["nav","y","x","b","a"]
+            
+        for idx,x in enumerate(barr):
             try:
                 self._Icons[x]._Label.SetText(texts[idx])
             except IndexError:
