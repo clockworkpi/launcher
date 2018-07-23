@@ -4,3 +4,4 @@ retroarch-core-options.cfg
 .bsv
 *.pyc
 sys.py/.powerlevel
+sys.py/.buttonslayout
