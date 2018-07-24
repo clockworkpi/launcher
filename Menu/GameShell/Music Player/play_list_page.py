@@ -128,6 +128,7 @@ class PlayListPage(Page):
         
         current_song = myvars.Poller.poll()
         
+        
         for i ,v in enumerate(self._MyList):
             self._MyList[i]._Playing = False
             self._MyList[i]._PlayingProcess = 0
@@ -248,6 +249,8 @@ class PlayListPage(Page):
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
             if myvars.Poller != None:
                 myvars.Poller.stop()
+                self._CurSongTime=""
+                self._CurSongName=""
             
             self.ReturnToUpLevelPage()
             self._Screen.Draw()

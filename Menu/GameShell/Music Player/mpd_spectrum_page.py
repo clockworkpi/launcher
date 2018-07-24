@@ -73,7 +73,7 @@ class MPDSpectrumPage(Page):
     _FootMsg = ["Nav","","","Back",""]
     _MyList = []
     _ListFont = fonts["veramono12"]
-    _SongFont = fonts["notosanscjk17"]
+    _SongFont = fonts["notosanscjk12"]
     _PIFI   =  None
     _FIFO   = None
     _Color  = pygame.Color(126,206,244)
@@ -95,8 +95,8 @@ class MPDSpectrumPage(Page):
     _SheepBodyH = 81
 
     _RollCanvas = None
-    _RollW     = 220
-    _RollH     = 68
+    _RollW     = 180
+    _RollH     = 18
     
     _freq_count = 0
     _head_dir = 0
@@ -148,19 +148,30 @@ class MPDSpectrumPage(Page):
         """
         
         self._cwp_png = IconItem()
-        self._cwp_png._ImgSurf = MyIconPool._Icons["clockworkpi"]
+        self._cwp_png._ImgSurf = MyIconPool._Icons["tape"]
         self._cwp_png._MyType = ICON_TYPES["STAT"]
         self._cwp_png._Parent = self
         self._cwp_png.Adjust(0,0,79,79,0)
 
 
         self._song_title = Label()
-        
         self._song_title.SetCanvasHWND(self._RollCanvas)
-
         self._song_title.Init("Untitled",self._SongFont,(255,255,255))
 
-        
+
+        self._title = Label()
+        self._title.SetCanvasHWND(self._CanvasHWND)
+        self._title.Init("Title:",self._ListFont,(255,255,255))
+
+        self._time = Label()
+        self._time.SetCanvasHWND(self._CanvasHWND)
+        self._time.Init("Time:",self._ListFont,(255,255,255))        
+
+
+        self._time2 = Label()
+        self._time2.SetCanvasHWND(self._CanvasHWND)
+        self._time2.Init("00:00-00:00",self._ListFont,(255,255,255))        
+
         
         self.Start()
                 
@@ -272,10 +283,11 @@ class MPDSpectrumPage(Page):
         
     def Draw(self):
         self.ClearCanvas()
-
+        self._frames+=1
+        
         bw = 10
         gap = 2
-        margin_bottom = 100
+        margin_bottom = 72
 
         spects = None
         meterNum =  self._Width / float(bw +gap )  ## 320/12= 26
@@ -284,22 +296,58 @@ class MPDSpectrumPage(Page):
         margin_left = meter_left / 2 + gap
         meterNum = int(meterNum)
         
-        self._cwp_png.NewCoord(43,149)
+        self._cwp_png.NewCoord(43,159)
         self._cwp_png.Draw()
 
         if self._Neighbor != None:
             if self._Neighbor._CurSongName != "":
                 self._song_title.SetText(self._Neighbor._CurSongName)
+            if self._Neighbor._CurSongTime != "":
+                times = self._Neighbor._CurSongTime
+                times_ = times.split(":")
+                if len(times_)> 1:
+                    cur = int(times_[0])
+                    end = int(times_[1])
+                    if cur > 3600:
+                        cur_text = time.strftime('%H:%M:%S', time.gmtime(cur))
+                    else:
+                        cur_text = time.strftime('%M:%S', time.gmtime(cur))
 
-        
+                    if end > 3600:
+                        end_text = time.strftime('%H:%M:%S', time.gmtime(end))
+                    else:
+                        end_text = time.strftime('%M:%S', time.gmtime(end))
+                else:
+                    cur_text = ""
+                    end_text = times
+                
+                self._time2.SetText(cur_text+"-"+end_text)
+                
+                
+        self._title.NewCoord(90,167)
+        self._title.Draw()
 
+        self._time.NewCoord(90,140)
+        self._time.Draw()
+
+        self._time2.NewCoord(135,140)
+        self._time2.Draw()
+    
         if self._RollCanvas != None:
+#            self._RollCanvas.fill((111,22,33))
             self._RollCanvas.fill((0,0,0))
+            if self._song_title._Width > self._RollW:
+                if (self._song_title._PosX + self._song_title._Width) > self._RollW and self._frames % 30 == 0:
+                    self._song_title._PosX -= 1
+                elif (self._song_title._PosX + self._song_title._Width) <= self._RollW and self._frames % 30 == 0:
+                    self._song_title._PosX  = 0
+            else:
+                self._song_title._PosX = 0
             
-            self._song_title.NewCoord(0,0)
             self._song_title.Draw()
             
-            self._CanvasHWND.blit(self._RollCanvas,(86,114,220,68))
+            self._CanvasHWND.blit(self._RollCanvas,(135,165,self._RollW,self._RollH))
+        
         
         try:
             spects = self._queue_data
