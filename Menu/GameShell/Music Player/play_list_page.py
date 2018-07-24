@@ -71,6 +71,8 @@ class PlayListPage(Page):
     _BGheight = 70
 
     _Scrolled = 0
+
+    _CurSongName = ""
     
     def __init__(self):
         self._Icons = {}
@@ -134,6 +136,8 @@ class PlayListPage(Page):
             if "song" in current_song:
                 posid = int(current_song["song"])
                 if posid < len(self._MyList): # out of index
+                    self._CurSongName = self._MyList[posid]._Text
+                    
                     if "state" in current_song:
                         if current_song["state"] == "stop":
                             self._MyList[posid]._Playing = False

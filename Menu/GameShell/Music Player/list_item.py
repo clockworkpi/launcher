@@ -65,7 +65,7 @@ class ListItem(object):
     _PlayingProcess = 0 # 0 - 100
     _Parent  = None
     
-    
+    _Text = ""
     def __init__(self):
         self._Labels = {}
         self._Icons  = {}
@@ -75,6 +75,7 @@ class ListItem(object):
     def Init(self,text):
 
         #self._Fonts["normal"] = fonts["veramono12"]
+        self._Text = text
         
         l = ListItemLabel()
         l._PosX = 22
