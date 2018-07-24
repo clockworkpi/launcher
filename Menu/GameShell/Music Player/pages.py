@@ -34,5 +34,5 @@ def InitListPage(main_screen):
 def InitSpectrumPage(main_screen):
     myvars.SpectrumPage = MPDSpectrumPage()
     myvars.SpectrumPage._Screen = main_screen
-    myvars.SpectrumPage._Name   = "Spectrum"
+    myvars.SpectrumPage._Name   = "GameShell RTA"
     myvars.SpectrumPage.Init()
