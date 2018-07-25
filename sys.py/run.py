@@ -284,7 +284,8 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = event.message
+                exec_app_cmd = "cd "+os.path.dirname(event.message)+";"
+                exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
@@ -301,7 +302,8 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = event.message
+                exec_app_cmd = "cd "+os.path.dirname(event.message)+";" 
+                exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
