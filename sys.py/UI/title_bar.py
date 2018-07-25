@@ -95,8 +95,12 @@ class TitleBar:
         return ge
 
     def SyncSoundVolume(self):
-        m = alsaaudio.Mixer()
-        vol = m.getvolume()[0]
+	try:
+	        m = alsaaudio.Mixer()
+	        vol = m.getvolume()[0]	
+	except Exception,e:
+		print(str(e))
+	        vol = 0
 
         snd_segs = [ [0,10],[10,30],[30,70],[70,100] ]
 
