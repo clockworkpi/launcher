@@ -200,11 +200,10 @@ def InspectionTeam(main_screen):
 
         main_screen._TitleBar._InLowBackLight = 0
 
-        if time_2 != 0:
-            passout_time_stage = 1 # next 
+        passout_time_stage = 1 # next 
         everytime_keydown = cur_time
     
-    elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
+    elif cur_time - everytime_keydown > time_2 > 0 and passout_time_stage == 1:
         print("timeout, close screen %d" % int(cur_time - everytime_keydown))
         
         try:
