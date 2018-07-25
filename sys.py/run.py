@@ -189,8 +189,9 @@ def InspectionTeam(main_screen):
                 content = f.readlines()
                 content = [x.strip() for x in content]
                 brt=int(content[0])
-                if brt != 1 and brt > 0:
-                    last_brt = brt ## remember brt for restore
+                if brt > 0:
+                    if last_brt < 0:
+                        last_brt = brt ## remember brt for restore
 
                     brt = 1
                     f.seek(0)
