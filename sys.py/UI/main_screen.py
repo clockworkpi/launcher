@@ -517,7 +517,6 @@ class MainScreen(object):
         pygame.time.delay(1000)
         cmdpath = cmdpath.strip()
         cmdpath = CmdClean(cmdpath)
-                
         pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
 
     def OnExitCb(self,event):
