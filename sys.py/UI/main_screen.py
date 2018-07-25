@@ -472,7 +472,7 @@ class MainScreen(object):
 
                     elif self.IsExecPackage(_dir+"/"+i):
                         iconitem._MyType  = ICON_TYPES["EXE"]                        
-                        iconitem._CmdPath = _dir+"/"+i+"/"+i2+".sh"
+                        iconitem._CmdPath = os.path.realpath(_dir+"/"+i+"/"+i2+".sh")
                         MakeExecutable(iconitem._CmdPath)
                         cur_page._Icons.append(iconitem)
                     else:                            
@@ -488,7 +488,7 @@ class MainScreen(object):
                     
                     #cmd      =  ReadTheFileContent(_dir+"/"+i)
                     iconitem = IconItem()
-                    iconitem._CmdPath = _dir+"/"+i
+                    iconitem._CmdPath = os.path.realpath(_dir+"/"+i)
                     MakeExecutable(iconitem._CmdPath)
                     iconitem._MyType  = ICON_TYPES["EXE"]
                     if FileExists( SkinMap( _dir+"/"+ReplaceSuffix(i2,"png"))):
@@ -517,7 +517,6 @@ class MainScreen(object):
         pygame.time.delay(1000)
         cmdpath = cmdpath.strip()
         cmdpath = CmdClean(cmdpath)
-
         pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
 
     def OnExitCb(self,event):

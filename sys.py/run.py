@@ -189,8 +189,9 @@ def InspectionTeam(main_screen):
                 content = f.readlines()
                 content = [x.strip() for x in content]
                 brt=int(content[0])
-                if brt != 1 and brt > 0:
-                    last_brt = brt ## remember brt for restore
+                if brt > 0:
+                    if last_brt < 0:
+                        last_brt = brt ## remember brt for restore
 
                     brt = 1
                     f.seek(0)
@@ -283,7 +284,8 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = event.message
+                exec_app_cmd = "cd "+os.path.dirname(event.message)+";"
+                exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
@@ -300,7 +302,8 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = event.message
+                exec_app_cmd = "cd "+os.path.dirname(event.message)+";" 
+                exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
