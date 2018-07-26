@@ -59,7 +59,7 @@ class PlayListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","","Remove","Back","Play/Pause"]
+    _FootMsg = ["Nav","RTA","Remove","Back","Play/Pause"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
 
@@ -280,7 +280,7 @@ class PlayListPage(Page):
         if event.key == CurKeys["Enter"]:
             self.Click()
 
-        if event.key == CurKeys["Start"]: # start spectrum
+        if event.key == CurKeys["X"]: # start spectrum
             myvars.SpectrumPage._Neighbor = self
             self._Screen.PushPage(myvars.SpectrumPage)
             self._Screen.Draw()
