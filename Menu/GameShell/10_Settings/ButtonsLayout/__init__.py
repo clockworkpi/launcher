@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*- 
 
 import pygame
-import  commands
+import commands
+import shutil
+import os
 
 from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
@@ -15,9 +17,138 @@ from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multi_icon_item import MultiIconItem
 from UI.multilabel import MultiLabel
+from UI.confirm_page import ConfirmPage
+
+class UpdateConfirmPage(ConfirmPage):
+    _ConfirmText = "Apply to RetroArch?"
+    _RetroArchConf = "/home/cpi/.config/retroarch/retroarch.cfg"
+    _LayoutMode = "Unknown"
+    
+    _DownloadPage = None
+
+    _URL = ""
+    _MD5 = ""
+    _Version = ""
+    _GIT = False
+    
+    def ModifyRetroArchConf(self,keys):
+    
+        try:
+            with open(self._RetroArchConf, mode="r") as f:
+                confarr = f.readlines()
+        except:
+            return "retroarch.cfg cannot open."
+    
+        bka = bkb = bkx = bky = False
+        try:
+            for i, ln in enumerate(confarr):
+                lnk = ln.split("=")[0].strip()
+                if lnk == "input_player1_a":
+                    confarr[i] = "input_player1_a = \"" + keys[0] + "\"\n"
+                    bka = True
+                if lnk == "input_player1_b":
+                    confarr[i] = "input_player1_b = \"" + keys[1] + "\"\n"
+                    bkb = True
+                if lnk == "input_player1_x":
+                    confarr[i] = "input_player1_x = \"" + keys[2] + "\"\n"
+                    bkx = True
+                if lnk == "input_player1_y":
+                    confarr[i] = "input_player1_y = \"" + keys[3] + "\"\n"
+                    bky = True
+        except:
+            return "retroarch.cfg cannot parse."
+        
+        if bka and bkb and bkx and bky:
+            None
+        else:
+            return "retroarch.cfg validation error."
+        
+        try:
+            with open(self._RetroArchConf, mode="w") as f:
+                confarr = f.writelines(confarr)
+        except:
+            return "retroarch.cfg cannot write."
+        
+        return "Completed! Your RA keymap: " + self._LayoutMode.upper()
+        
+    def KeyDown(self,event):
+    
+        def finalizeWithDialog(msg):
+            self._Screen._MsgBox.SetText(msg)
+            self._Screen._MsgBox.Draw()
+            self._Screen.SwapAndShow()
+            return
+        
+        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            
+        if event.key == CurKeys["B"]:
+            
+            if self._LayoutMode == "xbox":
+                keymap = ["j","k","u","i"]
+            elif self._LayoutMode == "snes":
+                keymap = ["k","j","i","u"]
+            else:
+                return "Internal error."
+            print("mode: " + self._LayoutMode)
+            
+            if not os.path.isfile(self._RetroArchConf):
+                finalizeWithDialog("retroarch.cfg was not found.")
+                return
+            
+            try:
+                shutil.copyfile(self._RetroArchConf, self._RetroArchConf + ".blbak")
+            except:
+                finalizeWithDialog("Cannot create .blbak")
+                return
+            
+            finalizeWithDialog(self.ModifyRetroArchConf(keymap))
+            return
+        
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            return
+            if self._GIT == True:
+                cmdpath = "feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/updating.png; cd /home/cpi/apps/launcher ;git pull; git reset --hard %s ; feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/loading.png " % self._Version
+                pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
+                self._GIT = False
+                return
+            
+            if self._DownloadPage == None:
+                self._DownloadPage = UpdateDownloadPage()
+                self._DownloadPage._Screen = self._Screen
+                self._DownloadPage._Name   = "Downloading..."                
+                self._DownloadPage.Init()
+
+            self._DownloadPage._MD5 = self._MD5
+            self._Screen.PushPage(self._DownloadPage)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+
+            if self._URL != None and validators.url(self._URL):
+                self._DownloadPage.StartDownload(self._URL, "/tmp")
+            else:
+                print "error url  %s " % self._URL
+            
+
+    def OnReturnBackCb(self):
+        self.ReturnToUpLevelPage()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+            
+    def Draw(self):
+        self.ClearCanvas()
+        self.DrawBG()
+        for i in self._MyList:
+            i.Draw()
+        
+        self.Reset()
 
 class ButtonsLayoutPage(Page):
-    _FootMsg =  ["Nav.","","","Back","Toggle"]
+    _FootMsg =  ["Nav.","UpdateRetroArch","","Back","Toggle"]
     _MyList = []
     _ListFontObj = fonts["varela13"]
     
@@ -30,6 +161,7 @@ class ButtonsLayoutPage(Page):
 
     _DrawOnce = False
     _Scroller = None
+    _ConfirmPage = None
 
     _EasingDur = 30
 
@@ -71,6 +203,14 @@ class ButtonsLayoutPage(Page):
         self._Scroller._PosY = 2
         self._Scroller.Init()
         self._Scroller.SetCanvasHWND(self._HWND)
+
+        self._ConfirmPage = UpdateConfirmPage()
+        self._ConfirmPage._LayoutMode = self.GetButtonsLayoutMode()
+        self._ConfirmPage._Screen = self._Screen
+        self._ConfirmPage._Name  = "Overwrite RA conf"
+        self._ConfirmPage._Parent = self
+        self._ConfirmPage.Init()
+
 
     def ScrollDown(self):
         dis = 10
@@ -137,6 +277,12 @@ class ButtonsLayoutPage(Page):
 
         if event.key == CurKeys["B"]:
             self.ToggleMode()
+            
+        if event.key == CurKeys["X"]:
+            self._ConfirmPage._LayoutMode = self.GetButtonsLayoutMode()
+            self._Screen.PushPage(self._ConfirmPage)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
                                 
     def Draw(self):
         self.ClearCanvas()
