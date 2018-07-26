@@ -79,9 +79,27 @@ def gobject_loop():
 
 def GobjectFlashLed1(main_screen):
     global gobject_flash_led1_counter
+    
+    if main_screen._Closed == False:
+        if gobject_flash_led1_counter > 0:
+            try:
+                f = open("/proc/driver/led1","w")
+            except IOError:
+                print( "open /proc/driver/led1 IOError")
+                pass
+            else:
+                with f:
+                    f.seek(0)
+                    f.write("0")
+                    f.truncate()
+                    f.close()
+
+            gobject_flash_led1_counter = 0
+        return True
+    
     gobject_flash_led1_counter+=1
 
-    if gobject_flash_led1_counter == 2:
+    if gobject_flash_led1_counter == 3:
         try:
             f = open("/proc/driver/led1","w")
         except IOError:
@@ -95,7 +113,7 @@ def GobjectFlashLed1(main_screen):
                 f.close()
     
 
-    elif gobject_flash_led1_counter == 4:
+    elif gobject_flash_led1_counter == 5:
         try:
             f = open("/proc/driver/led1","w")
         except IOError:
@@ -108,8 +126,8 @@ def GobjectFlashLed1(main_screen):
                 f.truncate()
                 f.close()
     
-    if gobject_flash_led1_counter == 10:
-        gobject_flash_led1_counter = 0
+    if gobject_flash_led1_counter == 11:
+        gobject_flash_led1_counter = 1
     
     return True
 
@@ -121,10 +139,6 @@ def RestoreLastBackLightBrightness(main_screen):
     main_screen._TitleBar._InLowBackLight = -1
     main_screen._Closed = False
     
-    if gobject_flash_led1 != -1:
-        gobject.source_remove(gobject_flash_led1)
-        gobject_flash_led1 = -1
-
     
     if last_brt == -1:
         return True
@@ -225,8 +239,6 @@ def InspectionTeam(main_screen):
         main_screen._Closed = True
         if time_3 != 0:
             passout_time_stage = 2 # next
-
-        gobject_flash_led1 = gobject.timeout_add(200,GobjectFlashLed1,main_screen)
         
         everytime_keydown = cur_time
         
@@ -441,7 +453,7 @@ def socket_thread(main_screen):
                                         i._CmdPath.API(main_screen)   
                 
 def big_loop():
-    global sound_patch
+    global sound_patch,gobject_flash_led1
     
     title_bar = TitleBar()
     title_bar.Init(screen)
@@ -470,6 +482,8 @@ def big_loop():
     main_screen.SwapAndShow()
 
     #gobject.timeout_add(DT,gobject_pygame_event_timer,main_screen)
+    gobject_flash_led1 = gobject.timeout_add(200,GobjectFlashLed1,main_screen)
+    
     gobject.timeout_add(DT,gobject_pygame_event_poll_timer,main_screen)
     gobject.timeout_add(3000,title_bar.GObjectRoundRobin)
 
