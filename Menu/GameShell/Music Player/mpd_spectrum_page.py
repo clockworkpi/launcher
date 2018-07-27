@@ -45,19 +45,16 @@ class PIFI(object):
             rawSamples = os.read(fifoFile,self.sampleSize)    # will return empty lines (non-blocking)
             if len(rawSamples) < 1:
 #               print("Read error")
-                if self._samples_buffer != None:
-                    data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
-                    numpy.divide(data,2)
+                pass
             else:
                 self._samples_buffer = rawSamples
-                data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
         except Exception,e:
             pass
 
         if self._samples_buffer == None:
             return ""
         
-#        data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
+        data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
 
         data = data * numpy.hanning(len(data))
 
@@ -210,7 +207,7 @@ class MPDSpectrumPage(Page):
                 #print("sleeping... 0.01")
                 time.sleep(0.01)
                 self.read_retry+=1
-                if self.read_retry > 40:
+                if self.read_retry > 20:
                     os.close(self._FIFO)
                     self._FIFO = os.open(self._PIFI._MPD_FIFO, os.O_RDONLY | os.O_NONBLOCK)
                     self.read_retry = 0
@@ -365,7 +362,7 @@ class MPDSpectrumPage(Page):
 #            print("spects:",spects)
             
             step = int( round( len( spects ) / meterNum) )
-            print(len(spects))
+#            print(len(spects))
             self._bbs = []
 
             for i in range(0,meterNum):
