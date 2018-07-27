@@ -34,21 +34,27 @@ class PIFI(object):
     _FIRST_SELECTED_BIN = 5
     _NUMBER_OF_SELECTED_BINS = 1024
 
+    _samples_buffer = None
     
     def __init__(self):
         self.sampleSize = self._SAMPLE_SIZE
         self.samplingRate = self._SAMPLING_RATE
         
-    def GetSpectrum(self,fifoFile,trim_by=10,log_scale=False,div_by=100):
+    def GetSpectrum(self,fifoFile,trim_by=4,log_scale=False,div_by=100):
         try:
             rawSamples = os.read(fifoFile,self.sampleSize)    # will return empty lines (non-blocking)
             if len(rawSamples) < 1:
-#                print("Read error")
-                return rawSamples
+#               print("Read error")
+                pass
+            else:
+                self._samples_buffer = rawSamples
         except Exception,e:
+            pass
+
+        if self._samples_buffer == None:
             return ""
-    
-        data = numpy.fromstring(rawSamples, dtype=numpy.int16)
+        
+        data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
 
         data = data * numpy.hanning(len(data))
 
@@ -201,7 +207,7 @@ class MPDSpectrumPage(Page):
                 #print("sleeping... 0.01")
                 time.sleep(0.01)
                 self.read_retry+=1
-                if self.read_retry > 40:
+                if self.read_retry > 20:
                     os.close(self._FIFO)
                     self._FIFO = os.open(self._PIFI._MPD_FIFO, os.O_RDONLY | os.O_NONBLOCK)
                     self.read_retry = 0
@@ -354,8 +360,9 @@ class MPDSpectrumPage(Page):
             if len(spects) == 0:
                 return
 #            print("spects:",spects)
+            
             step = int( round( len( spects ) / meterNum) )
-
+#            print(len(spects))
             self._bbs = []
 
             for i in range(0,meterNum):

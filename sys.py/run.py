@@ -422,7 +422,7 @@ def socket_thread(main_screen):
                     if callable( current_page_key_down_cb ):
                         main_screen._CurrentPage.KeyDown(escevent)
                 
-            if tokens[0].lower() == "quit":
+            if tokens[0].lower() == "quit": #eg: echo "quit" | socat - UNIX-CONNECT:/tmp/gameshell
                 conn.close()
                 on_exit_cb = getattr(main_screen,"OnExitCb",None)
                 if on_exit_cb != None:
@@ -488,7 +488,7 @@ def big_loop():
     gobject.timeout_add(3000,title_bar.GObjectRoundRobin)
 
 
-#    socket_thread(main_screen)
+    socket_thread(main_screen)
     
     gobject_loop()
     
