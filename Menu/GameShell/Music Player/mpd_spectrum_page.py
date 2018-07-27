@@ -45,16 +45,19 @@ class PIFI(object):
             rawSamples = os.read(fifoFile,self.sampleSize)    # will return empty lines (non-blocking)
             if len(rawSamples) < 1:
 #               print("Read error")
-                pass
+                if self._samples_buffer != None:
+                    data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
+                    numpy.divide(data,2)
             else:
                 self._samples_buffer = rawSamples
+                data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
         except Exception,e:
             pass
 
         if self._samples_buffer == None:
             return ""
         
-        data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
+#        data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
 
         data = data * numpy.hanning(len(data))
 
