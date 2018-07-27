@@ -39,7 +39,7 @@ class PIFI(object):
         self.sampleSize = self._SAMPLE_SIZE
         self.samplingRate = self._SAMPLING_RATE
         
-    def GetSpectrum(self,fifoFile,trim_by=10,log_scale=False,div_by=100):
+    def GetSpectrum(self,fifoFile,trim_by=4,log_scale=False,div_by=100):
         try:
             rawSamples = os.read(fifoFile,self.sampleSize)    # will return empty lines (non-blocking)
             if len(rawSamples) < 1:
@@ -285,7 +285,7 @@ class MPDSpectrumPage(Page):
         self.ClearCanvas()
         self._frames+=1
         
-        bw = 10
+        bw = 5
         gap = 2
         margin_bottom = 72
 
@@ -354,8 +354,9 @@ class MPDSpectrumPage(Page):
             if len(spects) == 0:
                 return
 #            print("spects:",spects)
+            
             step = int( round( len( spects ) / meterNum) )
-
+            print(len(spects))
             self._bbs = []
 
             for i in range(0,meterNum):
