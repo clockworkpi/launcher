@@ -11,8 +11,8 @@ import config
 
 class PowerOffConfirmPage(ConfirmPage):
     
-    _ConfirmText = "Confirm Power OFF?"
-    
+    _ConfirmText = "Awaiting Input"
+    _FootMsg = ["Nav","Reboot","","Cancel","Shutdown"]
 
     def CheckBattery(self):
         try:
@@ -59,7 +59,12 @@ class PowerOffConfirmPage(ConfirmPage):
             
             cmdpath += "sudo halt -p"
             pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
-
+            
+        if event.key == CurKeys["X"]:
+            cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
+            cmdpath += "sleep 3;"
+            cmdpath = "sudo reboot"
+            pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
 
 
 class APIOBJ(object):
