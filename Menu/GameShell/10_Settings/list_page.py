@@ -82,6 +82,7 @@ class ListPage(Page):
                          ["","Sound","Sound Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
+                         ["","Time","Timezone"],
                          ["","Update", ""],
                          ["","About",  "About"],
                          ["","PowerOFF","Power off"],
