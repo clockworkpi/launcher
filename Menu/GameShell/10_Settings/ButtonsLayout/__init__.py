@@ -24,13 +24,6 @@ class UpdateConfirmPage(ConfirmPage):
     _RetroArchConf = "/home/cpi/.config/retroarch/retroarch.cfg"
     _LayoutMode = "Unknown"
     
-    _DownloadPage = None
-
-    _URL = ""
-    _MD5 = ""
-    _Version = ""
-    _GIT = False
-    
     def ModifyRetroArchConf(self,keys):
     
         try:
@@ -91,7 +84,8 @@ class UpdateConfirmPage(ConfirmPage):
             elif self._LayoutMode == "snes":
                 keymap = ["k","j","i","u"]
             else:
-                return "Internal error."
+                finalizeWithDialog("Internal error.")
+                return
             print("mode: " + self._LayoutMode)
             
             if not os.path.isfile(self._RetroArchConf):
@@ -106,33 +100,6 @@ class UpdateConfirmPage(ConfirmPage):
             
             finalizeWithDialog(self.ModifyRetroArchConf(keymap))
             return
-        
-            self.ReturnToUpLevelPage()
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
-            return
-            if self._GIT == True:
-                cmdpath = "feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/updating.png; cd /home/cpi/apps/launcher ;git pull; git reset --hard %s ; feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/loading.png " % self._Version
-                pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
-                self._GIT = False
-                return
-            
-            if self._DownloadPage == None:
-                self._DownloadPage = UpdateDownloadPage()
-                self._DownloadPage._Screen = self._Screen
-                self._DownloadPage._Name   = "Downloading..."                
-                self._DownloadPage.Init()
-
-            self._DownloadPage._MD5 = self._MD5
-            self._Screen.PushPage(self._DownloadPage)
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
-
-            if self._URL != None and validators.url(self._URL):
-                self._DownloadPage.StartDownload(self._URL, "/tmp")
-            else:
-                print "error url  %s " % self._URL
-            
 
     def OnReturnBackCb(self):
         self.ReturnToUpLevelPage()
