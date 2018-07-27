@@ -34,6 +34,7 @@ class PIFI(object):
     _FIRST_SELECTED_BIN = 5
     _NUMBER_OF_SELECTED_BINS = 1024
 
+    _samples_buffer = None
     
     def __init__(self):
         self.sampleSize = self._SAMPLE_SIZE
@@ -43,12 +44,17 @@ class PIFI(object):
         try:
             rawSamples = os.read(fifoFile,self.sampleSize)    # will return empty lines (non-blocking)
             if len(rawSamples) < 1:
-#                print("Read error")
-                return rawSamples
+#               print("Read error")
+                pass
+            else:
+                self._samples_buffer = rawSamples
         except Exception,e:
+            pass
+
+        if self._samples_buffer == None:
             return ""
-    
-        data = numpy.fromstring(rawSamples, dtype=numpy.int16)
+        
+        data = numpy.fromstring(self._samples_buffer, dtype=numpy.int16)
 
         data = data * numpy.hanning(len(data))
 
