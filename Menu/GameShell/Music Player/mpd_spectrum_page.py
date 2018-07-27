@@ -291,7 +291,7 @@ class MPDSpectrumPage(Page):
         self.ClearCanvas()
         self._frames+=1
         
-        bw = 5
+        bw = 8
         gap = 2
         margin_bottom = 72
 
