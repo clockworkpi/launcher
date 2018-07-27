@@ -364,9 +364,10 @@ class MPDSpectrumPage(Page):
             step = int( round( len( spects ) / meterNum) )
 #            print(len(spects))
             self._bbs = []
-
+            a = numpy.logspace(0, 1, num=meterNum,endpoint=True)
+            
             for i in range(0,meterNum):
-                index = int(i*step)
+                index = int(a[i] * step)
                 total = 0
                 
                 value = spects[index]
@@ -386,7 +387,7 @@ class MPDSpectrumPage(Page):
                     value = 0
 
                 value = value/32768.0
-                value = value * 100
+                value = value * 123
                 value = value %  (self._Height-gap-margin_bottom)
                 
                 if len(self._vis_values) < len(self._bby):
@@ -396,7 +397,8 @@ class MPDSpectrumPage(Page):
                         self._vis_values[i] = value
 
 
-        except Empty:
+        except Exception,e:
+            print(e)
             return
         else: # got line
             if len(self._vis_values) == 0:
