@@ -1,5 +1,0 @@
-
-
-TimePage = None
-TimezoneListPage = None
-
