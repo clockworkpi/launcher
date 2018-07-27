@@ -11,7 +11,7 @@ import config
 
 class PowerOffConfirmPage(ConfirmPage):
     
-    _ConfirmText = "Awaiting Input?"
+    _ConfirmText = "Awaiting Input"
     _FootMsg = ["Nav","Reboot","","Cancel","Shutdown"]
 
     def CheckBattery(self):
