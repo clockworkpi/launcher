@@ -63,7 +63,7 @@ class PowerOffConfirmPage(ConfirmPage):
         if event.key == CurKeys["X"]:
             cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
             cmdpath += "sleep 3;"
-            cmdpath = "sudo reboot"
+            cmdpath += "sudo reboot"
             pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
 
 
