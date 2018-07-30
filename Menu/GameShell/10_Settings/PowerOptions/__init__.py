@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import os
 import pygame
 #import math
 #mport subprocess
@@ -443,6 +443,11 @@ class PowerOptionsPage(Page):
 
         config.PowerLevel = cur_li._Value
 
+        if config.PowerLevel!= "supersaving":
+            os.system("sudo iw wlan0 set power_save off")
+        else:
+            os.system("sudo iw wlan0 set power_save on")
+        
         self._Screen._MsgBox.SetText("Applying...")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()

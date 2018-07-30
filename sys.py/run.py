@@ -535,6 +535,10 @@ if __name__ == '__main__':
     powerlevel = powerlevel.strip()
     if powerlevel != "":
         config.PowerLevel = powerlevel
+        if powerlevel != "supersaving":
+            os.system("sudo iw wlan0 set power_save off")
+        else:
+            os.system("sudo iw wlan0 set power_save on")
     
     big_loop()
     
