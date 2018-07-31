@@ -454,14 +454,18 @@ class MainScreen(object):
                             with f:
                                 content = f.readlines()
                                 content = [x.strip() for x in content] 
-                        for i in content:
-                            pis = i.split("=")
+                        for c in content:
+                            pis = c.split("=")
                             if len(pis) > 1:
                                 if "EXT" in pis[0]:
                                     obj[pis[0]] = pis[1].split(",")
                                 else:
                                     obj[pis[0]] = pis[1]
-                        
+
+                        if FileExists(_dir+"/"+i+"/retroarch-local.cfg"):
+                            obj["RETRO_CONFIG"] = os.path.abspath( _dir+"/"+i+"/retroarch-local.cfg" )
+                            print("a local retroarch cfg:", obj["RETRO_CONFIG"])
+                            
                         em = MyEmulator()
                         em._Emulator = obj
                         
