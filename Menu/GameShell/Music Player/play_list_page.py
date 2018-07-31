@@ -97,7 +97,11 @@ class PlayListPage(Page):
             li._Fonts["normal"] = self._ListFont
 
             if "title" in v:
-                li.Init( v["title"])
+                if isinstance(v["title"], (list,)):
+                    li.Init(" | ".join(v["title"]))
+                else:
+                    li.Init( v["title"])
+                
                 if "file" in v:
                     li._Path = v["file"]
                 
