@@ -5,3 +5,4 @@ retroarch-core-options.cfg
 *.pyc
 sys.py/.powerlevel
 sys.py/.buttonslayout
+*.cfg
