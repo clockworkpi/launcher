@@ -463,7 +463,7 @@ class MainScreen(object):
                                     obj[pis[0]] = pis[1]
 
                         if FileExists(_dir+"/"+i+"/retroarch-local.cfg"):
-                            obj["RETRO_CONFIG"] = os.path.abspath( _dir+"/"+i+"/retroarch-local.cfg" )
+                            obj["RETRO_CONFIG"] = CmdClean(os.path.abspath( _dir+"/"+i+"/retroarch-local.cfg" ))
                             print("a local retroarch cfg:", obj["RETRO_CONFIG"])
                             
                         em = MyEmulator()
