@@ -485,6 +485,7 @@ class WifiList(Page):
         """
         
         if wireless_connecting:
+            
             if not fast:
                 iwconfig = self._Wireless.GetIwconfig()
             else:
@@ -498,7 +499,6 @@ class WifiList(Page):
                 
                 self._Screen._FootBar.UpdateNavText(self._LastStatusMsg)
                 SwapAndShow()
-                
             #self._ConnectTry+=1
 
             return True
@@ -536,7 +536,7 @@ class WifiList(Page):
         dbus.UInt32(2L)
         ['192.168.31.141', 'TP-LINK4G', '88', '0', '72.2 Mb/s']
         """
-        pp(info)
+#        pp(info)
         self.UpdateNetList(state,info)
         if info != None:
             self._Screen.Draw()
@@ -610,6 +610,7 @@ class WifiList(Page):
         self._Wireless.SetWirelessProperty(netid,"apsk",password)
         self._Wireless.SetWirelessProperty(netid,"automatic",1)
 
+        self.ShowBox("Connecting...")
         
         self._WirelessList[netid].Connect()
         print("after Connect")
@@ -679,9 +680,9 @@ class WifiList(Page):
         
     def KeyDown(self,event):
 
-        if self._BlockingUI == True:
-            print("UI blocking ...")
-            return
+#        if self._BlockingUI == True:
+#            print("UI blocking ...")
+#            return
         
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
             if self._Wireless != None:
