@@ -72,6 +72,12 @@ class ListItem(object):
             self._Path = text
 
         label_text = os.path.basename(text)
+        alias_file = os.path.splitext(text)[0] + ".alias"
+        if os.path.isfile(alias_file):
+            fp = open(alias_file, "r")
+            alias = fp.read()
+            fp.close()
+            label_text = alias
         
         if self._MyType == ICON_TYPES["DIR"]:
             l.Init(label_text,self._Fonts["normal"])
