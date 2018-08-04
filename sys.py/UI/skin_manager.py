@@ -23,7 +23,7 @@ class SkinManager(object):
     _Config = None
     
     def __init__(self):
-        pass
+        self.Init()
 
     def ConvertToRGB(self,hexstr):
         
@@ -31,44 +31,47 @@ class SkinManager(object):
         return tuple(int(h[i:i+2], 16) for i in (0, 2 ,4))
     
     def Init(self):
-        
+        if not SkinManager._Colors:
+            self.SetColors()
+
+    def SetColors(self):
         Colors = {}
-        Colors["High"] = pygame.Color(51,166,255) 
-        Colors["Text"] = pygame.Color(83,83,83)
-        Colors["Front"] =  pygame.Color(131,199,219)
-        Colors["URL"]   = pygame.Color(51,166,255)
-        Colors["Line"]  =  pygame.Color(169,169,169)
-        Colors["TitleBg"] = pygame.Color(228,228,228)
-        Colors["Active"]  =  pygame.Color(175,90,0)
-        Colors["White"]  = pygame.Color(255,255,255)
-        
-        self._Colors = Colors
-        
+        Colors["High"] = pygame.Color(51, 166, 255)
+        Colors["Text"] = pygame.Color(83, 83, 83)
+        Colors["Front"] = pygame.Color(131, 199, 219)
+        Colors["URL"] = pygame.Color(51, 166, 255)
+        Colors["Line"] = pygame.Color(169, 169, 169)
+        Colors["TitleBg"] = pygame.Color(228, 228, 228)
+        Colors["Active"] = pygame.Color(175, 90, 0)
+        Colors["White"] = pygame.Color(255, 255, 255)
+
+        SkinManager._Colors = Colors
+
         self._Config = CaseConfigParser()
-        
+
         fname = "../skin/"+config.SKIN+"/config.cfg"
-        
+
         try:
             self._Config.read(fname)
-        except Exception,e:
+        except Exception, e:
             print("read skin config.cfg error %s" % str(e))
             return
         else:
             if "Colors" in self._Config.sections():
                 colour_opts = self._Config.options("Colors")
 #                print(colour_opts)
-                for i in self._Colors:
+                for i in SkinManager._Colors:
                     if i in colour_opts:
                         try:
-                            self._Colors[i] = self.ConvertToRGB(self._Config.get("Colors",i))
-                        except Exception,e:
+                            SkinManager._Colors[i] = self.ConvertToRGB(
+                                self._Config.get("Colors", i))
+                        except Exception, e:
                             print("error in ConvertToRGB %s" % str(e))
                             continue
-
     
     def GiveColor(self,name):
-        if name in self._Colors:
-            return self._Colors[name]
+        if name in SkinManager._Colors:
+            return SkinManager._Colors[name]
         else:
             return  pygame.Color(255,0,0)
     
