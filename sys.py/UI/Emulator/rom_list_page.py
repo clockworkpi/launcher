@@ -4,6 +4,7 @@ import os
 import pygame
 
 import glob
+import re
 import shutil
 import gobject
 import validators
@@ -150,11 +151,18 @@ class RomListPage(Page):
                 
                 bname = os.path.basename(v)  ### filter extension
                 if len(bname)> 1:
-                    pieces  = bname.split(".")
-                    if len(pieces) > 1:
-                        if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                            dirmap["file"] = v
-                            ret.append(dirmap)
+                    is_excluded = False
+                    for exclude_pattern in self._Emulator["EXCLUDE"]:
+                        if re.match(exclude_pattern, bname):
+                            is_excluded = True
+                            break
+
+                    if not is_excluded:
+                        pieces  = bname.split(".")
+                        if len(pieces) > 1:
+                            if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
+                                dirmap["file"] = v
+                                ret.append(dirmap)
 #            else:
 #                print("not file or dir")
 

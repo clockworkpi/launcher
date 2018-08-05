@@ -440,6 +440,7 @@ class MainScreen(object):
                         obj["ROM"] = ""
                         obj["ROM_SO"] =""
                         obj["EXT"]    = []
+                        obj["EXCLUDE"] = []
                         obj["FILETYPE"] = "file"
                         obj["LAUNCHER"] = ""
                         obj["TITLE"]    = "Game"
@@ -458,6 +459,8 @@ class MainScreen(object):
                             pis = c.split("=")
                             if len(pis) > 1:
                                 if "EXT" in pis[0]:
+                                    obj[pis[0]] = pis[1].split(",")
+                                elif "EXCLUDE" in pis[0]
                                     obj[pis[0]] = pis[1].split(",")
                                 else:
                                     obj[pis[0]] = pis[1]
