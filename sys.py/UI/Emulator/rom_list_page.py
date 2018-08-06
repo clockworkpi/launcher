@@ -161,7 +161,7 @@ class RomListPage(Page):
                         pieces  = bname.split(".")
                         if len(pieces) > 1:
                             if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                                dirmap["file"] = v
+                                dirmap["file"] = v.decode("utf8")
                                 ret.append(dirmap)
 #            else:
 #                print("not file or dir")
