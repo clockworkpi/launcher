@@ -460,7 +460,7 @@ class MainScreen(object):
                             if len(pis) > 1:
                                 if "EXT" in pis[0]:
                                     obj[pis[0]] = pis[1].split(",")
-                                elif "EXCLUDE" in pis[0]
+                                elif "EXCLUDE" in pis[0]:
                                     obj[pis[0]] = pis[1].split(",")
                                 else:
                                     obj[pis[0]] = pis[1]
