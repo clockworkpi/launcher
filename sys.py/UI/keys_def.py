@@ -10,12 +10,6 @@ import sys
 from config import CurKeySet
 
 GameShell = {}
-"""
-GameShell["Up"]   = pygame.K_w
-GameShell["Down"] = pygame.K_s
-GameShell["Left"] = pygame.K_a
-GameShell["Right"]= pygame.K_d
-"""
 GameShell["Up"]   = pygame.K_UP
 GameShell["Down"] = pygame.K_DOWN
 GameShell["Left"] = pygame.K_LEFT
@@ -53,6 +47,9 @@ PC["Vol+"]  = pygame.K_RETURN
 PC["Enter"] = pygame.K_RETURN
 PC["Space"] = pygame.K_SPACE
 PC["Start"] = pygame.K_s
+
+PC["LK1"] = pygame.K_h
+PC["LK5"] = pygame.K_l
 
 if CurKeySet == "PC":
     CurKeys = PC
