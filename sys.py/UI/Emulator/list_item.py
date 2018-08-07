@@ -11,6 +11,7 @@ from UI.label  import Label
 from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
+from UI.skin_manager import SkinManager
 
 # a item for List
 # - - - - - - - - - - - -- 
@@ -112,6 +113,6 @@ class ListItem(object):
             self._Parent._Icons["sys"].NewCoord(self._PosX+12,self._PosY+ (self._Height - self._Parent._Icons["sys"]._Height)/2+self._Parent._Icons["sys"]._Height/2)
             self._Parent._Icons["sys"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,(169,169,169),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
     
 

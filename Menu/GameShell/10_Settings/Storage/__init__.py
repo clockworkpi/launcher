@@ -28,7 +28,7 @@ class StoragePage(Page):
     _BGmsg    = "%.1fGB of %.1fGB Used"
     _DskUsg   = None
 
-    _HighColor = pygame.Color(*SkinManager().GiveColor('High'))
+    _HighColor = SkinManager().GiveColor('High')
     _FootMsg    = ["Nav.","","","Back",""]
     
     def __init__(self):

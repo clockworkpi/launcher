@@ -43,7 +43,9 @@ class SkinManager(object):
         Colors["Line"] = pygame.Color(169, 169, 169)
         Colors["TitleBg"] = pygame.Color(228, 228, 228)
         Colors["Active"] = pygame.Color(175, 90, 0)
+        Colors["Disabled"] = pygame.Color(204, 204, 204)
         Colors["White"] = pygame.Color(255, 255, 255)
+        Colors["Black"] = pygame.Color(0, 0, 0)
 
         SkinManager._Colors = Colors
 

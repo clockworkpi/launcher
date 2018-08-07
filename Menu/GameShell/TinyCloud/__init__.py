@@ -10,6 +10,7 @@ from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.keys_def  import CurKeys
+from UI.skin_manager import SkinManager
 
 from libs.DBUS  import is_wifi_connected_now,get_wifi_ip
 
@@ -24,8 +25,8 @@ class TinyCloudPage(Page):
 
     _Coords = {}
     
-    _URLColor  = pygame.Color(51,166,255)
-    _TextColor = pygame.Color(83,83,83)
+    _URLColor  = SkinManager().GiveColor('URL')
+    _TextColor = SkinManager().GiveColor('Text')
     _Scrolled = 0
     
     _PngSize = {}
@@ -197,7 +198,7 @@ class TinyCloudPage(Page):
             self._DrawOnce = True
             
         if self._HWND != None:
-            self._HWND.fill((255,255,255))
+            self._HWND.fill(SkinManager().GiveColor('White'))
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             
             

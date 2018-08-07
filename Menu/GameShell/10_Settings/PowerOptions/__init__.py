@@ -19,11 +19,12 @@ from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multilabel import MultiLabel
+from UI.skin_manager import SkinManager
 
 import config
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -102,7 +103,7 @@ class PageListItem(object):
             self._Labels["Small"]._PosY = self._PosY + (self._Height-  self._Labels["Small"]._Height)/2
             self._Labels["Small"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,(169,169,169),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
+        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 
 class InfoPage(Page):

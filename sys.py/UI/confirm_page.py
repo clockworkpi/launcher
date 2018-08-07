@@ -12,11 +12,12 @@ from label  import Label
 from fonts  import fonts
 from util_funcs import midRect
 from keys_def   import CurKeys
+from skin_manager import SkinManager
 
 
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -129,8 +130,8 @@ class ConfirmPage(Page):
     def DrawBG(self):
         _rect = pygame.Rect(self._BGPosX,self._BGPosY,self._BGWidth,self._BGHeight)
         
-        pygame.draw.rect(self._CanvasHWND,(255,255,255),_rect,0)
-        pygame.draw.rect(self._CanvasHWND,(83,83,83),_rect,1)
+        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('White'),_rect,0)
+        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('Text'),_rect,1)
         
     def Draw(self):
         #self.ClearCanvas()

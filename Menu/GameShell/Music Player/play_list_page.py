@@ -14,6 +14,7 @@ from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys
 from UI.icon_pool  import MyIconPool
+from UI.skin_manager import SkinManager
 
 from UI.scroller   import ListScroller
 
@@ -22,7 +23,7 @@ from list_item  import ListItem
 import myvars
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -183,7 +184,7 @@ class PlayListPage(Page):
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.AddLabel("my favourites", fonts["varela18"])
-        self._BGpng.SetLableColor(pygame.Color(204,204,204))
+        self._BGpng.SetLableColor(SkinManager().GiveColor('Disabled'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
         self._Scroller = ListScroller()

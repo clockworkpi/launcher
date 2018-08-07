@@ -17,6 +17,7 @@ from UI.keys_def   import CurKeys
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool           import MyIconPool
 from UI.scroller   import ListScroller
+from UI.skin_manager import SkinManager
 
 from list_item  import ListItem
 
@@ -50,7 +51,7 @@ class TimeLibStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -189,7 +190,7 @@ class TimezoneListPage(Page):
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.AddLabel("No timezones found on system!", fonts["varela22"])
-        self._BGpng.SetLableColor(pygame.Color(204,204,204))
+        self._BGpng.SetLableColor(SkinManager().GiveColor('Disabled'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
 
