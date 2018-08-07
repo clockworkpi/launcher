@@ -34,6 +34,8 @@ GameShell["Space"] = pygame.K_SPACE
 GameShell["Enter"] = pygame.K_k
 GameShell["Start"] = pygame.K_RETURN
 
+GameShell["LK1"] = pygame.K_h
+GameShell["LK5"] = pygame.K_l
 
 PC = {}
 

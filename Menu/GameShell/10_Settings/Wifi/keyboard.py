@@ -304,14 +304,9 @@ class Keyboard(Page):
                 self._LeftOrRight = -1
             if self._SectionIndex >= (self._SectionNumbers -1):
                 self._LeftOrRight = 1
-            self.KeyboardShift()
 
-            self._SectionIndex -= self._LeftOrRight
+            self.ShiftKeyboardPage()
 
-            #print(self._SectionIndex) # on which keyboard section now
-            self.Draw()
-            self._Screen.SwapAndShow()
-        
         if event.key == CurKeys["Menu"]: # we assume keyboard always be child page
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
@@ -329,6 +324,16 @@ class Keyboard(Page):
             self._Textarea.Draw()
             self._Screen.SwapAndShow()
 
+        if event.key == CurKeys["LK1"]:
+            if self._SectionIndex < self._SectionNumbers -1:
+                self._LeftOrRight = -1
+                self.ShiftKeyboardPage()
+                
+        if event.key == CurKeys["LK5"]:
+            if self._SectionIndex > 0:
+                self._LeftOrRight = 1 
+                self.ShiftKeyboardPage()
+
     def Draw(self):
         self.ClearCanvas()
         self._Ps.Draw()
@@ -340,4 +345,9 @@ class Keyboard(Page):
         
         self._Textarea.Draw()
 
+    def ShiftKeyboardPage(self):
+        self.KeyboardShift()
+        self._SectionIndex -= self._LeftOrRight
+        self.Draw()
+        self._Screen.SwapAndShow()
 
