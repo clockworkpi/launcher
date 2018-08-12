@@ -6,3 +6,5 @@ retroarch-core-options.cfg
 sys.py/.powerlevel
 sys.py/.buttonslayout
 *.cfg
+**/Jobs/*
+!**/Jobs/.gitkeep
