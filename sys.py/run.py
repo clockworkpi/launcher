@@ -296,7 +296,7 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";"
+                exec_app_cmd = "./gsnotify/gsnotify-arm& cd "+os.path.dirname(event.message)+";"
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
@@ -539,6 +539,8 @@ if __name__ == '__main__':
             os.system("sudo iw wlan0 set power_save off")
         else:
             os.system("sudo iw wlan0 set power_save on")
-    
+
+    os.spawnlp(os.P_NOWAIT,"./gsnotify/gsnotify-arm",  "./gsnotify/gsnotify-arm")
+        
     big_loop()
     
