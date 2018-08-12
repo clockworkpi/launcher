@@ -2,6 +2,8 @@
 
 import pygame
 
+from skin_manager import SkinManager
+
 
 class MultiLabel: ##Multi Line Label 
     _PosX=0
@@ -10,7 +12,7 @@ class MultiLabel: ##Multi Line Label
     _Height=100
     _Text=""
     _FontObj=None
-    _Color = pygame.Color(83,83,83)
+    _Color = SkinManager().GiveColor('Text')
     _CanvasHWND = None
     _TextSurf = None
     _MaxWidth = 0
@@ -18,7 +20,7 @@ class MultiLabel: ##Multi Line Label
     def __init__(self):
         pass
     
-    def Init(self,text,font_obj,color=pygame.Color(83,83,83)):
+    def Init(self,text,font_obj,color=SkinManager().GiveColor('Text')):
         self._Color = color
         self._FontObj = font_obj
         self._Text = text

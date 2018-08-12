@@ -10,13 +10,14 @@ from libs.roundrects import aa_round_rect
 from UI.page         import Page,PageStack,PageSelector
 from UI.label        import Label
 from UI.fonts        import fonts
+from UI.skin_manager import SkinManager
 
 class Textarea:
     _PosX =0 
     _PosY = 0
     _Width = 0
     _Height = 0
-    _BackgroundColor = pygame.Color(229,229,229)
+    _BackgroundColor = SkinManager().GiveColor('TitleBg')
     _CanvasHWND  = None
     _MyWords     = []
     _BlitWords   = []

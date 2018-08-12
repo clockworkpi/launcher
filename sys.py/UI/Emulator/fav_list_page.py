@@ -17,6 +17,7 @@ from UI.keys_def   import CurKeys
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool import MyIconPool
 from UI.scroller  import ListScroller
+from UI.skin_manager import SkinManager
 
 from rom_so_confirm_page import RomSoConfirmPage
 
@@ -51,7 +52,7 @@ class FavStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -230,7 +231,7 @@ class FavListPage(Page):
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.AddLabel("my favourites games", fonts["varela18"])
-        bgpng.SetLableColor(pygame.Color(204,204,204))
+        bgpng.SetLableColor(SkinManager().GiveColor('Disabled'))
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
         self._Icons["bg"] = bgpng

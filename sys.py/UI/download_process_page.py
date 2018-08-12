@@ -19,6 +19,7 @@ from UI.keys_def   import CurKeys
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.download   import Download
+from UI.skin_manager import SkinManager
 
 from libs.DBUS     import is_wifi_connected_now
 
@@ -38,8 +39,8 @@ class DownloadProcessPage(Page):
     _FileNameLabel = None
     _SizeLabel     = None
 
-    _URLColor  = pygame.Color(51,166,255)
-    _TextColor = pygame.Color(83,83,83)
+    _URLColor  = SkinManager().GiveColor('URL')
+    _TextColor = SkinManager().GiveColor('Text')
     
     def __init__(self):
         Page.__init__(self)        
@@ -205,12 +206,12 @@ class DownloadProcessPage(Page):
 
         
         rect_ = midRect(self._Width/2,self._Height/2+33,170,17, Width,Height)
-        aa_round_rect(self._CanvasHWND,rect_, (238,238,238),5,0,(238,238,238))
+        aa_round_rect(self._CanvasHWND,rect_,SkinManager().GiveColor('TitleBg'),5,0,SkinManager().GiveColor('TitleBg'))
         
         rect2 = midRect(self._Width/2,self._Height/2+33,int(170*(percent/100.0)),17, Width,Height)
         rect2.left = rect_.left
         rect2.top  = rect_.top
-        aa_round_rect(self._CanvasHWND,rect2, (126,206,244),5,0,(126,206,244))
+        aa_round_rect(self._CanvasHWND,rect2,SkinManager().GiveColor('Front'),5,0,SkinManager().GiveColor('Front'))
 
         rect3 = midRect(self._Width/2,self._Height/2+53,self._FileNameLabel._Width, self._FileNameLabel._Height,Width,Height)
 

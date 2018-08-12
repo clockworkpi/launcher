@@ -8,6 +8,7 @@ from constants   import Width,Height,RUNSYS
 from label       import Label
 from fonts       import fonts
 from full_screen import FullScreen
+from skin_manager import SkinManager
 
 import config
 
@@ -21,8 +22,8 @@ class CounterScreen(FullScreen):
     _BottomLabel = None
     _NumberLabel = None
     
-    _BGColor = pygame.Color(0,0,0)
-    _FGColor = pygame.Color(255,255,255)
+    _BGColor = SkinManager().GiveColor('Black')
+    _FGColor = SkinManager().GiveColor('White')
     
     _Counting = False
     _Number = 10

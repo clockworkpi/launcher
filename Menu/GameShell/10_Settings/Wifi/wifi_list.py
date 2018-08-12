@@ -15,6 +15,7 @@ from UI.util_funcs import midRect,SwapAndShow
 from UI.keys_def   import CurKeys
 from UI.scroller   import ListScroller
 from UI.confirm_page import ConfirmPage
+from UI.skin_manager import SkinManager
 
 from net_item import NetItem
 
@@ -68,7 +69,7 @@ class InfoPageListItem(object):
             self._Labels["Small"]._PosY = self._PosY + (self._Height - self._Labels["Small"]._Height)/2
             self._Labels["Small"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,(169,169,169),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
     
 
 
@@ -105,7 +106,7 @@ class WifiDisconnectConfirmPage(ConfirmPage):
         self.Reset()
         
 class WifiInfoPageSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -297,7 +298,7 @@ class WifiInfoPage(Page):
         
     
 class WifiListSelector(PageSelector):
-    _BackgroundColor = pygame.Color(131,199,219)
+    _BackgroundColor = SkinManager().GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -333,9 +334,9 @@ class WifiListMessageBox(Label):
         x  = (self._Parent._Width - w)/2
         y =  (self._Parent._Height - h)/2
         padding = 10 
-        pygame.draw.rect(self._CanvasHWND,(255,255,255),(x-padding,y-padding, w+padding*2,h+padding*2))        
+        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))        
 
-        pygame.draw.rect(self._CanvasHWND,(0,0,0),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
 
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 

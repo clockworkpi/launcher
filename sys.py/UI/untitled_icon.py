@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import pygame
 from pygame.locals import *
@@ -11,34 +11,36 @@ from datetime import datetime
 import base64
 from beeprint import pp
 
-from util_funcs  import midRect,SkinMap
-from fonts       import fonts
+from util_funcs import midRect, SkinMap
+from fonts import fonts
 
-BlankPng = SkinMap("gameshell/blank.png")  ## 80x80
+from skin_manager import SkinManager
+
+BlankPng = SkinMap("gameshell/blank.png")  # 80x80
 ## use blank circle as bg, Two alpha As Icon Label
 #Upper and Lower
+
+
 class UntitledIcon(object):
     _PosX = 0
     _PosY = 0
     _Width = 80
     _Height = 80
-    
-    _Words = ["G","s"]
-    _FontObj= fonts["varela40"]
-    
-    _BG     = None  ## initial surface 
 
-    _Color  = pygame.Color(83,83,83)
+    _Words = ["G", "s"]
+    _FontObj = fonts["varela40"]
 
-    
+    _BG = None  # initial surface
+
+    _Color = SkinManager().GiveColor('Text')
+
     def __init__(self):
-        self._Words = ["G","s"]
+        self._Words = ["G", "s"]
 
     def Init(self):
         self._BG = pygame.image.load(BlankPng).convert_alpha()
 
-
-    def SetWords(self,TwoWords):
+    def SetWords(self, TwoWords):
         if len(TwoWords) == 1:
             self._Words[0] = TwoWords[0].upper()
 
