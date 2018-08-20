@@ -4,7 +4,7 @@ import pygame
 #import math
 import  commands
 import dbus
-#from beeprint import pp
+from beeprint import pp
 from libs.roundrects import aa_round_rect
 
 from libs.DBUS import  bus, adapter,devices
@@ -23,17 +23,258 @@ from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multi_icon_item import MultiIconItem
 from UI.skin_manager import SkinManager
+from UI.confirm_page import ConfirmPage
+from UI.info_page_list_item import InfoPageListItem
 
 from UI.multilabel import MultiLabel
 
 from net_item import NetItem
 
+class BleForgetConfirmPage(ConfirmPage):
+
+    _ConfirmText = "Confirm Forget?"
+    
+    def KeyDown(self,event):
+        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            
+        if event.key == CurKeys["B"]:
+            self.SnapMsg("Deleteing...")
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            
+            try:
+                #self._Parent._Adapter.RemoveDevice()
+                print("try to RemoveDevice")
+            except Exception,e:
+                print(str(e))
+            
+            pygame.time.delay(400)
+            
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            
+                    
+    def Draw(self):
+        #self.ClearCanvas()
+        self.DrawBG()
+        for i in self._MyList:
+            i.Draw()
+        
+        self.Reset()
+
+
+class BleInfoPageSelector(PageSelector):
+    _BackgroundColor = SkinManager().GiveColor('Front')
+
+    def __init__(self):
+        self._PosX = 0
+        self._PosY = 0
+        self._Height = 0
+        
+    def AnimateDraw(self,x2,y2):
+        pass 
+
+    def Draw(self):
+        idx = self._Parent._PsIndex
+        if idx < len( self._Parent._MyList):
+            x = self._PosX+2
+            y = self._Parent._MyList[idx]._PosY+1
+            h = self._Parent._MyList[idx]._Height -3
+        
+            self._PosX = x
+            self._PosY = y
+            self._Height = h
+
+            aa_round_rect(self._Parent._CanvasHWND,  
+                          (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
 
 class BleInfoPage(Page):
     _FootMsg =  ["Nav.","Disconnect","Forget","Back",""]
     _MyList = []
-    _ListFontObj = fonts["varela15"]    
+    _ListFontObj = fonts["varela15"]
+    _ListSmFontObj = fonts["varela12"]  # small font
+    _ListSm2FontObj= fonts["varela11"]
+    
+    _AList = {}
+    
+    def Init(self):
+        if self._Screen != None:
+            if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
+                self._CanvasHWND = self._Screen._CanvasHWND
 
+        self._PosX = self._Index*self._Screen._Width 
+        self._Width = self._Screen._Width ## equal to screen width
+        self._Height = self._Screen._Height
+        
+        ps = BleInfoPageSelector()
+        ps._Parent = self
+        self._Ps = ps
+        self._PsIndex = 0
+         
+        #_AList is an object 
+        self.GenList()
+
+        self._Scroller = ListScroller()
+        self._Scroller._Parent = self
+        self._Scroller._PosX = 2
+        self._Scroller._PosY = 2
+        self._Scroller.Init()
+        
+        self._ConfirmPage1 = BleForgetConfirmPage()
+        self._ConfirmPage1._Screen = self._Screen
+        self._ConfirmPage1._Name   = "Confirm Forget"
+        self._ConfirmPage1._Parent = self
+        self._ConfirmPage1.Init() 
+        
+    def GenList(self):
+        if self._AList== None:
+            return
+        self._MyList = []
+        
+        start_x  = 0
+        start_y  = 0        
+        for i,v in enumerate( self._AList):
+            #print(i,v) # (0, dbus.String(u'AddressType'))
+            
+            li = InfoPageListItem()
+            li._Parent = self
+            li._PosX   = start_x
+            li._PosY   = start_y + i*InfoPageListItem._Height
+            li._Width  = Width
+            li._Fonts["normal"] = self._ListFontObj
+            
+            if v == "UUIDs":
+                li._Fonts["small"] = self._ListSm2FontObj
+            else:
+                li._Fonts["small"] = self._ListSmFontObj
+            
+            li.Init( str(v) )
+            li._Flag = v
+            
+            if v =="UUIDs":
+                pp(self._AList[v][0]) 
+                sm_text = str(self._AList[v][0])
+            else:
+                sm_text = str(self._AList[v]) 
+            
+            if sm_text == "0":
+                sm_text="No"
+            elif sm_text == "1":
+                sm_text="Yes"
+            
+            li.SetSmallText(sm_text)
+            
+            li._PosX = 2
+            self._MyList.append(li)                      
+    
+
+    def ScrollUp(self):
+        if len(self._MyList) == 0:
+            return
+        self._PsIndex -= 1
+        if self._PsIndex < 0:
+            self._PsIndex = 0
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._PosY < 0:
+            for i in range(0, len(self._MyList)):
+                self._MyList[i]._PosY += self._MyList[i]._Height
+        
+
+    def ScrollDown(self):
+        if len(self._MyList) == 0:
+            return
+        self._PsIndex +=1
+        if self._PsIndex >= len(self._MyList):
+            self._PsIndex = len(self._MyList) -1
+
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._PosY +cur_li._Height > self._Height:
+            for i in range(0,len(self._MyList)):
+                self._MyList[i]._PosY -= self._MyList[i]._Height
+
+    def TryToForget(self):
+        print("try to forget this")
+        pass
+    
+    def TryToDisconnect(self):
+        print("try to Disconnect")
+        pass
+    
+    def Click(self):
+        if self._PsIndex >= len(self._MyList):
+            return
+        
+        cur_li = self._MyList[self._PsIndex]
+        print(cur_li._Flag)
+        
+    def OnLoadCb(self):
+        if self._AList != None:
+            if "Connected" in self._AList:
+                if self._AList["Connected"] == 1:
+                    self._FootMsg[1] = "Disconnect"
+                else:
+                    self._FootMsg[1] = ""
+        
+        self.GenList()
+
+    def OnReturnBackCb(self):
+        self.ReturnToUpLevelPage()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+
+    def KeyDown(self,event):
+        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+        
+        if event.key == CurKeys["Up"]:
+            self.ScrollUp()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+        if event.key == CurKeys["Down"]:
+            self.ScrollDown()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+        
+        if event.key == CurKeys["Enter"]:
+            self.Click()
+            
+        if event.key == CurKeys["X"]:
+            self.TryToDisconnect()
+        
+        if event.key == CurKeys["Y"]:
+            self.TryToForget()
+        
+        
+    def Draw(self):
+        if len(self._MyList) == 0:
+            return
+        
+        self.ClearCanvas()
+
+        if len(self._MyList) * InfoPageListItem._Height > self._Height:
+            self._Ps._Width = self._Width - 10
+            self._Ps._PosX  = 9
+            self._Ps.Draw()        
+            for i in self._MyList:
+                i.Draw()
+            
+            self._Scroller.UpdateSize(len(self._MyList)*InfoPageListItem._Height, self._PsIndex*InfoPageListItem._Height)
+            self._Scroller.Draw()
+        
+        else:
+            self._Ps._Width = self._Width
+            self._Ps.Draw()
+            for i in self._MyList:
+                i.Draw() 
+        
+
+            
 
 class BleListSelector(PageSelector):
     _BackgroundColor = SkinManager().GiveColor('Front')
@@ -155,6 +396,10 @@ class BluetoothPage(Page):
         
         self.GenNetworkList()
         
+        self._InfoPage = BleInfoPage()
+        self._InfoPage._Screen = self._Screen
+        self._InfoPage._Name   = "Bluetooth info"
+        self._InfoPage.Init()        
 
     def print_normal(self,address, properties):
         print("[ " + address + " ]")
@@ -200,7 +445,8 @@ class BluetoothPage(Page):
             address = devices[path]["Address"]
         else:
             address = "<unknown>"
-
+        
+        self._Devices = devices
         self.print_normal(address, devices[path])
 
     def ShutDownConnecting(self):
@@ -215,7 +461,6 @@ class BluetoothPage(Page):
         
     def CheckIfBluetoothConnecting(self):
         return True
-    
     
     def GenNetworkList(self):
         self._WirelessList = []
@@ -306,6 +551,15 @@ class BluetoothPage(Page):
         
         if event.key == CurKeys["X"]:
             self.Rescan()   
+
+        if event.key == CurKeys["Y"]:
+            if len(self._WirelessList) == 0:
+                return
+
+            self._InfoPage._AList = self._WirelessList[self._PsIndex]._Atts
+            self._Screen.PushPage(self._InfoPage)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
     
     def Draw(self):
         self.ClearCanvas()

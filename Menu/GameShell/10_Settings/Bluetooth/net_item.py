@@ -80,7 +80,7 @@ class NetItem(object):
         
 
         name_label = Label()
-        name_label._PosX = 16
+        name_label._PosX = 12
         name_label._CanvasHWND = self._Parent._CanvasHWND
 
         mac_addr = self._MacAddr
@@ -103,15 +103,7 @@ class NetItem(object):
         done_icon._Parent = self
         
         self._Icons["done"] = done_icon
-
-
         ## reuse the resource from TitleBar
-        nimt = NetItemMultiIcon()
-        nimt._ImgSurf = self._Parent._Screen._TitleBar._Icons["wifistatus"]._ImgSurf
-        nimt._CanvasHWND = self._Parent._CanvasHWND
-        nimt._Parent = self
-        self._Icons["wifistatus"] = nimt
-
         #pp(theString)
     
     
@@ -132,18 +124,5 @@ class NetItem(object):
             self._Icons["done"].NewCoord(320-14,self._PosY)
             self._Icons["done"].Draw()
         
-        """
-        ge = 0
-        if ge > 0:
-            self._Icons["wifistatus"]._IconIndex = ge
-            self._Icons["wifistatus"].NewCoord(self._Width-23,self._PosY)
-            self._Icons["wifistatus"].Draw()
-            
-        else:
-            self._Icons["wifistatus"]._IconIndex = 0
-            self._Icons["wifistatus"].NewCoord(self._Width-23,self._PosY)
-            self._Icons["wifistatus"].Draw()
-        
-        """
         pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),
             (self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
