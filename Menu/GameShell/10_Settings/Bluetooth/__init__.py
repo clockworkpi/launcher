@@ -156,8 +156,11 @@ class BleInfoPage(Page):
             li._Flag = v
             
             if v =="UUIDs":
-                pp(self._AList[v][0]) 
-                sm_text = str(self._AList[v][0])
+                if len(self._AList[v]) > 1:
+                    pp(self._AList[v][0])
+                    sm_text = str(self._AList[v][0])
+                else:
+                    sm_text = "<empty>"
             else:
                 sm_text = str(self._AList[v]) 
             
