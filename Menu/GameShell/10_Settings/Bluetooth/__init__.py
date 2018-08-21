@@ -468,6 +468,16 @@ class BluetoothPage(Page):
         
     def CheckIfBluetoothConnecting(self):
         return True
+
+    def RefreshDevices(self):
+        global devices
+        proxy_obj = bus.get_object("org.bluez", "/")
+        manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
+        objects = manager.GetManagedObjects()
+        for path, interfaces in objects.iteritems():
+            if "org.bluez.Device1" in interfaces:
+                devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
+    
     
     def GenNetworkList(self):
         self._WirelessList = []
@@ -514,6 +524,8 @@ class BluetoothPage(Page):
                 print(str(e))
             
     def OnLoadCb(self):
+        self.RefreshDevices()
+        
         self.GenNetworkList()
     
     def ScrollUp(self):
