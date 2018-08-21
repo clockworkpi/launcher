@@ -213,6 +213,8 @@ class BleInfoPage(Page):
         except Exception,e:
             print(str(e)) 
         
+        pygame.time.delay(400)
+        
         self._Screen.Draw()
         self._Screen.SwapAndShow()        
     
