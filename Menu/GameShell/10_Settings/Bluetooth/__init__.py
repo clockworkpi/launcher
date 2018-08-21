@@ -611,6 +611,11 @@ class BluetoothPage(Page):
         
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
             if self._Adapter != None:
+                try:
+                    self._Adapter.StopDiscovery()
+                except Exception,e:
+                    print(str(e))
+                
                 _connecting = self.CheckIfBluetoothConnecting()
                 if _connecting:
                     self.ShutDownConnecting()
