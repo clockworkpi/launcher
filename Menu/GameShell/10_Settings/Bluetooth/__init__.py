@@ -200,8 +200,21 @@ class BleInfoPage(Page):
                 self._MyList[i]._PosY -= self._MyList[i]._Height
 
     def TryToForget(self):
-        print("try to forget this")
-        pass
+        global adapter
+        proxy_obj = bus.get_object("org.bluez", self._Path)
+        dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
+        
+        self._Screen._MsgBox.SetText("Forgeting...")
+        self._Screen._MsgBox.Draw()
+        self._Screen.SwapAndShow()        
+        
+        try:
+            adapter.RemoveDevice(dev)
+        except Exception,e:
+            print(str(e)) 
+        
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()        
     
     def TryToDisconnect(self):
         global bus
@@ -524,6 +537,7 @@ class BluetoothPage(Page):
         
     def RefreshDevices(self):
         global devices
+        devices = {}
         proxy_obj = bus.get_object("org.bluez", "/")
         manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
         objects = manager.GetManagedObjects()
@@ -578,6 +592,10 @@ class BluetoothPage(Page):
             except Exception,e:
                 print(str(e))
             
+    def OnReturnBackCb(self):
+        self.RefreshDevices()
+        self.GenNetworkList()
+    
     def OnLoadCb(self):
         self.RefreshDevices()
         
