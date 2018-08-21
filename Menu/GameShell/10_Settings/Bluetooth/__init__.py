@@ -235,6 +235,8 @@ class BleInfoPage(Page):
         
         cur_li = self._MyList[self._PsIndex]
         print(cur_li._Flag)
+        if cur_li._Flag in self._AList:
+            print(self._AList[ cur_li._Flag ])
         
     def OnLoadCb(self):
         if self._AList != None:
