@@ -100,7 +100,7 @@ class BleInfoPage(Page):
     _ListSm2FontObj= fonts["varela11"]
     
     _AList = {}
-    
+    _Path = ""
     def Init(self):
         if self._Screen != None:
             if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
@@ -204,8 +204,30 @@ class BleInfoPage(Page):
         pass
     
     def TryToDisconnect(self):
-        print("try to Disconnect")
-        pass
+        global bus
+        
+        if "Connected" in self._AList:
+            if self._AList["Connected"] == 0:
+                return
+        
+        proxy_obj = bus.get_object("org.bluez", self._Path)
+        dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
+        
+        self._Screen._FootBar.UpdateNavText("Disconnecting...")
+        self._Screen._MsgBox.SetText("Disconnecting...")
+        self._Screen._MsgBox.Draw()
+        self._Screen.SwapAndShow()
+        
+        try:
+            dev.Disconnect()
+        except Exception,e:
+            print(str(e))        
+       
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        
+        self._Screen._FootBar.ResetNavText()        
+        
     
     def Click(self):
         if self._PsIndex >= len(self._MyList):
@@ -342,7 +364,7 @@ class BluetoothPage(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav.","Scan","Info","Back","Enter"]
+    _FootMsg           = ["Nav.","Scan","Info","Back","TryConnect"]
     _Scroller          = None
     _ListFontObj       = fonts["notosanscjk15"]
 
@@ -452,6 +474,7 @@ class BluetoothPage(Page):
         self._Devices = devices
         self.print_normal(address, devices[path])
         
+        self.RefreshDevices()
         self.GenNetworkList()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
@@ -465,10 +488,38 @@ class BluetoothPage(Page):
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
-        
+    
+    
     def CheckIfBluetoothConnecting(self):
         return True
 
+    def TryConnect(self):
+        global bus
+        
+        if self._PsIndex >= len(self._WirelessList):
+            return
+        
+        cur_li = self._WirelessList[self._PsIndex]
+        print(cur_li._Path)
+        
+        if "Connected" in cur_li._Atts:
+            if cur_li._Atts["Connected"] == 1:
+                return
+        
+        proxy_obj = bus.get_object("org.bluez", cur_li._Path)
+        dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
+        
+        self._Screen._FootBar.UpdateNavText("connecting...")
+        self.ShowBox("connecting...")
+        
+        try:
+            dev.Connect()
+        except Exception,e:
+            print(str(e))        
+        
+        self.HideBox()
+        self._Screen._FootBar.ResetNavText()
+        
     def RefreshDevices(self):
         global devices
         proxy_obj = bus.get_object("org.bluez", "/")
@@ -477,7 +528,9 @@ class BluetoothPage(Page):
         for path, interfaces in objects.iteritems():
             if "org.bluez.Device1" in interfaces:
                 devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
-    
+        
+        self._Devices = devices
+        
     
     def GenNetworkList(self):
         self._WirelessList = []
@@ -589,10 +642,14 @@ class BluetoothPage(Page):
                 return
 
             self._InfoPage._AList = self._WirelessList[self._PsIndex]._Atts
+            self._InfoPage._Path  = self._WirelessList[self._PsIndex]._Path
             self._Screen.PushPage(self._InfoPage)
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-    
+            
+        if event.key == CurKeys["B"]:
+            self.TryConnect()
+
     def Draw(self):
         self.ClearCanvas()
         if len(self._WirelessList) == 0:

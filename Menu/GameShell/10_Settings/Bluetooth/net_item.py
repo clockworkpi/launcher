@@ -75,7 +75,6 @@ class NetItem(object):
                 is_active=True
         
         if is_active:
-            theString = ">> "+theString[1:]
             self.SetActive(is_active)
         
 
@@ -121,7 +120,7 @@ class NetItem(object):
             self._Labels[i].Draw()
             
         if self._IsActive:
-            self._Icons["done"].NewCoord(320-14,self._PosY)
+            self._Icons["done"].NewCoord(320-22,self._PosY)
             self._Icons["done"].Draw()
         
         pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),
