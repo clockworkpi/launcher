@@ -134,7 +134,7 @@ class BleInfoPage(Page):
         if self._AList== None:
             return
         self._MyList = []
-        
+        self._PsIndex = 0
         start_x  = 0
         start_y  = 0        
         for i,v in enumerate( self._AList):
