@@ -215,8 +215,9 @@ class BleInfoPage(Page):
         
         pygame.time.delay(400)
         
+        self.ReturnToUpLevelPage()
         self._Screen.Draw()
-        self._Screen.SwapAndShow()        
+        self._Screen.SwapAndShow()    
     
     def TryToDisconnect(self):
         global bus
