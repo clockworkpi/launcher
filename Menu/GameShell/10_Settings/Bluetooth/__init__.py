@@ -482,6 +482,12 @@ class BluetoothPage(Page):
         self._PsIndex = 0   
     
     def Rescan(self):
+        if self._Screen._CurrentPage != self:
+            return
+        
+        self._Scanning = True
+        self.ShowBox("Bluetooth scanning...")
+        
         proxy_obj = self._Dbus.get_object("org.bluez", "/org/bluez/" + self._ADAPTER_DEV)
         adapter_props = dbus.Interface(proxy_obj,"org.freedesktop.DBus.Properties")
         discoverying = adapter_props.Get("org.bluez.Adapter1", "Discovering") 
@@ -550,6 +556,7 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()       
         
         if event.key == CurKeys["X"]:
+            
             self.Rescan()   
 
         if event.key == CurKeys["Y"]:
