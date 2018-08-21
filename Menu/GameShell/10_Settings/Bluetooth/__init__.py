@@ -428,7 +428,7 @@ class BluetoothPage(Page):
 
     def DbusPropertiesChanged(self, interface, changed, invalidated, path):
         global devices
-        
+        print("DbusPropertiesChanged")
         if interface != "org.bluez.Device1":
             return
 
@@ -448,7 +448,11 @@ class BluetoothPage(Page):
         
         self._Devices = devices
         self.print_normal(address, devices[path])
-
+        
+        self.GenNetworkList()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        
     def ShutDownConnecting(self):
         print("Shutdownconnecting...")
     
@@ -487,11 +491,13 @@ class BluetoothPage(Page):
         
         self._Scanning = True
         self.ShowBox("Bluetooth scanning...")
+        self._Screen._FootBar.UpdateNavText("bluetooth scanning")
         
         proxy_obj = self._Dbus.get_object("org.bluez", "/org/bluez/" + self._ADAPTER_DEV)
         adapter_props = dbus.Interface(proxy_obj,"org.freedesktop.DBus.Properties")
         discoverying = adapter_props.Get("org.bluez.Adapter1", "Discovering") 
         print(discoverying)
+        
         
         if self._Adapter!= None:
             try:
@@ -545,7 +551,9 @@ class BluetoothPage(Page):
                 self.ReturnToUpLevelPage()
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
-        
+            
+            self._Screen._FootBar.ResetNavText()
+            
         if event.key == CurKeys["Up"]:
             self.ScrollUp()
             self._Screen.Draw()

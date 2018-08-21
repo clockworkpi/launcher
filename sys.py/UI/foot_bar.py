@@ -103,6 +103,7 @@ class FootBar:
         self._Icons["nav"]._Label.SetText("Nav.")
         self._State = "normal"
         self.Draw()
+        return False
         
     def UpdateNavText(self,texts):
         self._State = "tips"
