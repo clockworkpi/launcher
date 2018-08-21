@@ -510,7 +510,9 @@ class BluetoothPage(Page):
             except Exception,e:
                 print(str(e))
             
-
+    def OnLoadCb(self):
+        self.GenNetworkList()
+    
     def ScrollUp(self):
         if len(self._WirelessList) == 0:
             return
