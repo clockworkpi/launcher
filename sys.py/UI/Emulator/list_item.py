@@ -78,7 +78,7 @@ class ListItem(object):
             fp = open(alias_file, "r")
             alias = fp.read()
             fp.close()
-            label_text = alias
+            label_text = alias.decode("utf8")
         
         if self._MyType == ICON_TYPES["DIR"]:
             l.Init(label_text,self._Fonts["normal"])

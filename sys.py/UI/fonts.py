@@ -21,6 +21,8 @@ fonts_path["noto"]     = "%s/NotoSansMono-Regular.ttf" % skinpath
 fonts_path["notocjk"]     = "%s/NotoSansCJK-Regular.ttf" % skinpath
 
 fonts = {}
+fonts["varela10"] = pygame.font.Font(fonts_path["varela"],10)
+fonts["varela11"] = pygame.font.Font(fonts_path["varela"],11)
 fonts["varela12"] = pygame.font.Font(fonts_path["varela"],12)
 fonts["varela13"] = pygame.font.Font(fonts_path["varela"],13)
 fonts["varela14"] = pygame.font.Font(fonts_path["varela"],14)
