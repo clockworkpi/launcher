@@ -77,7 +77,7 @@ class InfoPageListItem(object):
     
 
 class AirplanePage(Page):
-    _FootMsg =  ["Nav.","","","Back","Toggle"]
+    _FootMsg =  ["Nav.","Rescue","","Back","Toggle"]
     _MyList = []
     _ListFontObj = fonts["varela13"]
     
@@ -175,7 +175,7 @@ class AirplanePage(Page):
 
     def ToggleModeAni(self): ## with animation
         out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
-        if out[1] == "yes":
+        if "yes" in out[1]:
             data = self.EasingData(0,43)
             for _,v in enumerate(data):
                 self._airwire_y -= v
@@ -205,7 +205,7 @@ class AirplanePage(Page):
     def ToggleMode(self):
         out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
         print out
-        if out[1] == "yes":
+        if "yes" in out[1]:
             self._Screen._MsgBox.SetText("Turning On")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("sudo rfkill unblock all")
@@ -216,7 +216,13 @@ class AirplanePage(Page):
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("sudo rfkill block all")
             self._Screen._TitleBar._InAirPlaneMode = True
-
+    
+    def UnBlockAll(self):
+        self._Screen._MsgBox.SetText("Turning On")
+        self._Screen._MsgBox.Draw()
+        commands.getstatusoutput("sudo rfkill unblock all")
+        self._Screen._TitleBar._InAirPlaneMode = False
+    
         
     def OnLoadCb(self):
         self._Scrolled = 0
@@ -265,7 +271,15 @@ class AirplanePage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         """
-                                
+        
+        if event.key == CurKeys["X"]:
+            self.UnBlockAll()
+            self._Screen.SwapAndShow()
+            pygame.time.delay(1000)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow() 
+        
+            
     def Draw(self):
         self.ClearCanvas()
 
