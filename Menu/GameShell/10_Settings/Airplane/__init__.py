@@ -229,7 +229,7 @@ class AirplanePage(Page):
         self._PosY = 0
         self._DrawOnce = False
         out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
-        if out[1] == "yes":
+        if "yes" in out[1]:
             self._Screen._TitleBar._InAirPlaneMode = True
             self._airwire_y = 50+43
             self._dialog_index = 1
