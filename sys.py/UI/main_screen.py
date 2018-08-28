@@ -6,6 +6,8 @@ from sys import exit
 import os
 import sys
 
+from operator import itemgetter
+
 from libs import easing
 from datetime import datetime
 
@@ -388,7 +390,29 @@ class MainScreen(object):
             if i.endswith(python_package_flag):
                 return True
         return False
-
+    
+    def ReunionPagesIcons(self): #This is for combining /home/cpi/apps/Menu and ~/launcher/Menu/GameShell 
+        for p in self._Pages:
+            tmp = []
+            for i,x in enumerate(p._Icons):
+                tup = ('',0)
+                if hasattr(x, '_FileName'):
+                    if str.find(x._FileName,"_") < 0:
+                        tup = ("98_"+x._FileName,i) # prefer to maintain PowerOFF in last position if the filename has no order labels
+                    else:
+                        tup = (x._FileName, i)
+                else:
+                    tup = ("",i)
+                
+                tmp.append(tup)
+            tmp = sorted(tmp, key=itemgetter(0))
+            #print(tmp)
+            new_icons = []
+            for x in tmp:
+                new_icons.append( p._Icons[ x[1] ] )
+            p._Icons = new_icons
+    
+    
     def ReadTheDirIntoPages(self,_dir,pglevel,cur_page):
         
         if FileExists(_dir) == False and os.path.isdir(_dir) == False:
@@ -406,6 +430,7 @@ class MainScreen(object):
                 else: ## On CurPage now
                     i2 = self.ExtraName(i)
                     iconitem = IconItem()
+                    iconitem._FileName = i
                     iconitem._CmdPath = ""
                     iconitem.AddLabel(i2,self._IconFont)
                     if FileExists( _dir+"/"+i+"/"+i2+".png"): ### 20_Prog/Prog.png , cut 20_ 
@@ -495,6 +520,7 @@ class MainScreen(object):
                     
                     #cmd      =  ReadTheFileContent(_dir+"/"+i)
                     iconitem = IconItem()
+                    iconitem._FileName = i
                     iconitem._CmdPath = os.path.realpath(_dir+"/"+i)
                     MakeExecutable(iconitem._CmdPath)
                     iconitem._MyType  = ICON_TYPES["EXE"]
