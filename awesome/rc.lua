@@ -385,6 +385,10 @@ function awful.ewmh.activate(c)
 	      	client.focus = c
 				end
 
+		if c.class:lower() == "retroarch" then
+			c:lower()
+		end
+
     end
 end
 client.connect_signal("request::activate", awful.ewmh.activate)
@@ -394,6 +398,8 @@ client.connect_signal("property::fullscreen", function (c)
 		c.fullscreen = false
 		c.ontop = false
 		c.focus=false
+		c:lower()
+
 end)
 
 
