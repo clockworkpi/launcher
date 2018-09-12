@@ -465,7 +465,11 @@ def big_loop():
     main_screen._TitleBar = title_bar 
     main_screen._FootBar  = foot_bar
     main_screen.Init()
+    
     main_screen.ReadTheDirIntoPages("../Menu",0,None)
+    main_screen.ReadTheDirIntoPages("/home/cpi/apps/Menu",1,main_screen._Pages[ len(main_screen._Pages) -1])
+    main_screen.ReunionPagesIcons()
+    
     main_screen.FartherPages()
 
     
