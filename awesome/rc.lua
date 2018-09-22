@@ -20,7 +20,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
                      title = "Oops, there were errors during startup!",
-                     text = awesome.startup_errors })
+                     text = awesome.startup_errors,timeout=3 })
 end
 
 -- Handle runtime errors after startup
@@ -33,7 +33,7 @@ do
 
         naughty.notify({ preset = naughty.config.presets.critical,
                          title = "Oops, an error happened!",
-                         text = tostring(err) })
+                         text = tostring(err),timeout=3 })
         in_error = false
     end)
 end
