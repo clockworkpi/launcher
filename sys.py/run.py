@@ -402,6 +402,8 @@ def gobject_pygame_event_timer(main_screen):
 
 @misc.threaded
 def socket_thread(main_screen):
+    global everytime_keydown
+
     socket_path = "/tmp/gameshell"
     if os.path.exists(socket_path):
         os.remove(socket_path)
@@ -431,7 +433,12 @@ def socket_thread(main_screen):
                 
                 gobject_main_loop.quit()
                 exit()
-                                
+            
+            if tokens[0].lower() == "keydown": ## simulate keydown event
+                everytime_keydown = time.time()
+                if RestoreLastBackLightBrightness(main_screen) == False:
+                    print("RestoreLastBackLightBrightness unix socket false")
+
             if tokens[0].lower() == "poweroff":
                 escevent = pygame.event.Event(pygame.KEYDOWN,{'scancode':9,'key': 27, 'unicode': u'\x1b', 'mod': 0})
                 for i in range(0,5):

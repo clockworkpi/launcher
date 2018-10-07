@@ -15,6 +15,7 @@ class InfoPageListItem(object):
     _Fonts  = {}
 
     _LinkObj = None
+    _ReadOnly = False
     
     def __init__(self):
         self._Labels = {}
@@ -41,6 +42,12 @@ class InfoPageListItem(object):
         self._Labels["Text"] = l
 
     def Draw(self):
+        if self._ReadOnly == True:
+            self._Labels["Text"].SetColor(SkinManager().GiveColor("ReadOnlyText"))
+        else:
+            self._Labels["Text"].SetColor(SkinManager().GiveColor("Text"))
+
+        
         self._Labels["Text"]._PosX = self._Labels["Text"]._PosX + self._PosX
         self._Labels["Text"]._PosY = self._PosY + (self._Height - self._Labels["Text"]._Height)/2
         self._Labels["Text"].Draw()
