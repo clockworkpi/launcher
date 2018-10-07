@@ -85,6 +85,7 @@ class ListPage(Page):
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Time","Timezone"],
+                         ["","Notification","Notification"],
                          ["","Update", ""],
                          ["","About",  "About"],
                          ["","PowerOFF","Power off"],

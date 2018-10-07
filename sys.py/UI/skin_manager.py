@@ -38,6 +38,7 @@ class SkinManager(object):
         Colors = {}
         Colors["High"] = pygame.Color(51, 166, 255)
         Colors["Text"] = pygame.Color(83, 83, 83)
+        Colors["ReadOnlyText"] = pygame.Color(130,130,130)
         Colors["Front"] = pygame.Color(131, 199, 219)
         Colors["URL"] = pygame.Color(51, 166, 255)
         Colors["Line"] = pygame.Color(169, 169, 169)
