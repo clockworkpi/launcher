@@ -604,6 +604,10 @@ class WifiList(Page):
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
+
+    def OnReturnBackCb(self):
+        password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
+        self.ConfigWireless(password_inputed)
         
     def KeyDown(self,event):
 

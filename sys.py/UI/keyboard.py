@@ -317,8 +317,7 @@ class Keyboard(Page):
             print("".join(self._Textarea._MyWords))
             self.ReturnToUpLevelPage()
             self._Screen.SwapAndShow()
-            ## config and connect now
-            myvars.ScanPage.ConfigWireless( "".join(self._Textarea._MyWords)) 
+            #Uplevel page  invokes OnReturnBackCb,eg: ConfigWireless
 
         if event.key == CurKeys["A"]:
             self._Textarea.RemoveFromLastText()
