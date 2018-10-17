@@ -182,7 +182,7 @@ local function set_wallpaper(s)
 
 				-- wallpaper only in PC
         if s.geometry.width > 320 then
-	        gears.wallpaper.maximized(wallpaper, s, true)
+	        gears.wallpaper.centered(wallpaper, s, 1)
 	      end
 
     end
@@ -219,14 +219,12 @@ end
 
 
 
--- screen.connect_signal("property::geometry", set_wallpaper)
-
-
+screen.connect_signal("property::geometry", set_wallpaper)
 
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
-
+		set_wallpaper(s)
     -- Each screen has its own tag table.
     awful.tag({ "GameShell"  }, s, awful.layout.layouts[1])
 
@@ -310,7 +308,9 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.no_overlap+awful.placement.no_offscreen
+                     --placement = awful.placement.no_overlap+awful.placement.no_offscreen
+										 placement = awful.placement.centered
+	
      }
     },
 
@@ -347,16 +347,11 @@ awful.rules.rules = {
       }, properties = { ontop=false,floating = true,titlebars_enabled=false  }},
 
 		
-			{ rule_any = {class = {"run.py","gsnotify","gsnotify-arm","retroarch" }},
-				-- properties = { placement = awful.placement.centered,border_width=0 }
-				properties = { border_width=0,titlebars_enabled=false,floating=true }
-
-			},
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
 }
 -- }}}
+
+
+local gs_class = {"run.py","gsnotify","gsnotify-arm","retroarch"}
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
@@ -385,7 +380,26 @@ client.connect_signal("manage", function (c)
 		c.type = "notification"
 		c.floating = true
 		c:raise()		
-	--	awful.titlebar.hide(c)
+	end
+	
+	for s in capi.screen do	
+		if s.geometry.width > 320 then
+			for _,v in pairs(gs_class) do
+				if c.class:lower() == v then
+					awful.titlebar.hide(c)
+					break
+				end
+			end
+			
+			-- centered bg with offset of tasklist_bar's height
+			c.y= c.y + s.mywibox.height
+		
+		else 
+			-- hide all titlebars in GS
+			awful.titlebar.hide(c)
+
+		end
+		
 	end
 
 end)
