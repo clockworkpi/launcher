@@ -192,9 +192,9 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create the wibox
 		if s.geometry.width > 320 then	
-	    s.mywibox = awful.wibar({ position = "top", screen = s,visible=true })
+	    s.mywibox = awful.wibar({ position = "bottom", screen = s,visible=true })
 		else
-			s.mywibox = awful.wibar({ position = "top", screen = s,visible=false })
+			s.mywibox = awful.wibar({ position = "bottom", screen = s,visible=false })
 		end
 
     -- Add widgets to the wibox
