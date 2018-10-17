@@ -347,7 +347,7 @@ awful.rules.rules = {
       }, properties = { ontop=false,floating = true,titlebars_enabled=false  }},
 
 		
-			{ rule_any = {class = {"run.py","gsnotify","gsnotify-arm" }},
+			{ rule_any = {class = {"run.py","gsnotify","gsnotify-arm","retroarch" }},
 				-- properties = { placement = awful.placement.centered,border_width=0 }
 				properties = { border_width=0,titlebars_enabled=false,floating=true }
 
