@@ -172,7 +172,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2"  }, s, awful.layout.layouts[1])
+    awful.tag({ "GameShell"  }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
