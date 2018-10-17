@@ -14,6 +14,10 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 -- Load Debian menu entries
 -- require("debian.menu")
 
+local capi = { screen = screen,
+               client = client }
+local ipairs = ipairs
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -166,13 +170,65 @@ local tasklist_buttons = awful.util.table.join(
                                               awful.client.focus.byidx(-1)
                                           end))
 
+
+local function set_wallpaper(s)
+    -- Wallpaper
+    if beautiful.wallpaper then
+        local wallpaper = beautiful.wallpaper
+        -- If wallpaper is a function, call it with the screen
+        if type(wallpaper) == "function" then
+            wallpaper = wallpaper(s)
+        end
+
+				-- wallpaper only in PC
+        if s.geometry.width > 320 then
+	        gears.wallpaper.maximized(wallpaper, s, true)
+	      end
+
+    end
+end
+
+
+local function get_screen(s)
+    return s and screen[s]
+end
+
+function awful.widget.tasklist.filter.currenttags_without_gs(c, screen)
+    screen = get_screen(screen)
+    -- Only print client on the same screen as this widget
+    if get_screen(c.screen) ~= screen then return false end
+    -- Include sticky client too
+    if c.sticky then return true end
+    local tags = screen.tags
+    for _, t in ipairs(tags) do
+        if t.selected then
+            local ctags = c:tags()
+            for _, v in ipairs(ctags) do
+                if v == t then
+                		if c.class:lower() == "run.py" or c.class:lower() == "gsnotify-arm" then
+	                		return false
+                		else
+	                    return true
+	                  end
+                end
+            end
+        end
+    end
+    return false
+end
+
+
+
 -- screen.connect_signal("property::geometry", set_wallpaper)
+
+
+
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2"  }, s, awful.layout.layouts[1])
+    awful.tag({ "GameShell"  }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -188,10 +244,14 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
 
     -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags_without_gs, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s,visible=false })
+		if s.geometry.width > 320 then	
+	    s.mywibox = awful.wibar({ position = "bottom", screen = s,visible=true })
+		else
+			s.mywibox = awful.wibar({ position = "bottom", screen = s,visible=false })
+		end
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -241,7 +301,9 @@ end
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = 0,
+      properties = { 
+      							 size_hints_honor = false, 
+      							 border_width = 0,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
@@ -250,6 +312,10 @@ awful.rules.rules = {
                      screen = awful.screen.preferred,
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen
      }
+    },
+
+		{ rule_any = {type = { "normal", "dialog"}
+      }, properties = { titlebars_enabled = true }
     },
 
     -- Floating clients.
@@ -268,7 +334,10 @@ awful.rules.rules = {
           "pinentry",
           "veromix",
           "xtightvncviewer",
-					"xclock"
+					"xclock",
+					"run.py",
+					"gsnotify",
+					"gsnotify-arm"
 					},
 					
         name = {
@@ -278,13 +347,14 @@ awful.rules.rules = {
           "AlarmWindow",  -- Thunderbird's calendar.
           "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
         }
-      }, properties = { ontop=false,floating = true }},
+      }, properties = { ontop=false,floating = true,titlebars_enabled=false  }},
 
 		
-		{ rule_any = {type = { "normal", "dialog","desktop","dock","splash","menu","toolbar","utility","dnd","combo","popup_menu","dropdown_menu" }
-      }, properties = { titlebars_enabled = false }
-    },
-	
+			{ rule_any = {class = {"run.py","gsnotify","gsnotify-arm" }},
+				-- properties = { placement = awful.placement.centered,border_width=0 }
+				properties = { border_width=0 }
+
+			},
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
