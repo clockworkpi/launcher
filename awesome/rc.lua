@@ -334,10 +334,7 @@ awful.rules.rules = {
           "pinentry",
           "veromix",
           "xtightvncviewer",
-					"xclock",
-					"run.py",
-					"gsnotify",
-					"gsnotify-arm"
+					"xclock"
 					},
 					
         name = {
@@ -352,7 +349,7 @@ awful.rules.rules = {
 		
 			{ rule_any = {class = {"run.py","gsnotify","gsnotify-arm" }},
 				-- properties = { placement = awful.placement.centered,border_width=0 }
-				properties = { border_width=0 }
+				properties = { border_width=0,titlebars_enabled=false,floating=true }
 
 			},
     -- Set Firefox to always map on the tag named "2" on screen 1.
