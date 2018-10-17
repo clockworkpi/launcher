@@ -308,8 +308,8 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     --placement = awful.placement.no_overlap+awful.placement.no_offscreen
-										 placement = awful.placement.centered
+                     placement = awful.placement.no_overlap+awful.placement.no_offscreen
+										 --placement = awful.placement.no_overlap+awful.placement.centered+awful.placement.no_offscreen
 	
      }
     },
@@ -387,12 +387,15 @@ client.connect_signal("manage", function (c)
 			for _,v in pairs(gs_class) do
 				if c.class:lower() == v then
 					awful.titlebar.hide(c)
+					if v ~= "gsnotify-arm" then
+						awful.placement.centered(c)	
+					end
 					break
 				end
 			end
 			
 			-- centered bg with offset of tasklist_bar's height
-			c.y= c.y + s.mywibox.height
+			-- c.y= c.y + s.mywibox.height
 		
 		else 
 			-- hide all titlebars in GS
