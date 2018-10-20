@@ -46,16 +46,19 @@ def setup_dbus(force=True):
         
     
         ### BlueZ
-        proxy_obj = bus.get_object("org.bluez", "/")
-        manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
-        objects = manager.GetManagedObjects()
+        try:
+            proxy_obj = bus.get_object("org.bluez", "/")
+            manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
+            objects = manager.GetManagedObjects()
+            
+            for path, interfaces in objects.iteritems():
+                if "org.bluez.Device1" in interfaces:
+                    devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
         
-        for path, interfaces in objects.iteritems():
-            if "org.bluez.Device1" in interfaces:
-                devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
-        
-        proxy_obj = bus.get_object("org.bluez", "/org/bluez/hci0")
-        adapter = dbus.Interface(proxy_obj, "org.bluez.Adapter1")
+            proxy_obj = bus.get_object("org.bluez", "/org/bluez/hci0")
+            adapter = dbus.Interface(proxy_obj, "org.bluez.Adapter1")
+        except Exception as e:
+            print(str(e))
         
         if not daemon:
             print("Error connecting to wicd via D-Bus")
