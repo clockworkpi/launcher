@@ -377,7 +377,7 @@ client.connect_signal("manage", function (c)
 	c.below=true
 	c.fullscreen=false
 
-	if c.class:lower() == "gsnotify-arm"  then
+	if tableHasKey(c,"class") and c.class:lower() == "gsnotify-arm"  then
 		-- naughty.notify({text = "launched!",timeout = 2,position = "top_center"})
 		c.ontop = true
 		c.above = true
@@ -390,7 +390,7 @@ client.connect_signal("manage", function (c)
 	for s in capi.screen do	
 		if s.geometry.width > 320 then
 			for _,v in pairs(gs_class) do
-				if c.class:lower() == v then
+				if tableHasKey(c,"class") and c.class:lower() == v then
 					awful.titlebar.hide(c)
 					if v ~= "gsnotify-arm" then
 						awful.placement.centered(c)	
