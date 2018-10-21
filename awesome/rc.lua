@@ -81,6 +81,11 @@ awful.layout.layouts = {
 -- }}}
 
 -- {{{ Helper functions
+
+local function tableHasKey(table,key)
+    return table[key] ~= nil 
+end
+
 local function client_menu_toggle_fn()
     local instance = nil
 
@@ -464,14 +469,18 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 client.disconnect_signal("request::activate", awful.ewmh.activate)
 function awful.ewmh.activate(c)
+	  if tableHasKey(c,"class") == false then
+      return
+    end
+
     if c:isvisible() then
 				if c.class:lower() ~= "gsnotify-arm" then
 	      	client.focus = c
 				end
 
-		if c.class:lower() == "retroarch" then
-			c:lower()
-		end
+			if c.class:lower() == "retroarch" then
+				c:lower()
+			end
 
     end
 end
