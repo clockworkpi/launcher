@@ -42,6 +42,7 @@ from UI.foot_bar     import FootBar
 from UI.main_screen  import MainScreen
 from UI.above_all_patch import SoundPatch
 from UI.icon_pool    import MyIconPool
+from UI.createby_screen import CreateByScreen
 
 from libs.DBUS            import setup_dbus
 
@@ -66,6 +67,9 @@ last_brt = -1
 
 gobject_flash_led1 = -1
 gobject_flash_led1_counter = 0
+
+Keys = []
+crt_screen = None
 
 def gobject_loop():
     """
@@ -268,6 +272,25 @@ def InspectionTeam(main_screen):
         
     return True
 
+def RecordKeyDns(thekey,main_screen):
+    global Keys,crt_screen
+    
+    if len(Keys) < 10:
+        Keys.append(thekey)
+    else:
+        Keys = []
+        Keys.append(thekey)
+    
+    keys = ''.join(map(str,Keys))
+    print(keys)
+    if keys == "273273274274276276275275106107":##uuddllrrab
+        crt_screen.Draw()
+        crt_screen.SwapAndShow()
+        main_screen._TitleBar._InLowBackLight = 0 ##pause titlebar drawing
+        return True
+    
+    return False
+    
 def event_process(event,main_screen):
     global sound_patch
     global everytime_keydown 
@@ -373,11 +396,11 @@ def event_process(event,main_screen):
             if event.key == pygame.K_ESCAPE:
                 pygame.event.clear()
 
-            
-            key_down_cb = getattr(main_screen,"KeyDown",None)
-            if key_down_cb != None:
-                if callable( key_down_cb ):
-                    main_screen.KeyDown(event)
+            if RecordKeyDns(event.key,main_screen) == False:
+                key_down_cb = getattr(main_screen,"KeyDown",None)
+                if key_down_cb != None:
+                    if callable( key_down_cb ):
+                        main_screen.KeyDown(event)
             
             return
                     
@@ -551,6 +574,9 @@ if __name__ == '__main__':
         else:
             os.system("sudo iw wlan0 set power_save on")
 
-        
+    crt_screen = CreateByScreen()
+    crt_screen.Init()
+    crt_screen._HWND = screen 
+    
     big_loop()
     
