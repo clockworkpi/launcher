@@ -378,7 +378,8 @@ class RomListPage(Page):
                     self._Screen.PushPage(self._RomSoConfirmDownloadPage)
                     self._Screen.Draw()
                     self._Screen.SwapAndShow()
-                    return
+                    
+            return 
             
         self._Screen.Draw()
         self._Screen.SwapAndShow()
