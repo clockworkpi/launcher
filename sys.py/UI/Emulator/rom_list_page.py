@@ -357,27 +357,30 @@ class RomListPage(Page):
                 path = cur_li._Path
             
             print("Run  ",path)
-
-            # check ROM_SO exists
-            if FileExists(self._Emulator["ROM_SO"]):
-                if self._Emulator["FILETYPE"] == "dir":
-                    escaped_path = CmdClean(path)
-                else:
-                    escaped_path = CmdClean(path)
-                
-                custom_config = ""
-                if self._Emulator["RETRO_CONFIG"] != "" and len(self._Emulator["RETRO_CONFIG"]) > 5:
-                    custom_config = " -c " + self._Emulator["RETRO_CONFIG"]
-                
-                cmdpath = " ".join( (self._Emulator["LAUNCHER"],self._Emulator["ROM_SO"], custom_config, escaped_path))
-                pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
-                return
+            
+            if self._Emulator["FILETYPE"] == "dir":
+                escaped_path = CmdClean(path)
             else:
+                escaped_path = CmdClean(path)
                 
-                self._Screen.PushPage(self._RomSoConfirmDownloadPage)
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-    
+            custom_config = ""
+            if self._Emulator["RETRO_CONFIG"] != "" and len(self._Emulator["RETRO_CONFIG"]) > 5:
+                custom_config = " -c " + self._Emulator["RETRO_CONFIG"]
+                
+            cmdpath = " ".join( (self._Emulator["LAUNCHER"],self._Emulator["ROM_SO"], custom_config, escaped_path))
+                
+            if self._Emulator["ROM_SO"] =="": #empty means No needs for rom so
+                pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
+            else:
+                if FileExists(self._Emulator["ROM_SO"]):
+                    pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
+                else:
+                    self._Screen.PushPage(self._RomSoConfirmDownloadPage)
+                    self._Screen.Draw()
+                    self._Screen.SwapAndShow()
+                    
+            return 
+            
         self._Screen.Draw()
         self._Screen.SwapAndShow()
 
