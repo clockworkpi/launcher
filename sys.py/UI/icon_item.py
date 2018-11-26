@@ -3,7 +3,7 @@
 import pygame
 
 ## local import
-from constants  import icon_width,icon_height,ICON_TYPES,ALIGN,icon_ext,Width,Height
+from constants  import icon_width,icon_height,default_menu_item,ICON_TYPES,ALIGN,icon_ext,Width,Height
 from util_funcs import color_surface,midRect
 from label      import Label
 
@@ -72,7 +72,7 @@ class IconItem:
             elif self._LinkPage._Align == ALIGN["SLeft"]:
                 self._LinkPage.AdjustSAutoLeftAlign()
                 if self._LinkPage._IconNumbers > 1:
-                    self._LinkPage._PsIndex = 1
+                    self._LinkPage._PsIndex = default_menu_item
                     self._LinkPage._IconIndex = self._LinkPage._PsIndex
 
     def CreateImageSurf(self):

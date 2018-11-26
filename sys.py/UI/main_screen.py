@@ -14,7 +14,7 @@ from datetime import datetime
 from beeprint import pp
 
 ## local package import
-from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,RUNEVT
+from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,default_menu_item,RUNEVT
 from icon_item   import IconItem
 from page        import Page,PageStack
 from title_bar   import TitleBar
@@ -171,7 +171,7 @@ class MainScreen(object):
             self._Pages[i].Adjust()
             
             if self._Pages[i]._IconNumbers > 1:
-                self._Pages[i]._PsIndex = 1
+                self._Pages[i]._PsIndex = default_menu_item
                 self._Pages[i]._IconIndex = self._Pages[i]._PsIndex
             
                 

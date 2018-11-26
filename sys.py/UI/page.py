@@ -13,7 +13,7 @@ from libs import easing
 #from beeprint import pp
 
 ### local import
-from constants    import ALIGN,icon_width,icon_height,Width,Height,ICON_TYPES
+from constants    import ALIGN,icon_width,icon_height,default_menu_item,Width,Height,ICON_TYPES
 from util_funcs   import midRect
 from keys_def     import CurKeys
 from icon_pool    import MyIconPool
@@ -166,7 +166,7 @@ class Page(object):
         self._OnShow = False
         
         if self._IconNumbers > 1:
-            self._PsIndex = 1
+            self._PsIndex = default_menu_item
             self._IconIndex = self._PsIndex
             self._PrevIconIndex = self._IconIndex
             self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
@@ -218,7 +218,7 @@ class Page(object):
         self._OnShow = False
 
         if self._IconNumbers > 1:
-            self._PsIndex = 1
+            self._PsIndex = default_menu_item
             self._IconIndex = self._PsIndex
             self._PrevIconIndex = self._IconIndex
             self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
@@ -298,7 +298,7 @@ class Page(object):
             self._OnShow = False
             
             if self._IconNumbers > 1:
-                self._PsIndex = 1
+                self._PsIndex = default_menu_item
                 self._IconIndex = self._PsIndex
                 self._PrevIconIndex = self._IconIndex
                 self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset

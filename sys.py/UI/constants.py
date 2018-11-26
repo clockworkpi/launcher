@@ -19,6 +19,9 @@ Width = 320
 Height = 240
 bg_color =  SkinManager().GiveColor('White')
 
+# 1 is the value gameshell comes with
+default_menu_item = 0
+
 icon_width  = 80
 icon_height = 80
 icon_ext = ".sh"
