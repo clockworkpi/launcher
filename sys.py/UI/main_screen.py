@@ -27,7 +27,7 @@ from label       import Label
 from untitled_icon import UntitledIcon
 from Emulator    import MyEmulator
 
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 from counter_screen import CounterScreen
 
 class MessageBox(Label):
@@ -36,7 +36,7 @@ class MessageBox(Label):
     def __init__(self):
         pass
     
-    def Init(self,text,font_obj,color=SkinManager().GiveColor('Text')):
+    def Init(self,text,font_obj,color=MySkinManager.GiveColor('Text')):
         self._Color = color
         self._FontObj = font_obj
         self._Text = text
@@ -52,7 +52,7 @@ class MessageBox(Label):
     def PreDraw(self):
         self._Width = 0
         self._Height = 0
-        self._CanvasHWND.fill(SkinManager().GiveColor('White'))
+        self._CanvasHWND.fill(MySkinManager.GiveColor('White'))
         
         words = self._Text.split(' ')
         space = self._FontObj.size(' ')[0]
@@ -99,7 +99,7 @@ class MessageBox(Label):
         
         padding = 5
        
-        pygame.draw.rect(self._HWND,SkinManager().GiveColor('White'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2))        
+        pygame.draw.rect(self._HWND,MySkinManager.GiveColor('White'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2))        
     
         if self._HWND != None:
             rect = pygame.Rect(x_,y_,self._Width,self._Height)
@@ -107,7 +107,7 @@ class MessageBox(Label):
             #self._HWND.blit(self._CanvasHWND,rect)
 
         if withborder == True:
-            pygame.draw.rect(self._HWND,SkinManager().GiveColor('Black'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
+            pygame.draw.rect(self._HWND,MySkinManager.GiveColor('Black'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
         
     def Draw(self):        
         x = (self._Parent._Width)/2
@@ -152,9 +152,8 @@ class MainScreen(object):
         self._MsgBox._Parent= self
         self._MsgBox.Init(" ", self._MsgBoxFont)
 
-        self._SkinManager = SkinManager()
-        self._SkinManager.Init()
-
+        self._SkinManager = MySkinManager
+    
         self._CounterScreen = CounterScreen()
         self._CounterScreen._HWND = self._HWND
         
@@ -349,7 +348,7 @@ class MainScreen(object):
         self._Pages.append(Page)
 
     def ClearCanvas(self):
-        self._CanvasHWND.fill(SkinManager().GiveColor('White'))
+        self._CanvasHWND.fill(self._SkinManager.GiveColor('White'))
         
     def SwapAndShow(self):
         if self._Closed == True:

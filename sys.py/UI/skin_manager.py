@@ -78,3 +78,16 @@ class SkinManager(object):
         else:
             return  pygame.Color(255,0,0)
     
+
+##global MySkinManager Handler
+MySkinManager = None
+
+def InitMySkinManager():
+    global MySkinManager
+    if MySkinManager == None:
+        MySkinManager = SkinManager()
+    
+
+InitMySkinManager()
+
+

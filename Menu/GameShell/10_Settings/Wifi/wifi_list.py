@@ -547,7 +547,7 @@ class WifiList(Page):
         results = []
         activeID = -1
         for x,enc_type in enumerate(self._EncMethods):
-            if enc_type["type"] == self._Wireless.GetWirelessProperty(network_id,"enctype"):
+            if enc_type["type"] == self._Wireless.GetWirelessProperty(network_id,"encryption_method"):
                 activeID = x
                 break
 
@@ -645,7 +645,6 @@ class WifiList(Page):
                 return
             
             wicd_wirelss_encrypt_pwd = self.GetWirelessEncrypt(self._PsIndex)
-            
             if self._WirelessList[self._PsIndex]._IsActive:
                 self.ShowBox( self._Wireless.GetWirelessIP('')    )
             else:

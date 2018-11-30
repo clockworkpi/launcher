@@ -3,7 +3,7 @@
 from UI.constants import Width,Height,ICON_TYPES
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 class TextItem(IconItem):
     _PosX = 0
@@ -11,7 +11,7 @@ class TextItem(IconItem):
     _Width = 0
     _Height = 0
     _Str    = ""
-    _Color = SkinManager().GiveColor('Text')
+    _Color = MySkinManager.GiveColor('Text')
     _FontObj = None
     _Bold    = False
     _MyType  = ICON_TYPES["LETTER"] 

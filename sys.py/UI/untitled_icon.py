@@ -14,7 +14,7 @@ from beeprint import pp
 from util_funcs import midRect, SkinMap
 from fonts import fonts
 
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 
 BlankPng = SkinMap("gameshell/blank.png")  # 80x80
 ## use blank circle as bg, Two alpha As Icon Label
@@ -32,7 +32,7 @@ class UntitledIcon(object):
 
     _BG = None  # initial surface
 
-    _Color = SkinManager().GiveColor('Text')
+    _Color = MySkinManager.GiveColor('Text')
 
     def __init__(self):
         self._Words = ["G", "s"]

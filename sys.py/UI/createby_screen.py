@@ -4,7 +4,7 @@ import pygame
 import base64
 ## local package import
 from full_screen import FullScreen
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 from createby_clockworkpi import createby_clockworkpi_b64
 
 from constants   import Width,Height
@@ -12,7 +12,7 @@ from constants   import Width,Height
 class CreateByScreen(FullScreen):
 
     _BG = None
-    _BGColor = SkinManager().GiveColor('Black')
+    _BGColor = MySkinManager.GiveColor('Black')
     
     def Init(self):
         self._BG = pygame.image.frombuffer(base64.b64decode(createby_clockworkpi_b64 ),(Width,Height),"RGBA")

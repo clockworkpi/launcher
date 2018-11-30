@@ -12,12 +12,12 @@ import base64
 from beeprint import pp
 
 #UI lib
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 
 
 Width = 320
 Height = 240
-bg_color =  SkinManager().GiveColor('White')
+bg_color =  MySkinManager.GiveColor('White')
 
 icon_width  = 80
 icon_height = 80

@@ -24,7 +24,7 @@ from UI.keys_def   import CurKeys
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.scroller   import ListScroller
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 from rom_so_confirm_page import RomSoConfirmPage
 
@@ -59,7 +59,7 @@ class RomStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -265,7 +265,7 @@ class RomListPage(Page):
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.AddLabel("Please upload data over Wi-Fi", fonts["varela22"])
-        bgpng.SetLableColor(SkinManager().GiveColor('Disabled'))
+        bgpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
         self._Icons["bg"] = bgpng
@@ -346,7 +346,7 @@ class RomListPage(Page):
                 self.SyncList( self._MyStack.Last() )
                 self._PsIndex = 0
                 
-        if cur_li._MyType == ICON_TYPES["FILE"]: ## add to playlist only
+        if cur_li._MyType == ICON_TYPES["FILE"]: 
             self._Screen._MsgBox.SetText("Launching...")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
