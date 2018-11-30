@@ -21,13 +21,14 @@ from title_bar   import TitleBar
 from foot_bar    import FootBar
 from constants   import Width,Height,bg_color
 from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable,SkinMap
-from fonts       import fonts
 from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
 from Emulator    import MyEmulator
 
 from skin_manager import MySkinManager
+from lang_manager import MyLangManager
+
 from counter_screen import CounterScreen
 
 class MessageBox(Label):
@@ -135,8 +136,8 @@ class MainScreen(object):
     _TitleBar    = None
     _FootBar     = None
     _MsgBox      = None
-    _MsgBoxFont  = fonts["veramono20"]
-    _IconFont    = fonts["varela15"]
+    _MsgBoxFont  = MyLangManager.TrFont("veramono20")
+    _IconFont    = MyLangManager.TrFont("varela15")
     _SkinManager = None
 
     _Closed      = False
@@ -431,7 +432,7 @@ class MainScreen(object):
                     iconitem = IconItem()
                     iconitem._FileName = i
                     iconitem._CmdPath = ""
-                    iconitem.AddLabel(i2,self._IconFont)
+                    iconitem.AddLabel(MyLangManager.Tr(i2),self._IconFont)
                     if FileExists( _dir+"/"+i+"/"+i2+".png"): ### 20_Prog/Prog.png , cut 20_ 
                         iconitem._ImageName = _dir+"/"+i+"/"+i2+".png"
                     elif FileExists( SkinMap(_dir+"/"+i2+".png") ):
@@ -539,7 +540,7 @@ class MainScreen(object):
                         
                         iconitem._ImageName = ""
                         
-                    iconitem.AddLabel(i2.split(".")[0],self._IconFont)
+                    iconitem.AddLabel(MyLangManager.Tr(i2.split(".")[0]),self._IconFont)
                     iconitem._LinkPage = None
                     cur_page._Icons.append(iconitem)
 
@@ -587,7 +588,7 @@ class MainScreen(object):
                 
     
     def DrawRun(self):
-        self._MsgBox.SetText("Launching....")
+        self._MsgBox.SetText(MyLangManager.Tr("Launching"))
         self._MsgBox.Draw()
     
     def Draw(self):

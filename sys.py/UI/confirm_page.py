@@ -13,7 +13,7 @@ from fonts  import fonts
 from util_funcs import midRect
 from keys_def   import CurKeys
 from skin_manager import MySkinManager
-
+from lang_manager import MyLangManager
 
 
 class ListPageSelector(PageSelector):
@@ -54,13 +54,13 @@ class ConfirmPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","","","Cancel","Yes"]
+    _FootMsg = [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Cancel"),MyLangManager.Tr("Yes")]
     _MyList = []
-    _ListFont = fonts["veramono20"]
+    _ListFont = MyLangManager.TrFont("veramono20")
     _MyStack = None
     _FileName     = ""
     _TrashDir     = ""
-    _ConfirmText = "Confirm?"
+    _ConfirmText = MyLangManager.Tr("ConfirmQ")
     _BGPosX      = 0
     _BGPosY      = 0
     _BGWidth     = 0

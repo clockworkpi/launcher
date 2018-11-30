@@ -13,14 +13,14 @@ from UI.fonts  import fonts
 from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys
 from UI.scroller   import ListScroller
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 from list_item  import ListItem
 
 import myvars
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0

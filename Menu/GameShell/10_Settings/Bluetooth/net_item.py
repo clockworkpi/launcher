@@ -9,7 +9,7 @@ from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.multi_icon_item  import MultiIconItem
 from UI.icon_pool   import MyIconPool
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 
 class NetItemMultiIcon(MultiIconItem):
@@ -123,5 +123,5 @@ class NetItem(object):
             self._Icons["done"].NewCoord(320-22,self._PosY)
             self._Icons["done"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),
             (self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)

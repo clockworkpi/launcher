@@ -10,7 +10,7 @@ from UI.label  import Label
 from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 # a item for List
 # - - - - - - - - - - - -- 
@@ -32,7 +32,7 @@ class ListItemIcon(IconItem):
 
 class ListItemLabel(Label):
 
-    _ActiveColor  = SkinManager().GiveColor('Active')
+    _ActiveColor  = MySkinManager.GiveColor('Active')
     _Active = False
     def Draw(self):
 
@@ -117,7 +117,7 @@ class ListItem(object):
         
         self._Labels["Text"]._PosY = self._PosY + (self._Height - self._Labels["Text"]._Height)/2
             
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
 
         if self._Playing == True:
             self._Labels["Text"]._Active =True
@@ -128,7 +128,7 @@ class ListItem(object):
             
             if self._PlayingProcess > 0:
                 seek_posx = int(self._Width * self._PlayingProcess/100.0)
-                pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Active'),(self._PosX,self._PosY+self._Height-2),(self._PosX+seek_posx,self._PosY+self._Height-2),2)   
+                pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Active'),(self._PosX,self._PosY+self._Height-2),(self._PosX+seek_posx,self._PosY+self._Height-2),2)   
 
         else:
             self._Labels["Text"].Draw()

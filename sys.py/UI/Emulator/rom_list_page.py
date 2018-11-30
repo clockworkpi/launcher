@@ -25,6 +25,7 @@ from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.scroller   import ListScroller
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from rom_so_confirm_page import RomSoConfirmPage
 
@@ -98,7 +99,7 @@ class RomListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","Scan","Del","Add Fav","Run"]
+    _FootMsg = [MyLangManager.Tr("Nav"),MyLangManager.Tr("Scan"),MyLangManager.Tr("Del"),MyLangManager.Tr("AddFav"),MyLangManager.Tr("Run")]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     _MyStack = None
@@ -264,7 +265,7 @@ class RomListPage(Page):
         bgpng._ImgSurf = MyIconPool._Icons["empty"]
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
-        bgpng.AddLabel("Please upload data over Wi-Fi", fonts["varela22"])
+        bgpng.AddLabel(MyLangManager.Tr("UploadViaWifi"), MyLangManager.TrFont("varela22"))
         bgpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
@@ -278,7 +279,7 @@ class RomListPage(Page):
 
         rom_so_confirm_page = RomSoConfirmPage()
         rom_so_confirm_page._Screen = self._Screen
-        rom_so_confirm_page._Name = "Download Confirm"
+        rom_so_confirm_page._Name = MyLangManager.Tr("Download Confirm")
         rom_so_confirm_page._Parent = self
         rom_so_confirm_page.Init()
 
@@ -347,7 +348,7 @@ class RomListPage(Page):
                 self._PsIndex = 0
                 
         if cur_li._MyType == ICON_TYPES["FILE"]: 
-            self._Screen._MsgBox.SetText("Launching...")
+            self._Screen._MsgBox.SetText(MyLangManager.Tr("Launching"))
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
 
@@ -447,7 +448,7 @@ class RomListPage(Page):
                 except:
                     pass
                 
-                self._Screen._MsgBox.SetText("Adding to Favourite list")
+                self._Screen._MsgBox.SetText(MyLangManager.Tr("AddFavList"))
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
                 

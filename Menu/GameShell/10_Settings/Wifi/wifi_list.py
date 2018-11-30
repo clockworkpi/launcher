@@ -15,7 +15,7 @@ from UI.util_funcs import midRect,SwapAndShow
 from UI.keys_def   import CurKeys
 from UI.scroller   import ListScroller
 from UI.confirm_page import ConfirmPage
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
@@ -224,7 +224,7 @@ class WifiInfoPage(Page):
         
     
 class WifiListSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -260,9 +260,9 @@ class WifiListMessageBox(Label):
         x  = (self._Parent._Width - w)/2
         y =  (self._Parent._Height - h)/2
         padding = 10 
-        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))        
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))        
 
-        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
 
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 

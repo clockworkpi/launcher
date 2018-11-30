@@ -19,12 +19,12 @@ from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multilabel import MultiLabel
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 import config
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -103,7 +103,7 @@ class PageListItem(object):
             self._Labels["Small"]._PosY = self._PosY + (self._Height-  self._Labels["Small"]._Height)/2
             self._Labels["Small"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 
 class InfoPage(Page):
@@ -445,9 +445,9 @@ class PowerOptionsPage(Page):
         config.PowerLevel = cur_li._Value
 
         if config.PowerLevel!= "supersaving":
-            os.system("sudo iw wlan0 set power_save off")
+            os.system("sudo iw wlan0 set power_save off > /dev/null")
         else:
-            os.system("sudo iw wlan0 set power_save on")
+            os.system("sudo iw wlan0 set power_save on > /dev/null")
         
         self._Screen._MsgBox.SetText("Applying...")
         self._Screen._MsgBox.Draw()

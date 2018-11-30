@@ -19,7 +19,7 @@ from UI.keys_def import CurKeys
 from UI.confirm_page import ConfirmPage
 from UI.download     import Download
 from UI.download_process_page import DownloadProcessPage
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 from libs.roundrects import aa_round_rect
 from libs.DBUS       import is_wifi_connected_now
@@ -195,7 +195,7 @@ class InfoPageListItem(object):
             self._Labels["Small"]._PosY = self._PosY + (self._Height - self._Labels["Small"]._Height)/2
             self._Labels["Small"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
         
 
 class UpdatePage(Page):

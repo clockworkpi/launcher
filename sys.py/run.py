@@ -570,9 +570,9 @@ if __name__ == '__main__':
     if powerlevel != "":
         config.PowerLevel = powerlevel
         if powerlevel != "supersaving":
-            os.system("sudo iw wlan0 set power_save off")
+            os.system("sudo iw wlan0 set power_save off >/dev/null")
         else:
-            os.system("sudo iw wlan0 set power_save on")
+            os.system("sudo iw wlan0 set power_save on > /dev/null")
 
     crt_screen = CreateByScreen()
     crt_screen.Init()

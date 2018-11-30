@@ -18,6 +18,7 @@ from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool import MyIconPool
 from UI.scroller  import ListScroller
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from rom_so_confirm_page import RomSoConfirmPage
 
@@ -91,7 +92,7 @@ class FavListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","Scan","Remove","","Run"]
+    _FootMsg = [MyLangManager.Tr("Nav"),MyLangManager.Tr("Scan"),MyLangManager.Tr("Remove"),"",MyLangManager.Tr("Run")]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     _MyStack = None
@@ -230,7 +231,7 @@ class FavListPage(Page):
         bgpng._ImgSurf = MyIconPool._Icons["star"]
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
-        bgpng.AddLabel("my favourites games", fonts["varela18"])
+        bgpng.AddLabel(MyLangManager.Tr("MyFavGames"), MyLangManager.TrFont("varela18"))
         bgpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
@@ -244,7 +245,7 @@ class FavListPage(Page):
 
         rom_so_confirm_page = RomSoConfirmPage()
         rom_so_confirm_page._Screen = self._Screen
-        rom_so_confirm_page._Name = "Download Confirm"
+        rom_so_confirm_page._Name = MyLangManager.Tr("Download Confirm")
         rom_so_confirm_page._Parent = self
         rom_so_confirm_page.Init()
 
@@ -308,7 +309,7 @@ class FavListPage(Page):
             return
         
         if cur_li._MyType == ICON_TYPES["FILE"]: 
-            self._Screen._MsgBox.SetText("Launching...")
+            self._Screen._MsgBox.SetText(MyLangManager.Tr("Launching"))
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             if self._Emulator["FILETYPE"] == "dir":
@@ -418,7 +419,7 @@ class FavListPage(Page):
                 #delete directly without confirm dialog
                 stats = os.stat(cur_li._Path)
                 os.chown(cur_li._Path, stats.st_uid,stats.st_uid) ## normally uid and gid should be the same 
-                self._Screen._MsgBox.SetText("Deleting...")
+                self._Screen._MsgBox.SetText(MyLangManager.Tr("Deleting"))
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
                 pygame.time.delay(600)

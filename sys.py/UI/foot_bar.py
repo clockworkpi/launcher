@@ -12,6 +12,7 @@ from fonts      import fonts
 from multi_icon_item import MultiIconItem
 from icon_pool  import MyIconPool
 from libs.roundrects import aa_round_rect
+from lang_manager import MyLangManager
 
 icon_base_path = SkinMap("gameshell/footbar_icons/")
 
@@ -51,7 +52,7 @@ class FootBar:
     _Icons      = {}
     _IconWidth   = 18
     _IconHeight  = 18
-    _LabelFont   = fonts["veramono10"]
+    _LabelFont   = MyLangManager.TrFont("veramono10")
     _State       = "normal"
     
     _SkinManager = None
