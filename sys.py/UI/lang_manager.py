@@ -15,7 +15,6 @@ class LangManager(object):
     """
     
     _Langs = {}
-    _EngLangs = {} ##default Language dict,must be correct
     _Config = None
     _ConfigFileName = "00_English.ini"
     
@@ -25,7 +24,11 @@ class LangManager(object):
     def Init(self):
         if not self._Langs:
             self.SetLangs()
-
+    
+    def UpdateLang(self):
+        self._Langs = {}
+        self.SetLangs()
+    
     def SetLangs(self):
         self._Config = CaseConfigParser()
         print("SetLangs")

@@ -42,5 +42,5 @@ RUNSYS   = pygame.USEREVENT+3
 LOWLIGHT = pygame.USEREVENT+4 ## when dim screen backlight
 FOOTMSG  = pygame.USEREVENT+5 ## 
 POWEROPT = pygame.USEREVENT+6
-
+RESTARTUI  = pygame.USEREVENT+7 ##restart launcher
 
