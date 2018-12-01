@@ -20,6 +20,7 @@ from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multilabel import MultiLabel
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 import config
 
@@ -107,9 +108,9 @@ class PageListItem(object):
     
 
 class InfoPage(Page):
-    _FootMsg =  ["Nav.","","","Back",""]
+    _FootMsg =  [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Back"),""]
     _MyList = []
-    _ListFontObj = fonts["varela15"]    
+    _ListFontObj = MyLangManager.TrFont("varela15")
     _AList = {}
 
     _Time1 = 40
@@ -123,22 +124,22 @@ class InfoPage(Page):
             m = int(secs/60)
             s = secs % 60
             if m > 1:
-                min_str =  "%d minutes " % m
+                min_str =  "%d "+MyLangManager.Tr("minutes")+" " % m
             else:
-                min_str =  "%d minute " % m
+                min_str =  "%d "+MyLangManager.Tr("minute")+" " % m
             
             if s == 1:
-                sec_str = "%d second" % s
+                sec_str = "%d "+MyLangManager.Tr("second") % s
             elif s > 1:
-                sec_str = "%d seconds" % s
+                sec_str = "%d "+MyLangManager.Tr("seconds") % s
         elif secs > 0:
             if secs > 1:
-                sec_str = "%d seconds" % secs
+                sec_str = "%d "+MyLangManager.Tr("seconds") % secs
             else:
-                sec_str = "%d second" % secs
+                sec_str = "%d "+MyLangManager.Tr("second") % secs
         
         elif secs == 0:
-            sec_str = "Never"
+            sec_str = MyLangManager.Tr("Never")
         
         return min_str + sec_str
 
@@ -156,7 +157,7 @@ class InfoPage(Page):
         time1 = {}
         time1["key"] = "time1"
         if self._Time1 == 0:
-            time1["value"] = "Never"
+            time1["value"] = MyLangManager.Tr("Never")
         else:
             time1["value"] = "%d secs" % self._Time1
         time1["label"] = "Screen dimming"
@@ -164,7 +165,7 @@ class InfoPage(Page):
         time2 = {}
         time2["key"] = "time2"
         if self._Time2 == 0:
-            time2["value"] = "Never"
+            time2["value"] = MyLangManager.Tr("Never")
         else:
             time2["value"] = "%d secs" % self._Time2
             
@@ -174,7 +175,7 @@ class InfoPage(Page):
         time3["key"] = "time3"
         
         if self._Time3 == 0:
-            time3["value"] = "Never"
+            time3["value"] = MyLangManager.Tr("Never")
         else:
             time3["value"] = "%d secs" % self._Time3
         time3["label"] = "Power OFF"
@@ -289,7 +290,7 @@ class InfoPage(Page):
             i.Draw()
 
 class PowerOptionsPage(Page):
-    _FootMsg =  ["Nav.","","Detail","Back","Select"]
+    _FootMsg =  [MyLangManager.Tr("Nav"),"",MyLangManager.Tr("Detail"),MyLangManager.Tr("Back"),MyLangManager.Tr("Select")]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     
@@ -449,7 +450,7 @@ class PowerOptionsPage(Page):
         else:
             os.system("sudo iw wlan0 set power_save on > /dev/null")
         
-        self._Screen._MsgBox.SetText("Applying...")
+        self._Screen._MsgBox.SetText(MyLangManager.Tr("Applying"))
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
 
@@ -561,7 +562,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = PowerOptionsPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="Power Options"
+        self._Page._Name =MyLangManager.Tr("PowerOptions")
         self._Page.Init()
         
     def API(self,main_screen):

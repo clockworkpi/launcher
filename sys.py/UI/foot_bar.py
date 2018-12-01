@@ -101,7 +101,7 @@ class FootBar:
         self._Icons["round_corners"] = round_corners
         
     def ResetNavText(self):
-        self._Icons["nav"]._Label.SetText("Nav.")
+        self._Icons["nav"]._Label.SetText(MyLangManager.Tr("Nav"))
         self._State = "normal"
         self.Draw()
         return False

@@ -9,6 +9,7 @@ from util_funcs  import midRect
 
 #UI lib
 from skin_manager import MySkinManager
+from lang_manager import MyLangManager
 
 class Label:
     _PosX=0

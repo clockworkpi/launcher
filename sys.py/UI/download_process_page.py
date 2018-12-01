@@ -20,6 +20,7 @@ from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.download   import Download
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from libs.DBUS     import is_wifi_connected_now
 
@@ -130,7 +131,7 @@ class DownloadProcessPage(Page):
                     except:
                         pass
                     
-                    self._Screen._MsgBox.SetText("Download failed")
+                    self._Screen._MsgBox.SetText(MyLangManager.Tr("DownloadFailed"))
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
                     return False
@@ -163,7 +164,7 @@ class DownloadProcessPage(Page):
             self._URL = url
             self._DST_DIR = dst_dir
         else:
-            self._Screen._MsgBox.SetText("Invaid")
+            self._Screen._MsgBox.SetText(MyLangManager.Tr("Invaid"))
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()            
             print("url or dst dir error")
