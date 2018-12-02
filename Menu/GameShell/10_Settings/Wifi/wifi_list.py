@@ -16,6 +16,7 @@ from UI.keys_def   import CurKeys
 from UI.scroller   import ListScroller
 from UI.confirm_page import ConfirmPage
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
@@ -26,7 +27,7 @@ import myvars
 
 class WifiDisconnectConfirmPage(ConfirmPage):
 
-    _ConfirmText = "Confirm Disconnect?"
+    _ConfirmText = MyLangManager.Tr("ConfirmDisconnectQ")
     
     def KeyDown(self,event):
         if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
@@ -35,7 +36,7 @@ class WifiDisconnectConfirmPage(ConfirmPage):
             self._Screen.SwapAndShow()
             
         if event.key == CurKeys["B"]:
-            self.SnapMsg("Disconnecting...")
+            self.SnapMsg(MyLangManager.Tr("Disconnecting"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
@@ -57,9 +58,9 @@ class WifiDisconnectConfirmPage(ConfirmPage):
         self.Reset()
         
 class WifiInfoPage(Page):
-    _FootMsg =  ["Nav.","Disconnect","","Back",""]
+    _FootMsg =  ["Nav","Disconnect","","Back",""]
     _MyList = []
-    _ListFontObj = fonts["varela15"]
+    _ListFontObj = MyLangManager.TrFont("varela15")
 
     _Wireless = None
     _Daemon   = None
@@ -287,7 +288,7 @@ class WifiList(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav.","Scan","Info","Back","Enter"]
+    _FootMsg           = ["Nav","Scan","Info","Back","Enter"]
     _EncMethods        = None
     _Scroller          = None
     _ListFontObj       = fonts["notosanscjk15"]
@@ -370,7 +371,7 @@ class WifiList(Page):
             return
         
         self._Scanning = True
-        self.ShowBox("Wifi scanning...")
+        self.ShowBox(MyLangManager.Tr("Wifi scanning"))
         self._BlockingUI = True
         print("dbus says start scan...")
 
@@ -537,7 +538,7 @@ class WifiList(Page):
         self._Wireless.SetWirelessProperty(netid,"apsk",password)
         self._Wireless.SetWirelessProperty(netid,"automatic",1)
 
-        self.ShowBox("Connecting...")
+        self.ShowBox(MyLangManager.Tr("Connecting"))
         
         self._WirelessList[netid].Connect()
         print("after Connect")
@@ -620,7 +621,7 @@ class WifiList(Page):
                 wireless_connecting = self._Wireless.CheckIfWirelessConnecting()
                 if wireless_connecting:
                     self.ShutDownConnecting()
-                    self.ShowBox("ShutDownConnecting...")
+                    self.ShowBox(MyLangManager.Tr("ShutDownConnecting"))
                     self._BlockingUI=True
                     self._BlockCb = self.AbortedAndReturnToUpLevel
                 else:

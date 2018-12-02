@@ -22,16 +22,16 @@ from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multi_icon_item import MultiIconItem
-
+from UI.lang_manager  import MyLangManager
 from UI.multilabel import MultiLabel
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
 
 
 class NotificationPage(Page):
-    _FootMsg =  ["Nav.","","","Back","Toggle"]
+    _FootMsg =  ["Nav","","","Back","Toggle"]
     _MyList = []
-    _ListFontObj = fonts["varela13"]
+    _ListFontObj = MyLangManager.TrFont("varela13")
     
     _AList = {}
 
@@ -197,7 +197,7 @@ class NotificationPage(Page):
 
         if event.key == CurKeys["B"]:
             self.ToggleEnable()
-            self._Screen._MsgBox.SetText("Applying...")
+            self._Screen._MsgBox.SetText("Applying")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             pygame.time.delay(1000)

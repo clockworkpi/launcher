@@ -76,18 +76,18 @@ class MyEmulator(object):
     def InitDeleteConfirmPage(self,main_screen):
         self.DeleteConfirmPage = DeleteConfirmPage()
         self.DeleteConfirmPage._Screen = main_screen
-        self.DeleteConfirmPage._Name   = MyLangManager.Tr("DeleteConfirm")
+        self.DeleteConfirmPage._Name   = "DeleteConfirm"
         self.DeleteConfirmPage.Init()
 
         self.FavDeleteConfirmPage = FavDeleteConfirmPage()
         self.FavDeleteConfirmPage._Screen = main_screen
-        self.FavDeleteConfirmPage._Name   = MyLangManager.Tr("DeleteConfirm")
+        self.FavDeleteConfirmPage._Name   = "DeleteConfirm"
         self.FavDeleteConfirmPage.Init()
         
     def InitFavListPage(self,main_screen):
         self.FavListPage = FavListPage()
         self.FavListPage._Screen = main_screen
-        self.FavListPage._Name   = MyLangManager.Tr("FavouriteGames")
+        self.FavListPage._Name   = "FavouriteGames"
         self.FavListPage._Emulator = self._Emulator
         self.FavListPage._Parent = self
         

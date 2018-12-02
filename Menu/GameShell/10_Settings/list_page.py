@@ -26,7 +26,7 @@ class ListPage(Page):
     _Icons = {}
     _Selector=None
     
-    _FootMsg = [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Back"),MyLangManager.Tr("Enter")]
+    _FootMsg = ["Nav","","","Back","Enter"]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
 

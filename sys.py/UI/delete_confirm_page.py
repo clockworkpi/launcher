@@ -49,7 +49,7 @@ class DeleteConfirmPage(ConfirmPage):
                 shutil.move(self._FileName, self._TrashDir)
             except shutil.Error as e:
                 if "already exists" in str(e):
-                        self._Screen._MsgBox.SetText(MyLangManager.Tr("AlreadyExisted"))
+                        self._Screen._MsgBox.SetText("AlreadyExisted")
                 else:
                     self._Screen._MsgBox.SetText("Error")
 

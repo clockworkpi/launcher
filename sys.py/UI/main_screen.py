@@ -48,7 +48,7 @@ class MessageBox(Label):
         self._HWND       = self._Parent._CanvasHWND
 
     def SetText(self,text):
-        self._Text = text
+        self._Text = MyLangManager.Tr(text)
 
     def PreDraw(self):
         self._Width = 0

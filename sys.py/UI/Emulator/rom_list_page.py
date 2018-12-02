@@ -99,7 +99,7 @@ class RomListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = [MyLangManager.Tr("Nav"),MyLangManager.Tr("Scan"),MyLangManager.Tr("Del"),MyLangManager.Tr("AddFav"),MyLangManager.Tr("Run")]
+    _FootMsg = ["Nav","Scan","Del","AddFav","Run"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     _MyStack = None
@@ -279,7 +279,7 @@ class RomListPage(Page):
 
         rom_so_confirm_page = RomSoConfirmPage()
         rom_so_confirm_page._Screen = self._Screen
-        rom_so_confirm_page._Name = MyLangManager.Tr("Download Confirm")
+        rom_so_confirm_page._Name = "Download Confirm"
         rom_so_confirm_page._Parent = self
         rom_so_confirm_page.Init()
 
@@ -348,7 +348,7 @@ class RomListPage(Page):
                 self._PsIndex = 0
                 
         if cur_li._MyType == ICON_TYPES["FILE"]: 
-            self._Screen._MsgBox.SetText(MyLangManager.Tr("Launching"))
+            self._Screen._MsgBox.SetText("Launching")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
 
@@ -448,7 +448,7 @@ class RomListPage(Page):
                 except:
                     pass
                 
-                self._Screen._MsgBox.SetText(MyLangManager.Tr("AddFavList"))
+                self._Screen._MsgBox.SetText("AddFavList")
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
                 

@@ -63,7 +63,7 @@ class UpdateDownloadPage(DownloadProcessPage):
                     print(filename)
                     os.system("rm -rf %s" % CmdClean(filename))
                     
-                    self._Screen._MsgBox.SetText(MyLangManager.Tr("DownloadFailed"))
+                    self._Screen._MsgBox.SetText("DownloadFailed")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
                     return False
@@ -81,7 +81,7 @@ class UpdateDownloadPage(DownloadProcessPage):
             self._URL = url
             self._DST_DIR = dst_dir
         else:
-            self._Screen._MsgBox.SetText(MyLangManager.Tr("Invaid"))
+            self._Screen._MsgBox.SetText("Invaid")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()            
             return
@@ -123,7 +123,7 @@ class UpdateConfirmPage(ConfirmPage):
             if self._DownloadPage == None:
                 self._DownloadPage = UpdateDownloadPage()
                 self._DownloadPage._Screen = self._Screen
-                self._DownloadPage._Name   = MyLangManager.Tr("Downloading")
+                self._DownloadPage._Name   = "Downloading"
                 self._DownloadPage.Init()
 
             self._DownloadPage._MD5 = self._MD5
@@ -153,7 +153,7 @@ class UpdateConfirmPage(ConfirmPage):
 
 class UpdatePage(Page):
     _Icons = {}
-    _FootMsg = ["Nav.","Check Update","","Back",""]
+    _FootMsg = ["Nav","Check Update","","Back",""]
 
     _ListFontObj = fonts["varela15"]    
     _ConfirmPage = None
@@ -209,7 +209,7 @@ class UpdatePage(Page):
         self.GenList()
         
     def CheckUpdate(self):
-        self._Screen._MsgBox.SetText(MyLangManager.Tr("CheckingUpdate"))
+        self._Screen._MsgBox.SetText("CheckingUpdate")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
 
@@ -256,7 +256,7 @@ class UpdatePage(Page):
                             self._Screen.SwapAndShow()
                         else:
                             self._Screen.Draw()
-                            self._Screen._MsgBox.SetText(MyLangManager.Tr("LauncherIsUpToDate"))
+                            self._Screen._MsgBox.SetText("LauncherIsUpToDate")
                             self._Screen._MsgBox.Draw()
                             self._Screen.SwapAndShow()
                             pygame.time.delay(765)
@@ -287,12 +287,12 @@ class UpdatePage(Page):
                     self._Screen.SwapAndShow()
                 else:
                     self._Screen.Draw()
-                    self._Screen._MsgBox.SetText(MyLangManager.Tr("CheckingUpdateFailed"))
+                    self._Screen._MsgBox.SetText("CheckingUpdateFailed")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
             else:
                 self._Screen.Draw()
-                self._Screen._MsgBox.SetText(MyLangManager.Tr("CheckWifiConnection"))
+                self._Screen._MsgBox.SetText("CheckWifiConnection")
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
 
@@ -313,7 +313,7 @@ class APIOBJ(object):
         self._UpdatePage = UpdatePage()
 
         self._UpdatePage._Screen = main_screen
-        self._UpdatePage._Name =MyLangManager.Tr("Update")
+        self._UpdatePage._Name = "Update"
         self._UpdatePage.Init()
         
     def API(self,main_screen):

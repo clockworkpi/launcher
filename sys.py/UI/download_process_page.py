@@ -131,7 +131,7 @@ class DownloadProcessPage(Page):
                     except:
                         pass
                     
-                    self._Screen._MsgBox.SetText(MyLangManager.Tr("DownloadFailed"))
+                    self._Screen._MsgBox.SetText("DownloadFailed")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
                     return False
@@ -164,7 +164,7 @@ class DownloadProcessPage(Page):
             self._URL = url
             self._DST_DIR = dst_dir
         else:
-            self._Screen._MsgBox.SetText(MyLangManager.Tr("Invaid"))
+            self._Screen._MsgBox.SetText("Invaid")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()            
             print("url or dst dir error")

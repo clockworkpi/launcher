@@ -108,6 +108,7 @@ class FootBar:
         
     def UpdateNavText(self,texts):
         self._State = "tips"
+        texts = MyLangManager.Tr(texts)
         my_text = self._LabelFont.render(texts,True,self._SkinManager.GiveColor("Text"))
         """
         _w = 0
@@ -152,7 +153,7 @@ class FootBar:
             
         for idx,x in enumerate(barr):
             try:
-                self._Icons[x]._Label.SetText(texts[idx])
+                self._Icons[x]._Label.SetText(MyLangManager.Tr(texts[idx]))
             except IndexError:
                 print("Index "+x+" doesn't exist!")
 

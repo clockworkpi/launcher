@@ -94,7 +94,7 @@ class BleInfoPageSelector(PageSelector):
                           (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
 
 class BleInfoPage(Page):
-    _FootMsg =  [MyLangManager.Tr("Nav"),MyLangManager.Tr("Disconnect"),MyLangManager.Tr("Forget"),MyLangManager.Tr("Back"),""]
+    _FootMsg =  ["Nav","Disconnect","Forget","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
     _ListSmFontObj = fonts["varela12"]  # small font
@@ -127,7 +127,7 @@ class BleInfoPage(Page):
         
         self._ConfirmPage1 = BleForgetConfirmPage()
         self._ConfirmPage1._Screen = self._Screen
-        self._ConfirmPage1._Name   = MyLangManager.Tr("ConfirmForget")
+        self._ConfirmPage1._Name   = "ConfirmForget"
         self._ConfirmPage1._Parent = self
         self._ConfirmPage1.Init() 
         
@@ -205,7 +205,7 @@ class BleInfoPage(Page):
         proxy_obj = bus.get_object("org.bluez", self._Path)
         dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
         
-        self._Screen._MsgBox.SetText(MyLangManager.Tr("Forgeting"))
+        self._Screen._MsgBox.SetText("Forgeting")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()        
         
@@ -230,8 +230,8 @@ class BleInfoPage(Page):
         proxy_obj = bus.get_object("org.bluez", self._Path)
         dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
         
-        self._Screen._FootBar.UpdateNavText(MyLangManager.Tr("Disconnecting"))
-        self._Screen._MsgBox.SetText(MyLangManager.Tr("Disconnecting"))
+        self._Screen._FootBar.UpdateNavText("Disconnecting")
+        self._Screen._MsgBox.SetText("Disconnecting")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
         
@@ -261,7 +261,7 @@ class BleInfoPage(Page):
         if self._AList != None:
             if "Connected" in self._AList:
                 if self._AList["Connected"] == 1:
-                    self._FootMsg[1] = MyLangManager.Tr("Disconnect")
+                    self._FootMsg[1] = "Disconnect"
                 else:
                     self._FootMsg[1] = ""
         
@@ -385,7 +385,7 @@ class BluetoothPage(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = [MyLangManager.Tr("Nav"),MyLangManager.Tr("Scan"),MyLangManager.Tr("Info"),MyLangManager.Tr("Back"),MyLangManager.Tr("TryConnect")]
+    _FootMsg           = ["Nav","Scan","Info","Back","TryConnect"]
     _Scroller          = None
     _ListFontObj       = fonts["notosanscjk15"]
 
@@ -444,7 +444,7 @@ class BluetoothPage(Page):
         
         self._InfoPage = BleInfoPage()
         self._InfoPage._Screen = self._Screen
-        self._InfoPage._Name   = MyLangManager.Tr("BluetoothInfo")
+        self._InfoPage._Name   = "BluetoothInfo"
         self._InfoPage.Init()        
 
     def print_normal(self,address, properties):
@@ -530,7 +530,7 @@ class BluetoothPage(Page):
         proxy_obj = bus.get_object("org.bluez", cur_li._Path)
         dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
         
-        self._Screen._FootBar.UpdateNavText(MyLangManager.Tr("Connecting"))
+        self._Screen._FootBar.UpdateNavText("Connecting")
         self.ShowBox(MyLangManager.Tr("Connecting"))
         
         try:
@@ -579,7 +579,7 @@ class BluetoothPage(Page):
         
         self._Scanning = True
         self.ShowBox(MyLangManager.Tr("BluetoothScanning"))
-        self._Screen._FootBar.UpdateNavText(MyLangManager.Tr("Scanning"))
+        self._Screen._FootBar.UpdateNavText("Scanning")
         
         proxy_obj = self._Dbus.get_object("org.bluez", "/org/bluez/" + self._ADAPTER_DEV)
         adapter_props = dbus.Interface(proxy_obj,"org.freedesktop.DBus.Properties")

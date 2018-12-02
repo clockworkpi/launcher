@@ -16,7 +16,7 @@ class LangManager(object):
     
     _Langs = {}
     _Config = None
-    _ConfigFileName = "00_English.ini"
+    _ConfigFileName = "00_English.ini" ## double % to escape 
     
     def __init__(self):
         self.Init()
@@ -31,24 +31,25 @@ class LangManager(object):
     
     def SetLangs(self):
         self._Config = CaseConfigParser()
-        print("SetLangs")
+        #print("SetLangs")
         fname = ".lang"
         
         try:
             with open(fname, "r") as f:
                 self._ConfigFileName = f.read()
                 self._ConfigFileName = self._ConfigFileName.strip("\r\n ")
-                print(self._ConfigFileName)
+                #print(self._ConfigFileName)
         except:
             print("read lang failed")
             None
         
         
         if self._ConfigFileName == "" or FileExists("langs/"+self._ConfigFileName) == False:
-            print("miss file")
+            #print("miss file")
             self._ConfigFileName = "00_English.ini"
         else:
-            print("has file",self._ConfigFileName)
+            pass
+            #print("has file",self._ConfigFileName)
             
         
         try:
@@ -67,8 +68,9 @@ class LangManager(object):
                         continue
     
     def Tr(self,english_key_str):
-        print("english_key_str", english_key_str)
+        #print("english_key_str", english_key_str)
         if english_key_str in self._Langs:
+            #print( self._Langs[english_key_str]  )
             return self._Langs[english_key_str].decode("utf8")
         else:
             return english_key_str

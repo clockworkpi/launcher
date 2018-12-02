@@ -16,7 +16,7 @@ from UI.lang_manager import MyLangManager
 from libs.DBUS  import is_wifi_connected_now,get_wifi_ip
 
 class TinyCloudPage(Page):
-    _FootMsg =  [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Back"),""]
+    _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     
     _ListFontObj = fonts["varela13"]
@@ -166,7 +166,7 @@ class TinyCloudPage(Page):
 
     def KeyDown(self,event):
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
-            if self._FootMsg[3] == MyLangManager.Tr("Back"):
+            if self._FootMsg[3] == "Back":
                 self.ReturnToUpLevelPage()
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()

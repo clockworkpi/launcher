@@ -78,7 +78,7 @@ class InfoPageListItem(object):
     
 
 class AirplanePage(Page):
-    _FootMsg =  [MyLangManager.Tr("Nav"),MyLangManager.Tr("Rescue"),"",MyLangManager.Tr("Back"),MyLangManager.Tr("Toggle")]
+    _FootMsg =  ["Nav","Rescue","","Back","Toggle"]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela13")
     
@@ -207,19 +207,19 @@ class AirplanePage(Page):
         out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
         print out
         if "yes" in out[1]:
-            self._Screen._MsgBox.SetText(MyLangManager.Tr("TurningOn"))
+            self._Screen._MsgBox.SetText("TurningOn")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("sudo rfkill unblock all")
             self._Screen._TitleBar._InAirPlaneMode = False
         
         else:
-            self._Screen._MsgBox.SetText(MyLangManager.Tr("TurningOff"))
+            self._Screen._MsgBox.SetText("TurningOff")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("sudo rfkill block all")
             self._Screen._TitleBar._InAirPlaneMode = True
     
     def UnBlockAll(self):
-        self._Screen._MsgBox.SetText(MyLangManager.Tr("TurningOn"))
+        self._Screen._MsgBox.SetText("TurningOn")
         self._Screen._MsgBox.Draw()
         commands.getstatusoutput("sudo rfkill unblock all")
         self._Screen._TitleBar._InAirPlaneMode = False
@@ -314,7 +314,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = AirplanePage()
         self._Page._Screen = main_screen
-        self._Page._Name =MyLangManager.Tr("AirplaneMode")
+        self._Page._Name ="Airplane Mode"
         self._Page.Init()
         
     def API(self,main_screen):

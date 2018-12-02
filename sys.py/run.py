@@ -282,7 +282,7 @@ def RecordKeyDns(thekey,main_screen):
         Keys.append(thekey)
     
     keys = ''.join(map(str,Keys))
-    print(keys)
+    #print(keys)
     if keys == "273273274274276276275275106107":##uuddllrrab
         crt_screen.Draw()
         crt_screen.SwapAndShow()
@@ -345,7 +345,16 @@ def event_process(event,main_screen):
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
             return
-
+        if event.type == RESTARTUI:
+            pygame.quit()
+            gobject_main_loop.quit()
+            os.chdir(GetExePath())
+            exec_app_cmd = " sync & cd "+GetExePath()+"; exec python "+myscriptname
+            print(exec_app_cmd)
+            os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
+            os.chdir( GetExePath())
+            os.exelp("python","python"," "+myscriptname)
+            return
         if event.type == POWEROPT:
             everytime_keydown = time.time()
             

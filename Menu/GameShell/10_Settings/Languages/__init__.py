@@ -8,7 +8,7 @@ import glob
 from libs.roundrects import aa_round_rect
 
 ## local UI import
-from UI.constants import Width,Height,ICON_TYPES,POWEROPT
+from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
@@ -75,7 +75,7 @@ class PageListItem(InfoPageListItem):
         pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 class LanguagesPage(Page):
-    _FootMsg =  [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Back"),MyLangManager.Tr("Select")]
+    _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     
@@ -105,7 +105,7 @@ class LanguagesPage(Page):
         files_path = [os.path.basename(x) for x in sorted(glob.glob('langs/*.ini'))]
         
         for i,u in enumerate( files_path ):            
-            print(i,u)
+            #print(i,u)
             li = PageListItem()
             li._Parent = self
             li._PosX   = start_x
@@ -194,13 +194,13 @@ class LanguagesPage(Page):
         with open(".lang","w") as f:
             f.write(cur_li._Value)
         
-        self._Screen._MsgBox.SetText(MyLangManager.Tr("Applying"))
+        self._Screen._MsgBox.SetText("Applying")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
         
         MyLangManager.UpdateLang()
         
-        ##pygame.event.post( pygame.event.Event(RUNEVT, message="exit 0")) ##Restart Launcher
+        pygame.event.post( pygame.event.Event(RESTARTUI, message="")) ##Restart Launcher
         
         pygame.time.delay(1000)
         

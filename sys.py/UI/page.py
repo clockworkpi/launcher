@@ -100,7 +100,7 @@ class Page(object):
     _Name       = ""
     _Screen     = None ## Should be the Screen Class
     _PageIconMargin = 20
-    _FootMsg    = [MyLangManager.Tr("Nav"),"","","",MyLangManager.Tr("Enter")] ## Default Page Foot info
+    _FootMsg    = ["Nav","","","","Enter"] ## Default Page Foot info
 
     _SelectedIconTopOffset=20
     _EasingDur   = 30

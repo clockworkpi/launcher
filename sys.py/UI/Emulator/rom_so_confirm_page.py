@@ -99,7 +99,7 @@ class RomSoConfirmPage(ConfirmPage):
                 if self._MyDownloadPage == None:
                     self._MyDownloadPage = DownloadProcessPage()
                     self._MyDownloadPage._Screen = self._Screen
-                    self._MyDownloadPage._Name = MyLangManager.Tr("Downloading")
+                    self._MyDownloadPage._Name = "Downloading"
                     self._MyDownloadPage.Init()
                 
                 self._Screen.PushPage(self._MyDownloadPage)

@@ -54,7 +54,7 @@ class ConfirmPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Cancel"),MyLangManager.Tr("Yes")]
+    _FootMsg = ["Nav","","","Cancel","Yes"]
     _MyList = []
     _ListFont = MyLangManager.TrFont("veramono20")
     _MyStack = None

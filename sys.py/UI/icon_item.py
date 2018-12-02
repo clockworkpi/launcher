@@ -66,7 +66,7 @@ class IconItem:
             self._LinkPage._Screen = self._Parent._Screen
             self._LinkPage._CanvasHWND       = self._Parent._Screen._CanvasHWND
             
-            self._LinkPage._FootMsg =  [MyLangManager.Tr("Nav"),"","",MyLangManager.Tr("Back"),MyLangManager.Tr("Enter")] ## Default Page Foot info
+            self._LinkPage._FootMsg =  ["Nav","","","Back","Enter"] ## Default Page Foot info
             
             if self._LinkPage._Align == ALIGN["HLeft"]:
                 self._LinkPage.AdjustHLeftAlign()

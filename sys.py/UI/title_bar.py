@@ -297,7 +297,7 @@ class TitleBar:
         
     def Draw(self,title):
         self.ClearCanvas()
-        
+        title = MyLangManager.Tr(title)
         self._Title = title
         
         cur_time =  datetime.now().strftime("%H:%M")

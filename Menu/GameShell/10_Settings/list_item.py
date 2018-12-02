@@ -8,7 +8,7 @@ import pygame
 from UI.page   import Page
 from UI.label  import Label
 from UI.fonts  import fonts
-
+from UI.lang_manager import MyLangManager
 # a item for List
 # - - - - - - - - - - - -- 
 # | Icon  Text.....    > |
@@ -34,9 +34,6 @@ class ListItem(object):
         self._Icons  = {}
         self._Fonts  = {}
 
-
-    
-    
     def Init(self,text):
 
         #self._Fonts["normal"] = fonts["veramono12"]
@@ -44,7 +41,7 @@ class ListItem(object):
         l = Label()
         l._PosX = 16
         l.SetCanvasHWND(self._Parent._CanvasHWND)
-
+        text = MyLangManager.Tr(text)
         l.Init(text,self._Fonts["normal"])
         self._Labels["Text"] = l
 
