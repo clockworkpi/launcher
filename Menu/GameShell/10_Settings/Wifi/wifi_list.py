@@ -706,7 +706,7 @@ class WifiList(Page):
         
         msgbox = WifiListMessageBox()
         msgbox._CanvasHWND = self._CanvasHWND
-        msgbox.Init(" ",fonts["veramono12"])
+        msgbox.Init(" ",MyLangManager.TrFont("veramono12"))
         msgbox._Parent = self
         
         self._MsgBox = msgbox 
