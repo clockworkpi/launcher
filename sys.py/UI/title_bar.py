@@ -183,7 +183,7 @@ class TitleBar:
     def CheckBluetooth(self):
         out = commands.getstatusoutput("hcitool dev | grep hci0 |cut -f3")
         if len(out[1]) < 17:
-            print("no bluetooth", out)
+            print("CheckBluetooth:no bluetooth", out)
             self._Icons["bluetooth"]._IconIndex = 2
             return
         else:
