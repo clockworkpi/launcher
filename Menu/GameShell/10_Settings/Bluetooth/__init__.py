@@ -544,12 +544,16 @@ class BluetoothPage(Page):
     def RefreshDevices(self):
         global devices
         devices = {}
-        proxy_obj = bus.get_object("org.bluez", "/")
-        manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
-        objects = manager.GetManagedObjects()
-        for path, interfaces in objects.iteritems():
-            if "org.bluez.Device1" in interfaces:
-                devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
+        try:
+            proxy_obj = bus.get_object("org.bluez", "/")
+            manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
+            objects = manager.GetManagedObjects()
+            for path, interfaces in objects.iteritems():
+                if "org.bluez.Device1" in interfaces:
+                    devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
+        except Exception,e:
+            print(str(e))
+            devices={}
         
         self._Devices = devices
         
