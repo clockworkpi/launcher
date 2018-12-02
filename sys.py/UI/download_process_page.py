@@ -19,7 +19,8 @@ from UI.keys_def   import CurKeys
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.download   import Download
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from libs.DBUS     import is_wifi_connected_now
 
@@ -39,8 +40,8 @@ class DownloadProcessPage(Page):
     _FileNameLabel = None
     _SizeLabel     = None
 
-    _URLColor  = SkinManager().GiveColor('URL')
-    _TextColor = SkinManager().GiveColor('Text')
+    _URLColor  = MySkinManager.GiveColor('URL')
+    _TextColor = MySkinManager.GiveColor('Text')
     
     def __init__(self):
         Page.__init__(self)        
@@ -130,7 +131,7 @@ class DownloadProcessPage(Page):
                     except:
                         pass
                     
-                    self._Screen._MsgBox.SetText("Download failed")
+                    self._Screen._MsgBox.SetText("DownloadFailed")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
                     return False
@@ -206,12 +207,12 @@ class DownloadProcessPage(Page):
 
         
         rect_ = midRect(self._Width/2,self._Height/2+33,170,17, Width,Height)
-        aa_round_rect(self._CanvasHWND,rect_,SkinManager().GiveColor('TitleBg'),5,0,SkinManager().GiveColor('TitleBg'))
+        aa_round_rect(self._CanvasHWND,rect_,MySkinManager.GiveColor('TitleBg'),5,0,MySkinManager.GiveColor('TitleBg'))
         
         rect2 = midRect(self._Width/2,self._Height/2+33,int(170*(percent/100.0)),17, Width,Height)
         rect2.left = rect_.left
         rect2.top  = rect_.top
-        aa_round_rect(self._CanvasHWND,rect2,SkinManager().GiveColor('Front'),5,0,SkinManager().GiveColor('Front'))
+        aa_round_rect(self._CanvasHWND,rect2,MySkinManager.GiveColor('Front'),5,0,MySkinManager.GiveColor('Front'))
 
         rect3 = midRect(self._Width/2,self._Height/2+53,self._FileNameLabel._Width, self._FileNameLabel._Height,Width,Height)
 

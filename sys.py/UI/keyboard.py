@@ -13,7 +13,7 @@ from UI.util_funcs import midRect
 from UI.keys_def import CurKeys
 from UI.icon_item import IconItem
 from UI.icon_pool    import MyIconPool
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 from libs.roundrects import aa_round_rect
 
@@ -27,7 +27,7 @@ class KeyboardIcon(IconItem):
     _PosY = 0
     _Width = 0
     _Height = 0
-    _Color = SkinManager().GiveColor('Text')
+    _Color = MySkinManager.GiveColor('Text')
     _MyType  = ICON_TYPES["NAV"] 
     _Parent  = None
     _Str     = ""

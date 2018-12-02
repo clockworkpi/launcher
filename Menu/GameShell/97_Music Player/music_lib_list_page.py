@@ -15,7 +15,8 @@ from UI.keys_def   import CurKeys
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool           import MyIconPool
 from UI.scroller   import ListScroller
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from list_item  import ListItem
 
@@ -49,7 +50,7 @@ class MusicLibStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -184,8 +185,8 @@ class MusicLibListPage(Page):
         self._BGpng._ImgSurf = MyIconPool._Icons["empty"]
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
-        self._BGpng.AddLabel("Please upload data over Wi-Fi", fonts["varela22"])
-        self._BGpng.SetLableColor(SkinManager().GiveColor('Disabled'))
+        self._BGpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela22"))
+        self._BGpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
 

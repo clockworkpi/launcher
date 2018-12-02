@@ -17,6 +17,7 @@ from constants    import ALIGN,icon_width,icon_height,Width,Height,ICON_TYPES
 from util_funcs   import midRect
 from keys_def     import CurKeys
 from icon_pool    import MyIconPool
+from lang_manager import MyLangManager
 
 class PageStack:
     def __init__(self):
@@ -99,7 +100,7 @@ class Page(object):
     _Name       = ""
     _Screen     = None ## Should be the Screen Class
     _PageIconMargin = 20
-    _FootMsg    = ["Nav.","","","","Enter"] ## Default Page Foot info
+    _FootMsg    = ["Nav","","","","Enter"] ## Default Page Foot info
 
     _SelectedIconTopOffset=20
     _EasingDur   = 30

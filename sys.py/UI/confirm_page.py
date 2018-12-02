@@ -12,12 +12,12 @@ from label  import Label
 from fonts  import fonts
 from util_funcs import midRect
 from keys_def   import CurKeys
-from skin_manager import SkinManager
-
+from skin_manager import MySkinManager
+from lang_manager import MyLangManager
 
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -56,11 +56,11 @@ class ConfirmPage(Page):
     _Selector=None
     _FootMsg = ["Nav","","","Cancel","Yes"]
     _MyList = []
-    _ListFont = fonts["veramono20"]
+    _ListFont = MyLangManager.TrFont("veramono20")
     _MyStack = None
     _FileName     = ""
     _TrashDir     = ""
-    _ConfirmText = "Confirm?"
+    _ConfirmText = MyLangManager.Tr("ConfirmQ")
     _BGPosX      = 0
     _BGPosY      = 0
     _BGWidth     = 0
@@ -130,8 +130,8 @@ class ConfirmPage(Page):
     def DrawBG(self):
         _rect = pygame.Rect(self._BGPosX,self._BGPosY,self._BGWidth,self._BGHeight)
         
-        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('White'),_rect,0)
-        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('Text'),_rect,1)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),_rect,0)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),_rect,1)
         
     def Draw(self):
         #self.ClearCanvas()

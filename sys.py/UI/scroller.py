@@ -5,7 +5,7 @@ from util_funcs  import midRect
 
 from libs.roundrects import aa_round_rect
 
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 
 class ListScroller(object):
     _PosX = 0
@@ -14,7 +14,7 @@ class ListScroller(object):
     _Height = 0
     _MinHeight = 6 ## tested 
     _Parent    = None
-    _Color     = SkinManager().GiveColor('Front')
+    _Color     = MySkinManager.GiveColor('Front')
     
     _StartX   = 0
     _StartY   = 0

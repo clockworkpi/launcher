@@ -8,7 +8,8 @@ from constants import Width,Height
 from util_funcs  import midRect
 
 #UI lib
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
+from lang_manager import MyLangManager
 
 class Label:
     _PosX=0
@@ -17,13 +18,13 @@ class Label:
     _Height=0
     _Text=""
     _FontObj=None
-    _Color = SkinManager().GiveColor('Text')
+    _Color = MySkinManager.GiveColor('Text')
     _CanvasHWND = None
     _TextSurf = None
     def __init__(self):
         pass
     
-    def Init(self, text, font_obj, color=SkinManager().GiveColor('Text')):
+    def Init(self, text, font_obj, color=MySkinManager.GiveColor('Text')):
         self._Color = color
         self._FontObj = font_obj
         self._Text = text

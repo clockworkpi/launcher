@@ -22,17 +22,18 @@ from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multi_icon_item import MultiIconItem
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 from UI.confirm_page import ConfirmPage
 from UI.info_page_list_item import InfoPageListItem
 
 from UI.multilabel import MultiLabel
+from UI.lang_manager import MyLangManager
 
 from net_item import NetItem
 
 class BleForgetConfirmPage(ConfirmPage):
 
-    _ConfirmText = "Confirm Forget?"
+    _ConfirmText = MyLangManager.Tr("ConfirmForgetQ")
     
     def KeyDown(self,event):
         if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
@@ -41,7 +42,7 @@ class BleForgetConfirmPage(ConfirmPage):
             self._Screen.SwapAndShow()
             
         if event.key == CurKeys["B"]:
-            self.SnapMsg("Deleteing...")
+            self.SnapMsg(MyLangManager.Tr("Deleting"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
@@ -68,7 +69,7 @@ class BleForgetConfirmPage(ConfirmPage):
 
 
 class BleInfoPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -93,9 +94,9 @@ class BleInfoPageSelector(PageSelector):
                           (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
 
 class BleInfoPage(Page):
-    _FootMsg =  ["Nav.","Disconnect","Forget","Back",""]
+    _FootMsg =  ["Nav","Disconnect","Forget","Back",""]
     _MyList = []
-    _ListFontObj = fonts["varela15"]
+    _ListFontObj = MyLangManager.TrFont("varela15")
     _ListSmFontObj = fonts["varela12"]  # small font
     _ListSm2FontObj= fonts["varela11"]
     
@@ -126,7 +127,7 @@ class BleInfoPage(Page):
         
         self._ConfirmPage1 = BleForgetConfirmPage()
         self._ConfirmPage1._Screen = self._Screen
-        self._ConfirmPage1._Name   = "Confirm Forget"
+        self._ConfirmPage1._Name   = "ConfirmForget"
         self._ConfirmPage1._Parent = self
         self._ConfirmPage1.Init() 
         
@@ -204,7 +205,7 @@ class BleInfoPage(Page):
         proxy_obj = bus.get_object("org.bluez", self._Path)
         dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
         
-        self._Screen._MsgBox.SetText("Forgeting...")
+        self._Screen._MsgBox.SetText("Forgeting")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()        
         
@@ -229,8 +230,8 @@ class BleInfoPage(Page):
         proxy_obj = bus.get_object("org.bluez", self._Path)
         dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
         
-        self._Screen._FootBar.UpdateNavText("Disconnecting...")
-        self._Screen._MsgBox.SetText("Disconnecting...")
+        self._Screen._FootBar.UpdateNavText("Disconnecting")
+        self._Screen._MsgBox.SetText("Disconnecting")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
         
@@ -322,7 +323,7 @@ class BleInfoPage(Page):
             
 
 class BleListSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -356,9 +357,9 @@ class BleListMessageBox(Label):
         x  = (self._Parent._Width - w)/2
         y =  (self._Parent._Height - h)/2
         padding = 10 
-        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))
 
-        pygame.draw.rect(self._CanvasHWND,SkinManager().GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
 
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 
@@ -384,7 +385,7 @@ class BluetoothPage(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav.","Scan","Info","Back","TryConnect"]
+    _FootMsg           = ["Nav","Scan","Info","Back","TryConnect"]
     _Scroller          = None
     _ListFontObj       = fonts["notosanscjk15"]
 
@@ -428,7 +429,7 @@ class BluetoothPage(Page):
         
         msgbox = BleListMessageBox()
         msgbox._CanvasHWND = self._CanvasHWND
-        msgbox.Init(" ",fonts["veramono12"])
+        msgbox.Init(" ",MyLangManager.TrFont("veramono12"))
         msgbox._Parent = self
         
         self._MsgBox = msgbox     
@@ -443,7 +444,7 @@ class BluetoothPage(Page):
         
         self._InfoPage = BleInfoPage()
         self._InfoPage._Screen = self._Screen
-        self._InfoPage._Name   = "Bluetooth info"
+        self._InfoPage._Name   = "BluetoothInfo"
         self._InfoPage.Init()        
 
     def print_normal(self,address, properties):
@@ -529,8 +530,8 @@ class BluetoothPage(Page):
         proxy_obj = bus.get_object("org.bluez", cur_li._Path)
         dev = dbus.Interface(proxy_obj, "org.bluez.Device1")
         
-        self._Screen._FootBar.UpdateNavText("connecting...")
-        self.ShowBox("connecting...")
+        self._Screen._FootBar.UpdateNavText("Connecting")
+        self.ShowBox(MyLangManager.Tr("Connecting"))
         
         try:
             dev.Connect()
@@ -543,12 +544,16 @@ class BluetoothPage(Page):
     def RefreshDevices(self):
         global devices
         devices = {}
-        proxy_obj = bus.get_object("org.bluez", "/")
-        manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
-        objects = manager.GetManagedObjects()
-        for path, interfaces in objects.iteritems():
-            if "org.bluez.Device1" in interfaces:
-                devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
+        try:
+            proxy_obj = bus.get_object("org.bluez", "/")
+            manager = dbus.Interface(proxy_obj,"org.freedesktop.DBus.ObjectManager")
+            objects = manager.GetManagedObjects()
+            for path, interfaces in objects.iteritems():
+                if "org.bluez.Device1" in interfaces:
+                    devices[path] = interfaces["org.bluez.Device1"] ## like /org/bluez/hci0/dev_xx_xx_xx_yy_yy_yy
+        except Exception,e:
+            print(str(e))
+            devices={}
         
         self._Devices = devices
         
@@ -577,8 +582,8 @@ class BluetoothPage(Page):
             return
         
         self._Scanning = True
-        self.ShowBox("Bluetooth scanning...")
-        self._Screen._FootBar.UpdateNavText("bluetooth scanning")
+        self.ShowBox(MyLangManager.Tr("BluetoothScanning"))
+        self._Screen._FootBar.UpdateNavText("Scanning")
         
         proxy_obj = self._Dbus.get_object("org.bluez", "/org/bluez/" + self._ADAPTER_DEV)
         adapter_props = dbus.Interface(proxy_obj,"org.freedesktop.DBus.Properties")
@@ -642,7 +647,7 @@ class BluetoothPage(Page):
                 _connecting = self.CheckIfBluetoothConnecting()
                 if _connecting:
                     self.ShutDownConnecting()
-                    self.ShowBox("ShutDownConnecting...")
+                    self.ShowBox(MyLangManager.Tr("ShutDownConnecting"))
                     self.AbortedAndReturnToUpLevel()
                 else:
                     self.AbortedAndReturnToUpLevel()

@@ -11,6 +11,7 @@ import sys
 from UI.delete_confirm_page import DeleteConfirmPage
 from UI.icon_pool           import MyIconPool
 from UI.keys_def            import CurKeys
+from UI.lang_manager        import MyLangManager
 
 from rom_list_page import RomListPage
 from fav_list_page import FavListPage
@@ -34,7 +35,7 @@ class FavDeleteConfirmPage(DeleteConfirmPage):
             except:
                 print("error in FavDeleteConfirmPage chown ")
 
-            self.SnapMsg("Deleteing....")
+            self.SnapMsg(MyLangManager.Tr("Deleteing"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             self.Reset()
@@ -75,18 +76,18 @@ class MyEmulator(object):
     def InitDeleteConfirmPage(self,main_screen):
         self.DeleteConfirmPage = DeleteConfirmPage()
         self.DeleteConfirmPage._Screen = main_screen
-        self.DeleteConfirmPage._Name   = "Delete Confirm"
+        self.DeleteConfirmPage._Name   = "DeleteConfirm"
         self.DeleteConfirmPage.Init()
 
         self.FavDeleteConfirmPage = FavDeleteConfirmPage()
         self.FavDeleteConfirmPage._Screen = main_screen
-        self.FavDeleteConfirmPage._Name   = "Delete Confirm"
+        self.FavDeleteConfirmPage._Name   = "DeleteConfirm"
         self.FavDeleteConfirmPage.Init()
         
     def InitFavListPage(self,main_screen):
         self.FavListPage = FavListPage()
         self.FavListPage._Screen = main_screen
-        self.FavListPage._Name   = "Favourite Games"
+        self.FavListPage._Name   = "FavouriteGames"
         self.FavListPage._Emulator = self._Emulator
         self.FavListPage._Parent = self
         

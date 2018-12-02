@@ -31,7 +31,7 @@ else:
 
 
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT
+from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
@@ -282,7 +282,7 @@ def RecordKeyDns(thekey,main_screen):
         Keys.append(thekey)
     
     keys = ''.join(map(str,Keys))
-    print(keys)
+    #print(keys)
     if keys == "273273274274276276275275106107":##uuddllrrab
         crt_screen.Draw()
         crt_screen.SwapAndShow()
@@ -345,7 +345,16 @@ def event_process(event,main_screen):
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
             return
-
+        if event.type == RESTARTUI:
+            pygame.quit()
+            gobject_main_loop.quit()
+            os.chdir(GetExePath())
+            exec_app_cmd = " sync & cd "+GetExePath()+"; exec python "+myscriptname
+            print(exec_app_cmd)
+            os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
+            os.chdir( GetExePath())
+            os.exelp("python","python"," "+myscriptname)
+            return
         if event.type == POWEROPT:
             everytime_keydown = time.time()
             
@@ -539,7 +548,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
 
     pygame.event.set_allowed(None) 
-    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS,POWEROPT])
+    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS,POWEROPT,RESTARTUI])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
 
@@ -570,9 +579,9 @@ if __name__ == '__main__':
     if powerlevel != "":
         config.PowerLevel = powerlevel
         if powerlevel != "supersaving":
-            os.system("sudo iw wlan0 set power_save off")
+            os.system("sudo iw wlan0 set power_save off >/dev/null")
         else:
-            os.system("sudo iw wlan0 set power_save on")
+            os.system("sudo iw wlan0 set power_save on > /dev/null")
 
     crt_screen = CreateByScreen()
     crt_screen.Init()

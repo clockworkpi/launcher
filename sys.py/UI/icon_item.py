@@ -6,6 +6,7 @@ import pygame
 from constants  import icon_width,icon_height,ICON_TYPES,ALIGN,icon_ext,Width,Height
 from util_funcs import color_surface,midRect
 from label      import Label
+from lang_manager import MyLangManager
 
 class IconItem:
     _PosX=0
@@ -65,7 +66,7 @@ class IconItem:
             self._LinkPage._Screen = self._Parent._Screen
             self._LinkPage._CanvasHWND       = self._Parent._Screen._CanvasHWND
             
-            self._LinkPage._FootMsg =  ["Nav.","","","Back","Enter"] ## Default Page Foot info
+            self._LinkPage._FootMsg =  ["Nav","","","Back","Enter"] ## Default Page Foot info
             
             if self._LinkPage._Align == ALIGN["HLeft"]:
                 self._LinkPage.AdjustHLeftAlign()

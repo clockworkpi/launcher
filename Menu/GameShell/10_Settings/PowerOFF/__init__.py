@@ -6,14 +6,13 @@ import pygame
 from UI.constants    import RUNSYS
 from UI.keys_def     import CurKeys
 from UI.confirm_page import ConfirmPage
-
+from UI.lang_manager import MyLangManager
 import config
 
 class PowerOffConfirmPage(ConfirmPage):
     
-    _ConfirmText = "Confirm Power OFF?"
+    _ConfirmText = MyLangManager.Tr("Confirm Power OFF?")
     
-
     def CheckBattery(self):
         try:
             f = open(config.Battery)

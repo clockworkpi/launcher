@@ -5,10 +5,10 @@ from libs.roundrects import aa_round_rect
 ## local UI import
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 class InfoPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0

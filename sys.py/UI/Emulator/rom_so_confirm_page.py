@@ -17,13 +17,14 @@ from UI.download_process_page import DownloadProcessPage
 from UI.keys_def   import CurKeys
 from UI.fonts  import fonts
 from UI.multilabel import MultiLabel
+from UI.lang_manager import MyLangManager
 
 import config
 
 class RomSoConfirmPage(ConfirmPage):
-    _ListFont = fonts["veramono18"]
+    _ListFont = MyLangManager.TrFont("veramono18")
 
-    _ConfirmText = "Do you want to setup this game engine automatically?"
+    _ConfirmText = MyLangManager.Tr("SetupGameEngineAutoQ")
 
     _MyDownloadPage = None
     
@@ -93,12 +94,12 @@ class RomSoConfirmPage(ConfirmPage):
 
         if event.key == CurKeys["B"]:
             if self.CheckBattery() < 5:
-                self.SnapMsg("Battery must over 5%")
+                self.SnapMsg(MyLangManager.Tr("BATOver5Pct"))
             else:
                 if self._MyDownloadPage == None:
                     self._MyDownloadPage = DownloadProcessPage()
                     self._MyDownloadPage._Screen = self._Screen
-                    self._MyDownloadPage._Name = "Downloading..."
+                    self._MyDownloadPage._Name = "Downloading"
                     self._MyDownloadPage.Init()
                 
                 self._Screen.PushPage(self._MyDownloadPage)

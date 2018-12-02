@@ -19,12 +19,13 @@ from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multilabel import MultiLabel
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 import config
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = SkinManager().GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         self._PosX = 0
@@ -84,7 +85,7 @@ class PageListItem(object):
         l = Label()
         l._PosX = 10
         l.SetCanvasHWND(self._Parent._CanvasHWND)
-
+        text = MyLangManager.Tr(text)
         l.Init(text,self._Fonts["normal"])
         self._Labels["Text"] = l
         
@@ -103,13 +104,13 @@ class PageListItem(object):
             self._Labels["Small"]._PosY = self._PosY + (self._Height-  self._Labels["Small"]._Height)/2
             self._Labels["Small"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 
 class InfoPage(Page):
-    _FootMsg =  ["Nav.","","","Back",""]
+    _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
-    _ListFontObj = fonts["varela15"]    
+    _ListFontObj = MyLangManager.TrFont("varela15")
     _AList = {}
 
     _Time1 = 40
@@ -123,22 +124,22 @@ class InfoPage(Page):
             m = int(secs/60)
             s = secs % 60
             if m > 1:
-                min_str =  "%d minutes " % m
+                min_str =  ("%d "+MyLangManager.Tr("minutes")+" ") % m
             else:
-                min_str =  "%d minute " % m
+                min_str =  ("%d "+MyLangManager.Tr("minute")+" ") % m
             
             if s == 1:
-                sec_str = "%d second" % s
+                sec_str = ("%d "+MyLangManager.Tr("second")) % s
             elif s > 1:
-                sec_str = "%d seconds" % s
+                sec_str = ("%d "+MyLangManager.Tr("seconds")) % s
         elif secs > 0:
             if secs > 1:
-                sec_str = "%d seconds" % secs
+                sec_str = ("%d "+MyLangManager.Tr("seconds")) % secs
             else:
-                sec_str = "%d second" % secs
+                sec_str = ("%d "+MyLangManager.Tr("second")) % secs
         
         elif secs == 0:
-            sec_str = "Never"
+            sec_str = MyLangManager.Tr("Never")
         
         return min_str + sec_str
 
@@ -156,7 +157,7 @@ class InfoPage(Page):
         time1 = {}
         time1["key"] = "time1"
         if self._Time1 == 0:
-            time1["value"] = "Never"
+            time1["value"] = MyLangManager.Tr("Never")
         else:
             time1["value"] = "%d secs" % self._Time1
         time1["label"] = "Screen dimming"
@@ -164,7 +165,7 @@ class InfoPage(Page):
         time2 = {}
         time2["key"] = "time2"
         if self._Time2 == 0:
-            time2["value"] = "Never"
+            time2["value"] = MyLangManager.Tr("Never")
         else:
             time2["value"] = "%d secs" % self._Time2
             
@@ -174,7 +175,7 @@ class InfoPage(Page):
         time3["key"] = "time3"
         
         if self._Time3 == 0:
-            time3["value"] = "Never"
+            time3["value"] = MyLangManager.Tr("Never")
         else:
             time3["value"] = "%d secs" % self._Time3
         time3["label"] = "Power OFF"
@@ -189,17 +190,17 @@ class InfoPage(Page):
         start_y  = 0
         
         for i,v in enumerate( self._AList):
-            print(v)
+            #print(v)
             li = PageListItem()
             li._Parent = self
             li._PosX   = start_x
             li._PosY   = start_y + i*PageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MyLangManager.TrFont("varela12")
             
             if self._AList[v]["label"] != "":
-                li.Init(  self._AList[v]["label"] )
+                li.Init( self._AList[v]["label"] )
             else:
                 li.Init( self._AList[v]["key"] )
 
@@ -289,7 +290,7 @@ class InfoPage(Page):
             i.Draw()
 
 class PowerOptionsPage(Page):
-    _FootMsg =  ["Nav.","","Detail","Back","Select"]
+    _FootMsg =  ["Nav","","Detail","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     
@@ -445,11 +446,11 @@ class PowerOptionsPage(Page):
         config.PowerLevel = cur_li._Value
 
         if config.PowerLevel!= "supersaving":
-            os.system("sudo iw wlan0 set power_save off")
+            os.system("sudo iw wlan0 set power_save off > /dev/null")
         else:
-            os.system("sudo iw wlan0 set power_save on")
+            os.system("sudo iw wlan0 set power_save on > /dev/null")
         
-        self._Screen._MsgBox.SetText("Applying...")
+        self._Screen._MsgBox.SetText("Applying")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
 

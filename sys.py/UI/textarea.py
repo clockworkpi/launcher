@@ -10,14 +10,14 @@ from libs.roundrects import aa_round_rect
 from UI.page         import Page,PageStack,PageSelector
 from UI.label        import Label
 from UI.fonts        import fonts
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 
 class Textarea:
     _PosX =0 
     _PosY = 0
     _Width = 0
     _Height = 0
-    _BackgroundColor = SkinManager().GiveColor('TitleBg')
+    _BackgroundColor = MySkinManager.GiveColor('TitleBg')
     _CanvasHWND  = None
     _MyWords     = []
     _BlitWords   = []
@@ -80,7 +80,7 @@ class Textarea:
         x = self._PosX+xmargin
         linenumber = 0
         cursor_row = 0
-        
+
         for i, v in enumerate(self._MyWords):
             t = self._FontObj.render(v, True, (8, 135, 174))
             t_width = t.get_width()

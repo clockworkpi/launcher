@@ -2,7 +2,7 @@
 
 import pygame 
 from label  import Label
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 
 class InfoPageListItem(object):
     _PosX = 0
@@ -43,9 +43,9 @@ class InfoPageListItem(object):
 
     def Draw(self):
         if self._ReadOnly == True:
-            self._Labels["Text"].SetColor(SkinManager().GiveColor("ReadOnlyText"))
+            self._Labels["Text"].SetColor(MySkinManager.GiveColor("ReadOnlyText"))
         else:
-            self._Labels["Text"].SetColor(SkinManager().GiveColor("Text"))
+            self._Labels["Text"].SetColor(MySkinManager.GiveColor("Text"))
 
         
         self._Labels["Text"]._PosX = self._Labels["Text"]._PosX + self._PosX
@@ -59,4 +59,4 @@ class InfoPageListItem(object):
             self._Labels["Small"]._PosY = self._PosY + (self._Height - self._Labels["Small"]._Height)/2
             self._Labels["Small"].Draw()
         
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)

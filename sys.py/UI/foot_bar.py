@@ -12,6 +12,7 @@ from fonts      import fonts
 from multi_icon_item import MultiIconItem
 from icon_pool  import MyIconPool
 from libs.roundrects import aa_round_rect
+from lang_manager import MyLangManager
 
 icon_base_path = SkinMap("gameshell/footbar_icons/")
 
@@ -51,7 +52,7 @@ class FootBar:
     _Icons      = {}
     _IconWidth   = 18
     _IconHeight  = 18
-    _LabelFont   = fonts["veramono10"]
+    _LabelFont   = MyLangManager.TrFont("veramono10")
     _State       = "normal"
     
     _SkinManager = None
@@ -100,13 +101,14 @@ class FootBar:
         self._Icons["round_corners"] = round_corners
         
     def ResetNavText(self):
-        self._Icons["nav"]._Label.SetText("Nav.")
+        self._Icons["nav"]._Label.SetText(MyLangManager.Tr("Nav"))
         self._State = "normal"
         self.Draw()
         return False
         
     def UpdateNavText(self,texts):
         self._State = "tips"
+        texts = MyLangManager.Tr(texts)
         my_text = self._LabelFont.render(texts,True,self._SkinManager.GiveColor("Text"))
         """
         _w = 0
@@ -151,7 +153,7 @@ class FootBar:
             
         for idx,x in enumerate(barr):
             try:
-                self._Icons[x]._Label.SetText(texts[idx])
+                self._Icons[x]._Label.SetText(MyLangManager.Tr(texts[idx]))
             except IndexError:
                 print("Index "+x+" doesn't exist!")
 

@@ -12,12 +12,12 @@ import base64
 from beeprint import pp
 
 #UI lib
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 
 
 Width = 320
 Height = 240
-bg_color =  SkinManager().GiveColor('White')
+bg_color =  MySkinManager.GiveColor('White')
 
 icon_width  = 80
 icon_height = 80
@@ -42,5 +42,5 @@ RUNSYS   = pygame.USEREVENT+3
 LOWLIGHT = pygame.USEREVENT+4 ## when dim screen backlight
 FOOTMSG  = pygame.USEREVENT+5 ## 
 POWEROPT = pygame.USEREVENT+6
-
+RESTARTUI  = pygame.USEREVENT+7 ##restart launcher
 

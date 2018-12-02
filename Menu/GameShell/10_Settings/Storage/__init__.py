@@ -6,7 +6,7 @@ import os
 
 ## local UI import
 from UI.page  import Page
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
 from UI.constants import ICON_TYPES,Width,Height
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
@@ -28,7 +28,7 @@ class StoragePage(Page):
     _BGmsg    = "%.1fGB of %.1fGB Used"
     _DskUsg   = None
 
-    _HighColor = SkinManager().GiveColor('High')
+    _HighColor = MySkinManager.GiveColor('High')
     _FootMsg    = ["Nav.","","","Back",""]
     
     def __init__(self):
@@ -99,7 +99,7 @@ class StoragePage(Page):
 
         rect_ = midRect(self._Width/2,self._Height-30,170,17, Width,Height)
 
-        aa_round_rect(self._CanvasHWND, rect_, SkinManager().GiveColor('Line'), 5, 0, SkinManager().GiveColor('Line'))
+        aa_round_rect(self._CanvasHWND, rect_, MySkinManager.GiveColor('Line'), 5, 0, MySkinManager.GiveColor('Line'))
 
         
         rect2 = midRect(self._Width/2,self._Height-30,int(170*(1.0-usage_percent)),17, Width,Height)
@@ -107,7 +107,7 @@ class StoragePage(Page):
         rect2.left = rect_.left
         rect2.top  = rect_.top
         
-        aa_round_rect(self._CanvasHWND,rect2, SkinManager().GiveColor('Front'),5,0,SkinManager().GiveColor('Front'))        
+        aa_round_rect(self._CanvasHWND,rect2, MySkinManager.GiveColor('Front'),5,0,MySkinManager.GiveColor('Front'))        
         
 class APIOBJ(object):
 

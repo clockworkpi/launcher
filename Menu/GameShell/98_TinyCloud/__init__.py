@@ -10,12 +10,13 @@ from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.keys_def  import CurKeys
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from libs.DBUS  import is_wifi_connected_now,get_wifi_ip
 
 class TinyCloudPage(Page):
-    _FootMsg =  ["Nav.","","","Back",""]
+    _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     
     _ListFontObj = fonts["varela13"]
@@ -25,8 +26,8 @@ class TinyCloudPage(Page):
 
     _Coords = {}
     
-    _URLColor  = SkinManager().GiveColor('URL')
-    _TextColor = SkinManager().GiveColor('Text')
+    _URLColor  = MySkinManager.GiveColor('URL')
+    _TextColor = MySkinManager.GiveColor('Text')
     _Scrolled = 0
     
     _PngSize = {}
@@ -198,7 +199,7 @@ class TinyCloudPage(Page):
             self._DrawOnce = True
             
         if self._HWND != None:
-            self._HWND.fill(SkinManager().GiveColor('White'))
+            self._HWND.fill(MySkinManager.GiveColor('White'))
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             
             

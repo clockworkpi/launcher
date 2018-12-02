@@ -17,7 +17,7 @@ from fonts       import fonts
 from icon_item   import IconItem
 from multi_icon_item import MultiIconItem
 from icon_pool   import MyIconPool
-
+from lang_manager import MyLangManager
 from util_funcs  import midRect,SwapAndShow,SkinMap
 
 from config import Battery
@@ -183,7 +183,7 @@ class TitleBar:
     def CheckBluetooth(self):
         out = commands.getstatusoutput("hcitool dev | grep hci0 |cut -f3")
         if len(out[1]) < 17:
-            print("no bluetooth", out)
+            print("CheckBluetooth:no bluetooth", out)
             self._Icons["bluetooth"]._IconIndex = 2
             return
         else:
@@ -297,17 +297,17 @@ class TitleBar:
         
     def Draw(self,title):
         self.ClearCanvas()
-        
+        title = MyLangManager.Tr(title)
         self._Title = title
         
         cur_time =  datetime.now().strftime("%H:%M")
         time_text_size = fonts["varela12"].size(cur_time)
-        title_text_size = fonts["varela16"].size(title)
+        title_text_size = MyLangManager.TrFont("varela16").size(title)
 
-        self._CanvasHWND.blit(fonts["varela16"].render(title,True,self._SkinManager.GiveColor("Text")),midRect(title_text_size[0]/2+self._LOffset,
+        self._CanvasHWND.blit(MyLangManager.TrFont("varela16").render(title,True,self._SkinManager.GiveColor("Text")),midRect(title_text_size[0]/2+self._LOffset,
                                                                     title_text_size[1]/2+(self._BarHeight-title_text_size[1])/2,
                                                                     title_text_size[0],title_text_size[1],Width,Height))
-        self._CanvasHWND.blit(fonts["varela12"].render(cur_time,True,self._SkinManager.GiveColor("Text")),midRect(Width-time_text_size[0]/2-self._ROffset,
+        self._CanvasHWND.blit( fonts["varela12"].render(cur_time,True,self._SkinManager.GiveColor("Text")),midRect(Width-time_text_size[0]/2-self._ROffset,
                                                                         time_text_size[1]/2+(self._BarHeight-time_text_size[1])/2,
                                                                         time_text_size[0],time_text_size[1],Width,Height))
 

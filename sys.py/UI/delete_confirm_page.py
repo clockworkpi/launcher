@@ -13,12 +13,13 @@ from fonts  import fonts
 from util_funcs import midRect
 from keys_def   import CurKeys
 from confirm_page import ConfirmPage
+from lang_manager import MyLangManager
 
 class DeleteConfirmPage(ConfirmPage):
 
     _FileName     = ""
     _TrashDir     = ""
-    _ConfirmText = "Confirm delete?"
+    _ConfirmText = MyLangManager.Tr("ConfirmDeleteQ")
 
     def SetTrashDir(self,d):
         self._TrashDir = d
@@ -48,14 +49,14 @@ class DeleteConfirmPage(ConfirmPage):
                 shutil.move(self._FileName, self._TrashDir)
             except shutil.Error as e:
                 if "already exists" in str(e):
-                        self._Screen._MsgBox.SetText("Already existed")
+                        self._Screen._MsgBox.SetText("AlreadyExisted")
                 else:
                     self._Screen._MsgBox.SetText("Error")
 
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
             else:
-                self.SnapMsg("Deleting....")
+                self.SnapMsg(MyLangManager.Tr("Deleting"))
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
                 self.Reset()
