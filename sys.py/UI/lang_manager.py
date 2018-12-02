@@ -40,6 +40,7 @@ class LangManager(object):
                 self._ConfigFileName = self._ConfigFileName.strip("\r\n ")
                 #print(self._ConfigFileName)
         except:
+            os.system("touch .lang")
             print("read lang failed")
             None
         
