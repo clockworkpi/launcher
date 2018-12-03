@@ -42,7 +42,7 @@ class UpdateDownloadPage(DownloadProcessPage):
                     
                     if filename.endswith(".tar.gz"):                    
                         #/home/cpi/apps/[launcher]
-                        cmdpath = "tar zxf " + CmdClean(filename) + " -C /home/cpi/apps ;rm -rf "+ filename
+                        cmdpath = "tar zxf " + CmdClean(filename) + " -C /home/cpi/ ;rm -rf "+ filename
                         pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                         
                     self.ReturnToUpLevelPage()
@@ -115,7 +115,7 @@ class UpdateConfirmPage(ConfirmPage):
             
         if event.key == CurKeys["B"]:
             if self._GIT == True:
-                cmdpath = "feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/updating.png; cd /home/cpi/apps/launcher ;git pull; git reset --hard %s ; feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/loading.png " % self._Version
+                cmdpath = "feh --bg-center /home/cpi/launcher/sys.py/gameshell/wallpaper/updating.png; cd /home/cpi/launcher ;git pull; git reset --hard %s ; feh --bg-center /home/cpi/launcher/sys.py/gameshell/wallpaper/loading.png " % self._Version
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 self._GIT = False
                 return
