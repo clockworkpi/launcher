@@ -29,6 +29,8 @@ from libs.DBUS       import is_wifi_connected_now
 
 import config
 
+LauncherLoc = "/home/cpi/launcher"
+
 class UpdateDownloadPage(DownloadProcessPage):
     _MD5 = ""
 
@@ -108,6 +110,7 @@ class UpdateConfirmPage(ConfirmPage):
     _GIT = False
     
     def KeyDown(self,event):
+        global LauncherLoc
         if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
@@ -115,7 +118,7 @@ class UpdateConfirmPage(ConfirmPage):
             
         if event.key == CurKeys["B"]:
             if self._GIT == True:
-                cmdpath = "feh --bg-center /home/cpi/launcher/sys.py/gameshell/wallpaper/updating.png; cd /home/cpi/launcher ;git pull; git reset --hard %s ; feh --bg-center /home/cpi/launcher/sys.py/gameshell/wallpaper/loading.png " % self._Version
+                cmdpath = "feh --bg-center %s/sys.py/gameshell/wallpaper/updating.png; cd %s ;git pull; git reset --hard %s ; feh --bg-center %s/sys.py/gameshell/wallpaper/loading.png " % (LauncherLoc,LauncherLoc,self._Version,LauncherLoc)
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 self._GIT = False
                 return
@@ -159,7 +162,6 @@ class UpdatePage(Page):
     _ConfirmPage = None
     _AList    = {}
     _MyList   = []
-    
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}    
@@ -209,6 +211,7 @@ class UpdatePage(Page):
         self.GenList()
         
     def CheckUpdate(self):
+        global LauncherLoc
         self._Screen._MsgBox.SetText("CheckingUpdate")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
@@ -238,7 +241,7 @@ class UpdatePage(Page):
                             
                     elif "gitversion" in json_: ### just use git to  run update
                         cur_dir = os.getcwd()
-                        os.chdir("/home/cpi/apps/launcher")
+                        os.chdir(LauncherLoc)
                         current_git_version = get_git_revision_short_hash()
                         current_git_version = current_git_version.strip("\n")
                         current_git_version = current_git_version.strip("\t")
