@@ -236,7 +236,7 @@ class UpdatePage(Page):
                             self._Screen.PushPage(self._ConfirmPage)
                             
                             self._Screen.Draw()
-                            self._ConfirmPage.SnapMsg("Confirm Update to %s ?" % json_["version"] )
+                            self._ConfirmPage.SnapMsg(MyLangManager.Tr("ConfirmUpdateToFQ") % json_["version"] )
                             self._Screen.SwapAndShow()
                             
                     elif "gitversion" in json_: ### just use git to  run update
@@ -255,7 +255,7 @@ class UpdatePage(Page):
                             self._Screen.PushPage(self._ConfirmPage)
                             
                             self._Screen.Draw()
-                            self._ConfirmPage.SnapMsg("Update to %s ?" % json_["gitversion"] )
+                            self._ConfirmPage.SnapMsg(MyLangManager.Tr("UpdateToFQ") % json_["gitversion"] )
                             self._Screen.SwapAndShow()
                         else:
                             self._Screen.Draw()
