@@ -17,6 +17,7 @@ class LangManager(object):
     _Langs = {}
     _Config = None
     _ConfigFileName = "00_English.ini" ## double % to escape 
+    _CJKMode = False
     
     def __init__(self):
         self.Init()
@@ -29,6 +30,17 @@ class LangManager(object):
         self._Langs = {}
         self.SetLangs()
     
+    def IsCJKMode(self):## in MultiLabel, latins seped by white spaces,CJK no needs for that
+        latins = ["English"]
+        self._CJKMode = True
+        
+        for i in latins:
+            if i in self._ConfigFileName:
+                self._CJKMode= False
+                break
+        
+        return self._CJKMode
+        
     def SetLangs(self):
         self._Config = CaseConfigParser()
         #print("SetLangs")

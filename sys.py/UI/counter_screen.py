@@ -75,7 +75,8 @@ class CounterScreen(FullScreen):
             return
         self._Counting = False
         self._Number = 10
-
+        self._inter_counter = 0
+        
         if self._GobjectIntervalId != -1:
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1

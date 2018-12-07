@@ -21,6 +21,8 @@ from UI.lang_manager import MyLangManager
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
 
+from libs.DBUS     import is_wifi_connected_now
+
 from net_item import NetItem
 
 import myvars
@@ -608,7 +610,9 @@ class WifiList(Page):
 
     def OnReturnBackCb(self):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
-        self.ConfigWireless(password_inputed)
+        if is_wifi_connected_now() == False:
+            self.ConfigWireless(password_inputed)
+        
         
     def KeyDown(self,event):
 
