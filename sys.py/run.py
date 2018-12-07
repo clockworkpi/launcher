@@ -582,7 +582,9 @@ if __name__ == '__main__':
             os.system("sudo iw wlan0 set power_save off >/dev/null")
         else:
             os.system("sudo iw wlan0 set power_save on > /dev/null")
-
+    else:
+        os.system("sudo iw wlan0 set power_save off >/dev/null")
+    
     crt_screen = CreateByScreen()
     crt_screen.Init()
     crt_screen._HWND = screen 
