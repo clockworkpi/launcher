@@ -13,7 +13,8 @@ except:
 def Init(main_screen):
     pages.InitPasswordPage(main_screen)
     pages.InitScanPage(main_screen)
-
+    myvars.PasswordPage._Caller = myvars.ScanPage
+    
 def API(main_screen):
     
     if main_screen != None:
