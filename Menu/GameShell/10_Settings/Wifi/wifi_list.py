@@ -550,7 +550,7 @@ class WifiList(Page):
         results = []
         activeID = -1
         for x,enc_type in enumerate(self._EncMethods):
-            if enc_type["type"] == self._Wireless.GetWirelessProperty(network_id,"encryption_method"):
+            if enc_type["type"] == self._Wireless.GetWirelessProperty(network_id,"enctype"):
                 activeID = x
                 break
 
@@ -608,10 +608,13 @@ class WifiList(Page):
         self._Screen.Draw()
         self._Screen.SwapAndShow()
 
-    def OnReturnBackCb(self):
+    def OnKbdReturnBackCb(self):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
+            
+    def OnReturnBackCb(self):
+        pass
         
         
     def KeyDown(self,event):

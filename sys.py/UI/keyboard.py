@@ -74,6 +74,7 @@ class Keyboard(Page):
     _FootMsg           = ["Nav.","ABC","Done","Backspace","Enter"]
 
     _RowIndex    = 0
+    _Caller   = None
     
     def __init__(self):
         self._Secs     = {}
@@ -317,6 +318,11 @@ class Keyboard(Page):
             print("".join(self._Textarea._MyWords))
             self.ReturnToUpLevelPage()
             self._Screen.SwapAndShow()
+            if self._Caller != None:
+                on_kbd_return_back_cb = getattr(self._Caller,"OnKbdReturnBackCb",None)
+                if on_kbd_return_back_cb != None:
+                    if callable( on_kbd_return_back_cb ):
+                        self._Caller.OnKbdReturnBackCb()
             #Uplevel page  invokes OnReturnBackCb,eg: ConfigWireless
 
         if event.key == CurKeys["A"]:
