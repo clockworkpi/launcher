@@ -61,32 +61,39 @@ class TinyCloudPage(Page):
 
         self._Coords["forssh"] = SimpleNamespace()
         self._Coords["forssh"].x = self._Coords["forID"].x
-        self._Coords["forssh"].y = 47
+        self._Coords["forssh"].y = 36
 
         self._Coords["ssh_addr"] = SimpleNamespace()
         self._Coords["ssh_addr"].x = self._Coords["forID"].x
-        self._Coords["ssh_addr"].y = 65
+        self._Coords["ssh_addr"].y = 54
 
         self._Coords["forwin"] = SimpleNamespace()
         self._Coords["forwin"].x = self._Coords["forID"].x
-        self._Coords["forwin"].y = 101
+        self._Coords["forwin"].y = 80
 
         self._Coords["samba_games"] = SimpleNamespace()
         self._Coords["samba_games"].x = self._Coords["forID"].x
-        self._Coords["samba_games"].y = 118
+        self._Coords["samba_games"].y = 97
 
         self._Coords["samba_music"] = SimpleNamespace()
         self._Coords["samba_music"].x = self._Coords["samba_games"].x
-        self._Coords["samba_music"].y = 136
+        self._Coords["samba_music"].y = 115
 
         self._Coords["for_airplay"] = SimpleNamespace()
         self._Coords["for_airplay"].x = self._Coords["forID"].x
-        self._Coords["for_airplay"].y = 173
+        self._Coords["for_airplay"].y = 140
 
         self._Coords["airplay_name"] = SimpleNamespace()
         self._Coords["airplay_name"].x = 68
         self._Coords["airplay_name"].y = self._Coords["for_airplay"].y
         
+        self._Coords["for-usb-eth"] = SimpleNamespace()
+        self._Coords["for-usb-eth"].x = self._Coords["forID"].x
+        self._Coords["for-usb-eth"].y = 163
+        
+        self._Coords["usb-eth-addr"] = SimpleNamespace()
+        self._Coords["usb-eth-addr"].x = 112
+        self._Coords["usb-eth-addr"].y = self._Coords["for-usb-eth"].y
 
         self._Coords["bg"]          = SimpleNamespace()
         self._Coords["bg"].x        = self._Width/2
@@ -120,7 +127,9 @@ class TinyCloudPage(Page):
          ["forKey",     "Key:",                    self._ListFontObj, self._TextColor],
          ["key_and_pass", "cpi",                   self._ListFontObj, self._URLColor],
          ["for_airplay", "Airplay:",               self._ListFontObj, self._TextColor],
-         ["airplay_name","clockworkpi",            self._ListFontObj, self._URLColor]]
+         ["airplay_name","clockworkpi",            self._ListFontObj, self._URLColor],
+         ["for-usb-eth","USB-Ethernet:",            self._ListFontObj, self._TextColor],
+         ["usb-eth-addr","192.168.10.1",            self._ListFontObj, self._URLColor]]
 
         for i in labels:
             l = Label()
