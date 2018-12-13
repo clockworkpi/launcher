@@ -12,7 +12,7 @@ MPD_socket = "/tmp/mpd.socket"
 
 UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ver.json"
 
-VERSION="stable 1.22"
+VERSION="stable 1.23"
 
 SKIN="default"
 
