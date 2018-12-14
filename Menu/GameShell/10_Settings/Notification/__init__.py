@@ -104,8 +104,8 @@ class NotificationPage(Page):
         
         if "arm" in platform.machine():
             os.system( "git config --global core.filemode false" )
-            
-        def GenList(self):
+        
+    def GenList(self):
 
         self._MyList = []
         ## map ini to self._AList
