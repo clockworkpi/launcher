@@ -9,3 +9,6 @@ sys.py/.lang
 *.cfg
 **/Jobs/*
 !**/Jobs/.gitkeep
+!**/Jobs/00_lowpower.sh
+!**/Jobs/00_lowpower.alias
+

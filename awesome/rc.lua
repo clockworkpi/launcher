@@ -210,7 +210,7 @@ function awful.widget.tasklist.filter.currenttags_without_gs(c, screen)
             local ctags = c:tags()
             for _, v in ipairs(ctags) do
                 if v == t then
-                		if c.class:lower() == "run.py" or c.class:lower() == "gsnotify-arm" then
+                		if c.class:lower() == "run.py" or c.class:lower() == "gsnotify-arm" or c.class:lower() == "main" then
 	                		return false
                 		else
 	                    return true
@@ -356,7 +356,7 @@ awful.rules.rules = {
 -- }}}
 
 
-local gs_class = {"run.py","gsnotify","gsnotify-arm","retroarch"}
+local gs_class = {"run.py","gsnotify","gsnotify-arm","retroarch","GSPLauncher","main"}
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
