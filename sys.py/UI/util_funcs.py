@@ -55,7 +55,10 @@ def IsPythonPackage(self,dirname):
         if i.endswith("__init__.py"):
             return True
     return False
-    
+
+def IsExecutable(fpath):
+    return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
 def MakeExecutable(path):
     mode = os.stat(path).st_mode
     mode |= (mode & 0o444) >> 2    # copy R bits to X
