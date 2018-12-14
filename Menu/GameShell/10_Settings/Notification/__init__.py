@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import platform
 import pygame
 import glob
 #import math
@@ -101,7 +102,10 @@ class NotificationPage(Page):
         Page.__init__(self)
         self._Icons = {}
         
-    def GenList(self):
+        if "arm" in platform.machine():
+            os.system( "git config --global core.filemode false" )
+            
+        def GenList(self):
 
         self._MyList = []
         ## map ini to self._AList
@@ -110,7 +114,7 @@ class NotificationPage(Page):
                 
         start_x  = 10
         start_y  = 0
-        
+        counter = 0 
         for i,v in enumerate( files_path):
             filename, file_extension = os.path.splitext(v)
             alias_file = filename + ".alias"
@@ -119,7 +123,7 @@ class NotificationPage(Page):
                 li = NotifyJobListItem()
                 li._Parent = self
                 li._PosX   = start_x
-                li._PosY   = start_y + i*InfoPageListItem._Height
+                li._PosY   = start_y + counter*InfoPageListItem._Height
                 li._Width  = Width-10
                 li._Fonts["normal"] = self._ListFontObj
                 li._Fonts["small"] = fonts["varela12"]
@@ -140,7 +144,7 @@ class NotificationPage(Page):
                 ##li.SetSmallText( v )
                 
                 self._MyList.append(li)
-    
+                counter += 1
     
     def Init(self):
         if self._Screen != None:
