@@ -180,6 +180,7 @@ local function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
         local wallpaper = beautiful.wallpaper
+				local wallpaperpc = beautiful.wallpaperpc
         -- If wallpaper is a function, call it with the screen
         if type(wallpaper) == "function" then
             wallpaper = wallpaper(s)
@@ -187,7 +188,7 @@ local function set_wallpaper(s)
 
 				-- wallpaper only in PC
         if s.geometry.width > 320 then
-	        gears.wallpaper.centered(wallpaper, s, 1)
+	        gears.wallpaper.centered(wallpaperpc, s, 1)
 	      end
 
     end
