@@ -152,7 +152,7 @@ class TinyCloudPage(Page):
         self._Width = self._Screen._Width ## equal to screen width
         self._Height = self._Screen._Height
 
-        self._PngSize["bg"] = (253,132)
+        self._PngSize["bg"] = (253,114)
         self._PngSize["online"] = (75,122)
         
         bgpng = IconItem()
@@ -201,6 +201,12 @@ class TinyCloudPage(Page):
                 self._Labels["key_and_pass"].Draw()
 
             else:
+                self._Labels["for-usb-eth"].NewCoord(self._Coords["for-usb-eth"].x+55, self._Coords["for-usb-eth"].y)
+                self._Labels["for-usb-eth"].Draw()
+                
+                self._Labels["usb-eth-addr"].NewCoord(self._Coords["usb-eth-addr"].x+55, self._Coords["usb-eth-addr"].y)
+                self._Labels["usb-eth-addr"].Draw()                
+                
                 self._Icons["bg"].NewCoord(self._Coords["bg"].x, self._Coords["bg"].y)
                 self._Icons["bg"].Draw()
 
