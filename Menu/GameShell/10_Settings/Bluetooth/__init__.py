@@ -562,17 +562,23 @@ class BluetoothPage(Page):
         self._WirelessList = []
         start_x = 0
         start_y = 0
-
+        
+        counter = 0
         for i,v in enumerate(self._Devices):
+            if "Name" in self._Devices[v]:
+                if len(self._Devices[v]["Name"]) < 2:
+                    continue
+            
             ni = NetItem()
             ni._Parent = self
             ni._PosX = start_x
-            ni._PosY = start_y + i* NetItem._Height
+            ni._PosY = start_y + counter* NetItem._Height
             ni._Width = Width
             ni._FontObj = self._ListFontObj
             
             ni.Init(v,self._Devices[v])
             
+            counter += 1
             self._WirelessList.append(ni)
 
         self._PsIndex = 0   
