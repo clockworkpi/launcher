@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import re
 import pygame
 #import math
 import  commands
@@ -568,6 +568,10 @@ class BluetoothPage(Page):
             if "Name" in self._Devices[v]:
                 if len(self._Devices[v]["Name"]) < 2:
                     continue
+                if re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", self._Devices[v]["Name"].lower()):
+                    continue
+            else:
+                continue
             
             ni = NetItem()
             ni._Parent = self
