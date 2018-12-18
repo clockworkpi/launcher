@@ -1,0 +1,12 @@
+SCREEN=`cat /sys/class/graphics/fb0/modes`
+if [ -f /tmp/autologin ]
+then
+   rm -f /tmp/autologin
+   mpd ~/.mpd.conf
+      if [[ $SCREEN =~ .*320.* ]]
+      then
+         startx /home/cpi/launcher/.xinitrc_320 -- -nocursor > /tmp/x.log 2>&1
+      else
+         startx /home/cpi/launcher/.xinitrc > /tmp/x.log 2>&1
+      fi
+fi
