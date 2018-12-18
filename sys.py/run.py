@@ -247,12 +247,7 @@ def InspectionTeam(main_screen):
         
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
         print("Power Off counting down")
-        
-        main_screen._CounterScreen.Draw()
-        main_screen._CounterScreen.SwapAndShow()
-        main_screen._CounterScreen.StartCounter()
-        
-        
+                
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -264,7 +259,11 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
-                
+            
+            main_screen._CounterScreen.Draw()
+            main_screen._CounterScreen.SwapAndShow()
+            main_screen._CounterScreen.StartCounter()
+        
         main_screen._TitleBar._InLowBackLight = 0
 
         passout_time_stage = 4
