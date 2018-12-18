@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import platform
 import dbus
 import dbus.service
 import sys
@@ -536,6 +536,27 @@ def big_loop():
     gobject_loop()
     
 
+def PreparationInAdv():
+    
+    if "arm" not in platform.machine():
+        return
+    
+    if FileExists(".powerlevel") == False:
+        os.system("touch .powerlevel")
+    
+    with open(".powerlevel","r") as f:
+        powerlevel = f.read()
+    
+    powerlevel = powerlevel.strip()
+    if powerlevel != "":
+        config.PowerLevel = powerlevel
+        if powerlevel != "supersaving":
+            os.system("sudo iw wlan0 set power_save off >/dev/null")
+        else:
+            os.system("sudo iw wlan0 set power_save on > /dev/null")
+    else:
+        os.system("sudo iw wlan0 set power_save off >/dev/null")
+        
 ###MAIN()###
 if __name__ == '__main__':
     
@@ -568,22 +589,8 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
-
-    if FileExists(".powerlevel") == False:
-        os.system("touch .powerlevel")
     
-    with open(".powerlevel","r") as f:
-        powerlevel = f.read()
-    
-    powerlevel = powerlevel.strip()
-    if powerlevel != "":
-        config.PowerLevel = powerlevel
-        if powerlevel != "supersaving":
-            os.system("sudo iw wlan0 set power_save off >/dev/null")
-        else:
-            os.system("sudo iw wlan0 set power_save on > /dev/null")
-    else:
-        os.system("sudo iw wlan0 set power_save off >/dev/null")
+    PreparationInAdv()
     
     crt_screen = CreateByScreen()
     crt_screen.Init()
