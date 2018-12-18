@@ -113,7 +113,6 @@ class SoundPage(Page):
         self._Height = self._Screen._Height
         
         self._MySlider = SoundSlider()
-        
 
         self._MySlider._Parent = self        
         self._MySlider.SetCanvasHWND(self._CanvasHWND)
@@ -123,19 +122,19 @@ class SoundPage(Page):
         self._MySlider.Init()
         
         try:
-		m = alsaaudio.Mixer()
-	        self._MySlider.SetValue(m.getvolume()[0])
-	except Exception,e:
-		print(str(e))
-		self._MySlider.SetValue(0)
+            m = alsaaudio.Mixer()
+            self._MySlider.SetValue(m.getvolume()[0])
+        except Exception,e:
+            print(str(e))
+            self._MySlider.SetValue(0)
 
 
     def OnLoadCb(self):
-	try:
+        try:
 	        m = alsaaudio.Mixer()
         	self._MySlider.SetValue(m.getvolume()[0])
-	except Exception,e:
-		print(str(e))
+        except Exception,e:
+            print(str(e))
                 
     def WhenSliderDrag(self,value): ##value 0-100
         if value < 0 or value > 100:
