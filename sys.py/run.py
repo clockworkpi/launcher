@@ -178,7 +178,6 @@ def RestoreLastBackLightBrightness(main_screen):
             f.truncate()
             f.close()
     
-            
     if main_screen._CounterScreen._Counting==True:
         main_screen._CounterScreen.StopCounter()
         main_screen.Draw()
