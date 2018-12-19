@@ -184,7 +184,7 @@ class PlayListPage(Page):
         self._BGpng._ImgSurf = MyIconPool._Icons["heart"]
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
-        self._BGpng.AddLabel(MyLangManager.Tr("my favourites"), MyLangManager.TrFont("varela18"))
+        self._BGpng.AddLabel(MyLangManager.Tr("my favorite music"), MyLangManager.TrFont("varela18"))
         self._BGpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
