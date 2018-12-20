@@ -296,6 +296,7 @@ class WifiList(Page):
     _ListFontObj       = fonts["notosanscjk15"]
 
     _InfoPage          = None
+    _CurBssid          = ""
     
     def __init__(self):
         Page.__init__(self)
@@ -517,7 +518,14 @@ class WifiList(Page):
         return True
 
     def ConfigWireless(self,password):
+        
         netid = self._PsIndex
+        
+        for i,v in enumerate(self._WirelessList):
+            if v._Bssid == self._CurBssid:
+                netid = i
+                break
+        
         print(netid," ", password)
         """
         self._Wireless.SetWirelessProperty(netid,"dhcphostname","GameShell")
@@ -651,6 +659,8 @@ class WifiList(Page):
         if event.key == CurKeys["Enter"]: ## enter to set password,enter is B on GM
             if len(self._WirelessList) == 0:
                 return
+            
+            self._CurBssid = self._WirelessList[self._PsIndex]._Bssid
             
             wicd_wirelss_encrypt_pwd = self.GetWirelessEncrypt(self._PsIndex)
             if self._WirelessList[self._PsIndex]._IsActive:

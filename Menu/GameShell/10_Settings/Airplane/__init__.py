@@ -108,6 +108,8 @@ class AirplanePage(Page):
         self._Scroller.Init()
         self._Scroller.SetCanvasHWND(self._HWND)
         
+        self.OnLoadCb()
+        
     def ScrollDown(self):
         dis = 10
         if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 0:

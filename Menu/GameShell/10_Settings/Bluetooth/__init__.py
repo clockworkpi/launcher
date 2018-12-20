@@ -617,10 +617,10 @@ class BluetoothPage(Page):
         self.GenNetworkList()
     
     def OnLoadCb(self):
-        self.RefreshDevices()
+        if self._Screen._TitleBar._InAirPlaneMode == False:
+            self.RefreshDevices()
+            self.GenNetworkList()
         
-        self.GenNetworkList()
-    
     def ScrollUp(self):
         if len(self._WirelessList) == 0:
             return
@@ -648,6 +648,10 @@ class BluetoothPage(Page):
     def KeyDown(self,event):
         
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+            if self._Screen._TitleBar._InAirPlaneMode == True:
+                self.AbortedAndReturnToUpLevel()
+                return
+            
             if self._Adapter != None:
                 try:
                     self._Adapter.StopDiscovery()
@@ -679,8 +683,8 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()       
         
         if event.key == CurKeys["X"]:
-            
-            self.Rescan()   
+            if self._Screen._TitleBar._InAirPlaneMode == False:
+                self.Rescan()   
 
         if event.key == CurKeys["Y"]:
             if len(self._WirelessList) == 0:
@@ -693,7 +697,8 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()
             
         if event.key == CurKeys["B"]:
-            self.TryConnect()
+            if self._Screen._TitleBar._InAirPlaneMode == False:
+                self.TryConnect()
 
     def Draw(self):
         self.ClearCanvas()
@@ -743,10 +748,10 @@ class APIOBJ(object):
         self._Page.Init()
         
         bus.add_signal_receiver(self._Page.DbusPropertiesChanged,
-			dbus_interface = "org.freedesktop.DBus.Properties",
-			signal_name = "PropertiesChanged",
-			arg0 = "org.bluez.Device1",
-			path_keyword = "path")
+            dbus_interface = "org.freedesktop.DBus.Properties",
+            signal_name = "PropertiesChanged",
+            arg0 = "org.bluez.Device1",
+            path_keyword = "path")
             
     def API(self,main_screen):
         if main_screen !=None:

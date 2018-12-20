@@ -92,6 +92,8 @@ class NetItem(object):
             print(object["RSSI"])
             self._RSSI = int(object["RSSI"])
         
+        mac_addr = mac_addr[:34]
+        
         name_label.Init(mac_addr,self._FontObj)
         
         self._Labels["mac_addr"] = name_label
