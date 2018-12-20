@@ -393,6 +393,8 @@ class BluetoothPage(Page):
     
     _ADAPTER_DEV  = "hci0"
     
+    _Offline = False
+    
     def __init__(self):
         Page.__init__(self)
         self._WirelessList = []
@@ -617,9 +619,17 @@ class BluetoothPage(Page):
         self.GenNetworkList()
     
     def OnLoadCb(self):
+        self._Offline = False
         if self._Screen._TitleBar._InAirPlaneMode == False:
-            self.RefreshDevices()
-            self.GenNetworkList()
+            out = commands.getstatusoutput("hcitool dev | grep hci0 |cut -f3") ## bluetooth maybe dead after airplane mode
+            if len(out[1]) < 17:
+                self._Offline = True
+                print("Bluetooth OnLoadCb ,can not find hci0 alive,try to reboot")
+            else:
+                self.RefreshDevices()
+                self.GenNetworkList()
+        else:
+            self._Offline = True
         
     def ScrollUp(self):
         if len(self._WirelessList) == 0:
@@ -648,7 +658,7 @@ class BluetoothPage(Page):
     def KeyDown(self,event):
         
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
-            if self._Screen._TitleBar._InAirPlaneMode == True:
+            if self._Offline == True:
                 self.AbortedAndReturnToUpLevel()
                 return
             
@@ -683,7 +693,7 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()       
         
         if event.key == CurKeys["X"]:
-            if self._Screen._TitleBar._InAirPlaneMode == False:
+            if self._Offline == False:
                 self.Rescan()   
 
         if event.key == CurKeys["Y"]:
@@ -697,7 +707,7 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()
             
         if event.key == CurKeys["B"]:
-            if self._Screen._TitleBar._InAirPlaneMode == False:
+            if self._Offline == False:
                 self.TryConnect()
 
     def Draw(self):
