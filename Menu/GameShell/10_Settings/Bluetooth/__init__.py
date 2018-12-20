@@ -699,7 +699,9 @@ class BluetoothPage(Page):
         if event.key == CurKeys["Y"]:
             if len(self._WirelessList) == 0:
                 return
-
+            if self._Offline == True:
+                return
+            
             self._InfoPage._AList = self._WirelessList[self._PsIndex]._Atts
             self._InfoPage._Path  = self._WirelessList[self._PsIndex]._Path
             self._Screen.PushPage(self._InfoPage)
