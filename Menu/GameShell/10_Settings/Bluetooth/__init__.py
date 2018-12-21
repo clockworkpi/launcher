@@ -137,7 +137,8 @@ class BleInfoPage(Page):
         self._MyList = []
         self._PsIndex = 0
         start_x  = 0
-        start_y  = 0        
+        start_y  = 0
+         
         for i,v in enumerate( self._AList):
             #print(i,v) # (0, dbus.String(u'AddressType'))
             
@@ -170,11 +171,11 @@ class BleInfoPage(Page):
             elif sm_text == "1":
                 sm_text="Yes"
             
+            sm_text = sm_text[:20]
             li.SetSmallText(sm_text)
             
             li._PosX = 2
             self._MyList.append(li)                      
-    
 
     def ScrollUp(self):
         if len(self._MyList) == 0:
