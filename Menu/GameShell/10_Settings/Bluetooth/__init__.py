@@ -145,7 +145,7 @@ class BleInfoPage(Page):
             li = InfoPageListItem()
             li._Parent = self
             li._PosX   = start_x
-            li._PosY   = start_y + counter*InfoPageListItem._Height
+            li._PosY   = start_y + i*InfoPageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
             
