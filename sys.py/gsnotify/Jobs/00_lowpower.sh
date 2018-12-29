@@ -4,11 +4,9 @@ BAT_PNT=`upower -i $(upower -e | grep 'battery') | grep -E "state|to\ full|perce
 
 if [ "$BAT_PNT" -lt "20" ]; then
 
-	if [ "$BAT_PNT" -lt "10" ]; then
-		echo '{"type":"once","content":"Low Battery: 10% of battery remaining"}'
-	fi
-    
 	if [ "$BAT_PNT" -lt "5" ]; then
+		echo '{"type":"once","content":"Low Battery: 5% of battery remaining"}'
+	elif [ "$BAT_PNT" -lt "10" ]; then
 		echo '{"type":"once","content":"Low Battery: 10% of battery remaining"}'
 	fi
 
