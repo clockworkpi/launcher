@@ -74,7 +74,7 @@ class PageListItem(InfoPageListItem):
         
         pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
-class LanguagesPage(Page):
+class GPUDriverPage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
@@ -302,7 +302,7 @@ class APIOBJ(object):
     def __init__(self):
         pass
     def Init(self,main_screen):
-        self._Page = LanguagesPage()
+        self._Page = GPUDriverPage()
         self._Page._Screen = main_screen
         self._Page._Name ="GPU driver switch"
         self._Page.Init()
