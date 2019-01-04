@@ -1,12 +1,19 @@
 SCREEN=`cat /sys/class/graphics/fb0/modes`
+
+XORG_CONF="/home/cpi/launcher/.xorg.conf"
+if [ -f ~/.lima ]
+then
+XORG_CONF="/home/cpi/launcher/.xorg_lima.conf"
+fi
+
 if [ -f /tmp/autologin ]
 then
    rm -f /tmp/autologin
    mpd ~/.mpd.conf
       if [[ $SCREEN =~ .*320.* ]]
       then
-         startx /home/cpi/launcher/.xinitrc -- -nocursor > /tmp/x.log 2>&1
+         startx /home/cpi/launcher/.xinitrc -- -xf86config $XORG_CONF -nocursor > /tmp/x.log 2>&1
       else
-         startx /home/cpi/launcher/.xinitrc hdmi > /tmp/x.log 2>&1
+         startx /home/cpi/launcher/.xinitrc hdmi -- -xf86config $XORG_CONF > /tmp/x.log 2>&1
       fi
 fi
