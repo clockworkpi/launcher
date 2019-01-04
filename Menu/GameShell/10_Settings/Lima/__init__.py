@@ -197,9 +197,9 @@ class LanguagesPage(Page):
             self._Screen.SwapAndShow()
             
             if "modesetting" in cur_li._Value:
-                os.system("touch ~/.lima")
+                os.system("touch %s/.lima" % os.path.expanduser('~') )
             else:
-                os.system("rm ~/.lima")
+                os.system("rm %s/.lima" % os.path.expanduser('~') )
             
             pygame.time.delay(800)
             os.system("sudo reboot")
@@ -220,14 +220,17 @@ class LanguagesPage(Page):
         thedrv = ""
         
         if "arm" in platform.machine():
-            if FileExists("~/.lima"):
+            if FileExists("%s/.lima" % os.path.expanduser('~')):
                 thedrv = "modesetting"
             else:
                 thedrv = "fbturbo"
         
         if thedrv == "":
                 thedrv = "fbturbo"
-
+        
+        for i in self._MyList:
+            i._Active = False
+        
         for i in self._MyList:
             if thedrv in i._Value:
                 i._Active = True
