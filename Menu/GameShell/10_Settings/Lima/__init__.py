@@ -12,7 +12,7 @@ from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
-from UI.util_funcs import midRect
+from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
