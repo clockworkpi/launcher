@@ -177,7 +177,7 @@ class GateWayPage(Page):
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             
-            ApplyGateWay(cur_li._Value)
+            self.ApplyGateWay(cur_li._Value)
             
             pygame.time.delay(1000)
             self._Screen.Draw()
