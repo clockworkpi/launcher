@@ -555,8 +555,31 @@ class Page(object):
     def DrawIcons(self):
         for i in range(0,self._IconNumbers):
             self._Icons[i].Draw()
-            
 
+    ##make sure the Class has the _MyList
+    def ScrollDown(self):
+        if len(self._MyList) == 0:
+            return
+        self._PsIndex +=1
+        if self._PsIndex >= len(self._MyList):
+            self._PsIndex = len(self._MyList) -1
+
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._PosY +cur_li._Height > self._Height:
+            for i in range(0,len(self._MyList)):
+                self._MyList[i]._PosY -= self._MyList[i]._Height
+    
+    def ScrollUp(self):
+        if len(self._MyList) == 0:
+            return
+        self._PsIndex -= 1
+        if self._PsIndex < 0:
+            self._PsIndex = 0
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._PosY < 0:
+            for i in range(0, len(self._MyList)):
+                self._MyList[i]._PosY += self._MyList[i]._Height
+    
     def KeyDown(self,event):##default keydown,every inherited page class should have it's own KeyDown
         if event.key == CurKeys["A"]:
             if self._FootMsg[3] == "Back":

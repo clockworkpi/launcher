@@ -23,6 +23,7 @@ from UI.lang_manager import MyLangManager
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
 
+from libs.DBUS  import is_wifi_connected_now
 import config
 
 class ListPageSelector(InfoPageSelector):
@@ -74,7 +75,7 @@ class PageListItem(InfoPageListItem):
         
         pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
-class GPUDriverPage(Page):
+class GateWayPage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
@@ -102,8 +103,8 @@ class GPUDriverPage(Page):
         start_y  = 0
         last_height = 0
 
-        drivers = [["fbturbo","Fbturbo"],
-                    ["modesetting","Lima"]]
+        drivers = [["usb0","USB Ethernet"],
+                    ["wlan0","Wi-Fi"]]
                 
         
         for i,u in enumerate( drivers ):            
@@ -158,6 +159,11 @@ class GPUDriverPage(Page):
         
         cur_li = self._MyList[self._PsIndex]
         if cur_li._Active == True:
+            out = commands.getstatusoutput("sudo ip route | grep default | cut -d " " -f3")
+            if len(out[1]) > 7:
+                self._Screen._MsgBox.SetText(out[1])
+                self._Screen._MsgBox.Draw()
+                self._Screen.SwapAndShow()      
             return
 
         print(cur_li._Value)
@@ -171,18 +177,37 @@ class GPUDriverPage(Page):
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             
-            if "modesetting" in cur_li._Value:
-                os.system("touch %s/.lima" % os.path.expanduser('~') )
-            else:
-                os.system("rm %s/.lima" % os.path.expanduser('~') )
+            ApplyGateWay(cur_li._Value)
             
-            pygame.time.delay(800)
-            os.system("sudo reboot")
-        
+            pygame.time.delay(1000)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
         else:
             self._Screen._MsgBox.SetText("Do it in GameShell")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
+    
+    def ApplyGateWay(self,gateway):
+        os.system("sudo ip route del 0/0")
+        if gateway== "usb0":
+            out = commands.getstatus("sudo ifconfig usb0 | grep inet | tr -s \" \"| cut -d \" \" -f3")
+            if len(out[1]) > 7:
+                if "error" not in out[1]:
+                    parts = out[1].split(".")
+                    if len(parts) == 4:##IPv4
+                        tmp = int(parts[3]) + 1
+                        if tmp > 255:
+                            tmp = 255
+                        parts[3] = str(tmp)
+                        ipaddress = parts.join(".")
+                        os.system("sudo route add default gw "+ipaddress)
+        else:
+            if is_wifi_connected_now():
+                os.system("sudo dhclient wlan0")
+            else:
+                self._Screen._MsgBox.SetText("Wi-Fi is not connected")
+                self._Screen._MsgBox.Draw()
+                self._Screen.SwapAndShow()            
         
     def OnLoadCb(self):
         self._Scrolled = 0
@@ -195,20 +220,21 @@ class GPUDriverPage(Page):
         thedrv = ""
         
         if "arm" in platform.machine():
-            if FileExists("%s/.lima" % os.path.expanduser('~')):
-                thedrv = "modesetting"
-            else:
-                thedrv = "fbturbo"
-        
-        if thedrv == "":
-                thedrv = "fbturbo"
-        
+            out = commands.getstatusoutput("sudo ip route | grep default")
+            if len(out[1]) > 7:
+                if "usb0" in out[1]:
+                    thedrv = "usb0"
+                elif "wlan0" in out[1]:
+                    thedrv = "wlan0"
+                
         for i in self._MyList:
             i._Active = False
         
-        for i in self._MyList:
-            if thedrv in i._Value:
-                i._Active = True
+        if thedrv != "":
+            for i in self._MyList:
+                if thedrv in i._Value:
+                    i._Active = True
+                    break
         
     def OnReturnBackCb(self):
         pass
@@ -277,9 +303,9 @@ class APIOBJ(object):
     def __init__(self):
         pass
     def Init(self,main_screen):
-        self._Page = GPUDriverPage()
+        self._Page = GateWayPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="GPU driver switch"
+        self._Page._Name ="Gateway switch"
         self._Page.Init()
         
     def API(self,main_screen):
