@@ -172,12 +172,11 @@ class GateWayPage(Page):
             for i in self._MyList:
                 i._Active = False
             
-            cur_li._Active = True
             self._Screen._MsgBox.SetText("Applying")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             
-            self.ApplyGateWay(cur_li._Value)
+            cur_li._Active = self.ApplyGateWay(cur_li._Value)
             
             pygame.time.delay(1000)
             self._Screen.Draw()
@@ -190,7 +189,7 @@ class GateWayPage(Page):
     def ApplyGateWay(self,gateway):
         os.system("sudo ip route del 0/0")
         if gateway== "usb0":
-            out = commands.getstatus("sudo ifconfig usb0 | grep inet | tr -s \" \"| cut -d \" \" -f3")
+            out = commands.getstatusoutput("sudo ifconfig usb0 | grep inet | tr -s \" \"| cut -d \" \" -f3")
             if len(out[1]) > 7:
                 if "error" not in out[1]:
                     parts = out[1].split(".")
@@ -199,16 +198,22 @@ class GateWayPage(Page):
                         if tmp > 255:
                             tmp = 255
                         parts[3] = str(tmp)
-                        ipaddress = parts.join(".")
+                        ipaddress = ".".join(parts)
                         os.system("sudo route add default gw "+ipaddress)
+                        return true
         else:
             if is_wifi_connected_now():
                 os.system("sudo dhclient wlan0")
+                return true
             else:
                 self._Screen._MsgBox.SetText("Wi-Fi is not connected")
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()            
+                return false
         
+        return false
+        
+
     def OnLoadCb(self):
         self._Scrolled = 0
         self._PosY = 0
