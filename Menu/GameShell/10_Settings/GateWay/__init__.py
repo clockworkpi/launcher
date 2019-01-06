@@ -213,18 +213,18 @@ class GateWayPage(Page):
                         parts[3] = str(tmp)
                         ipaddress = ".".join(parts)
                         os.system("sudo route add default gw "+ipaddress)
-                        return true
+                        return True
         else:
             if is_wifi_connected_now():
                 os.system("sudo dhclient wlan0")
-                return true
+                return True
             else:
                 self._Screen._MsgBox.SetText("Wi-Fi is not connected")
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()            
-                return false
+                return False
         
-        return false
+        return False
         
 
     def OnLoadCb(self):
