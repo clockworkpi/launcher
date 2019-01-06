@@ -76,7 +76,7 @@ class PageListItem(InfoPageListItem):
         pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 class GateWayPage(Page):
-    _FootMsg =  ["Nav","","","Back","Select"]
+    _FootMsg =  ["Nav","","Clear All","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     
@@ -186,6 +186,19 @@ class GateWayPage(Page):
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
     
+    def ClearAllGateways(self):
+        self._Screen._MsgBox.SetText("Cleaning up")
+        self._Screen._MsgBox.Draw()
+        self._Screen.SwapAndShow()          
+        os.system("sudo ip route del 0/0")
+        pygame.time.delay(800)
+        
+        for i in self._MyList:
+            i._Active = False 
+        
+        self._Screen.Draw()
+        self._Screen.SwapAndShow() 
+    
     def ApplyGateWay(self,gateway):
         os.system("sudo ip route del 0/0")
         if gateway== "usb0":
@@ -238,8 +251,8 @@ class GateWayPage(Page):
         if thedrv != "":
             for i in self._MyList:
                 if thedrv in i._Value:
-                    i._Active = True
-                    break
+                    i._Active = True 
+        ## if usb0 and wlan0 all actived, clear all
         
     def OnReturnBackCb(self):
         pass
@@ -257,6 +270,9 @@ class GateWayPage(Page):
         if event.key == CurKeys["B"]:
             self.Click()
             
+        if event.key == CurKeys["Y"]:
+            self.ClearAllGateways()
+                        
         if event.key == CurKeys["Up"]:
             self.ScrollUp()
             self._Screen.Draw()
