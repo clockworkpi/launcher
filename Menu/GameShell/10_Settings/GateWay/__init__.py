@@ -159,7 +159,7 @@ class GateWayPage(Page):
         
         cur_li = self._MyList[self._PsIndex]
         if cur_li._Active == True:
-            out = commands.getstatusoutput("sudo ip route | grep default | cut -d " " -f3")
+            out = commands.getstatusoutput("sudo ip route | grep default | cut -d \" \" -f3")
             if len(out[1]) > 7:
                 self._Screen._MsgBox.SetText(out[1])
                 self._Screen._MsgBox.Draw()
