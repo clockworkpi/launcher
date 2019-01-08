@@ -12,8 +12,16 @@ then
    mpd ~/.mpd.conf
       if [[ $SCREEN =~ .*320.* ]]
       then
-         startx /home/cpi/launcher/.xinitrc -- -xf86config $XORG_CONF -nocursor > /tmp/x.log 2>&1
+			while :
+			do
+        startx /home/cpi/launcher/.xinitrc -- -xf86config $XORG_CONF -nocursor > /tmp/x.log 2>&1
+				sleep 1
+			done
       else
-         startx /home/cpi/launcher/.xinitrc hdmi -- -xf86config $XORG_CONF > /tmp/x.log 2>&1
+			while :
+			do
+        startx /home/cpi/launcher/.xinitrc hdmi -- -xf86config $XORG_CONF > /tmp/x.log 2>&1
+				sleep 1
+			done
       fi
 fi
