@@ -207,9 +207,13 @@ class GateWayPage(Page):
                 if "error" not in out[1]:
                     parts = out[1].split(".")
                     if len(parts) == 4:##IPv4
-                        tmp = int(parts[3]) + 1
-                        if tmp > 255:
-                            tmp = 255
+                        tp3 = int(parts[3])
+                        tmp = tp3
+                        if tp3 == 0:
+                            tmp = int(parts[3]) + 1
+                        elif tp3 > 0:
+                            tmp = int(parts[3]) - 1
+                        
                         parts[3] = str(tmp)
                         ipaddress = ".".join(parts)
                         os.system("sudo route add default gw "+ipaddress)
