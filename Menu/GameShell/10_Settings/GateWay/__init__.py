@@ -211,7 +211,9 @@ class GateWayPage(Page):
                         tmp = tp3
                         if tp3 == 0:
                             tmp = int(parts[3]) + 1
-                        elif tp3 > 0:
+                        elif tp3 == 1:
+                            tmp = int(parts[3]) + 1
+                        elif tp3 > 1:
                             tmp = int(parts[3]) - 1
                         
                         parts[3] = str(tmp)
