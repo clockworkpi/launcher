@@ -408,21 +408,21 @@ class MainScreen(object):
             tmp = sorted(tmp, key=itemgetter(0))
             
             retro_games_idx = []
+            retro_games_dir = "20_Retro Games"
             for i,x in enumerate(tmp):
-                if "20_Retro Games" in x[0]:
+                if retro_games_dir in x[0]:
                     retro_games_idx.append(x[1])
             
             if len(retro_games_idx) > 1:
                 for i in range(1,len(retro_games_idx)):
-                    p._Icons[retro_games_idx[0]]._LinkPage._Icons.extend( p._Icons[retro_games_idx[i]]._LinkPage._Icons)
-                    #p._Icons[ retro_games_idx[0]]._LinkPage._Icons.extend( tmp[ retro_games_idx[i] ]._LinkPage._Icons )
+                    p._Icons[retro_games_idx[0]]._LinkPage._Icons.extend( p._Icons[retro_games_idx[i]]._LinkPage._Icons) ### assumes the folder of ~/apps/Menu/20_Retro Games is legalzip","sfc"],
                 
             
                 tmp_swap = []
                 for i, x in enumerate(tmp):
-                    if "20_Retro Games" not in x[0]:
+                    if retro_games_dir not in x[0]:
                         tmp_swap.append(x)
-                    if "20_Retro Games" in x[0] and i == retro_games_idx[0]:
+                    if retro_games_dir in x[0] and i == retro_games_idx[0]:
                         tmp_swap.append(x)
                 
                 tmp = tmp_swap
