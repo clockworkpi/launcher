@@ -11,12 +11,9 @@ from UI.page         import Page,PageStack,PageSelector
 from UI.label        import Label
 from UI.fonts        import fonts
 from UI.skin_manager import MySkinManager
+from UI.widget       import Widget 
 
-class Textarea:
-    _PosX =0 
-    _PosY = 0
-    _Width = 0
-    _Height = 0
+class Textarea(Widget):
     _BackgroundColor = MySkinManager.GiveColor('TitleBg')
     _CanvasHWND  = None
     _MyWords     = []

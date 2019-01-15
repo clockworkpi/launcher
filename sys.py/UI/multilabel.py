@@ -4,11 +4,9 @@ import pygame
 
 from skin_manager import MySkinManager
 from lang_manager import MyLangManager
+from widget       import Widget
 
-
-class MultiLabel: ##Multi Line Label 
-    _PosX=0
-    _PosY=0
+class MultiLabel(Widget): ##Multi Line Label 
     _Width=135
     _Height=100
     _Text=""
@@ -28,9 +26,6 @@ class MultiLabel: ##Multi Line Label
         
         self.blit_text(self._CanvasHWND,self._Text,(self._PosX,self._PosY),self._FontObj)
         
-    def NewCoord(self,x,y):
-        self._PosX = x
-        self._PosY = y
 
     def SetColor(self,color):
         self._Color = color
@@ -43,9 +38,6 @@ class MultiLabel: ##Multi Line Label
         
         self.blit_text(self._CanvasHWND,self._Text,(self._PosX,self._PosY),self._FontObj) 
         
-    def Width(self):
-        return self._Width
-    
     def SetCanvasHWND(self,_canvashwnd):
         self._CanvasHWND = _canvashwnd
 

@@ -10,12 +10,8 @@ from util_funcs  import midRect
 #UI lib
 from skin_manager import MySkinManager
 from lang_manager import MyLangManager
-
-class Label:
-    _PosX=0
-    _PosY=0
-    _Width=0
-    _Height=0
+from widget       import Widget
+class Label(Widget):
     _Text=""
     _FontObj=None
     _Color = MySkinManager.GiveColor('Text')
@@ -32,10 +28,6 @@ class Label:
         my_text = self._FontObj.render(self._Text,True,self._Color)
         self._Width = my_text.get_width()
         self._Height = my_text.get_height()
-
-    def NewCoord(self,x,y):
-        self._PosX = x
-        self._PosY = y
         
     def SetColor(self,color):
         self._Color = color
@@ -50,8 +42,6 @@ class Label:
         self._Width = my_text.get_width()
         self._Height = my_text.get_height()
 
-    def Width(self):
-        return self._Width
     
     def SetCanvasHWND(self,_canvashwnd):
         self._CanvasHWND = _canvashwnd

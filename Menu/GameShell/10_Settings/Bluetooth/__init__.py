@@ -177,30 +177,6 @@ class BleInfoPage(Page):
             li._PosX = 2
             self._MyList.append(li)                      
 
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-        
-
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-
     def TryToForget(self):
         global adapter
         proxy_obj = bus.get_object("org.bluez", self._Path)
@@ -336,10 +312,10 @@ class BleListSelector(PageSelector):
 
     def Draw(self):
         idx = self._Parent._PsIndex
-        if idx < len( self._Parent._WirelessList):
-            x = self._Parent._WirelessList[idx]._PosX+2
-            y = self._Parent._WirelessList[idx]._PosY+1
-            h = self._Parent._WirelessList[idx]._Height -3
+        if idx < len( self._Parent._MyList):
+            x = self._Parent._MyList[idx]._PosX+2
+            y = self._Parent._MyList[idx]._PosY+1
+            h = self._Parent._MyList[idx]._Height -3
         
             self._PosX = x
             self._PosY = y
@@ -367,7 +343,7 @@ class BleListMessageBox(Label):
 
 
 class BluetoothPage(Page):
-    _WirelessList = []
+    _MyList = []
     #Wicd dbus part
     _Adapter = None
     _Dbus     = None
@@ -398,7 +374,7 @@ class BluetoothPage(Page):
     
     def __init__(self):
         Page.__init__(self)
-        self._WirelessList = []
+        self._MyList = []
         self._CanvasHWND = None
     
     def ShowBox(self,msg):
@@ -520,10 +496,10 @@ class BluetoothPage(Page):
     def TryConnect(self):
         global bus
         
-        if self._PsIndex >= len(self._WirelessList):
+        if self._PsIndex >= len(self._MyList):
             return
         
-        cur_li = self._WirelessList[self._PsIndex]
+        cur_li = self._MyList[self._PsIndex]
         print(cur_li._Path)
         
         if "Connected" in cur_li._Atts:
@@ -562,7 +538,7 @@ class BluetoothPage(Page):
         
     
     def GenNetworkList(self):
-        self._WirelessList = []
+        self._MyList = []
         start_x = 0
         start_y = 0
         
@@ -586,7 +562,7 @@ class BluetoothPage(Page):
             ni.Init(v,self._Devices[v])
             
             counter += 1
-            self._WirelessList.append(ni)
+            self._MyList.append(ni)
 
         self._PsIndex = 0   
     
@@ -631,31 +607,7 @@ class BluetoothPage(Page):
                 self.GenNetworkList()
         else:
             self._Offline = True
-        
-    def ScrollUp(self):
-        if len(self._WirelessList) == 0:
-            return
-        self._PsIndex-=1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        
-        cur_ni = self._WirelessList[self._PsIndex]
-        if cur_ni._PosY < 0:
-            for i in range(0,len(self._WirelessList)):
-                self._WirelessList[i]._PosY += self._WirelessList[i]._Height
             
-    def ScrollDown(self):
-        if len(self._WirelessList) == 0:
-            return
-        self._PsIndex+=1
-        if self._PsIndex >= len(self._WirelessList):
-            self._PsIndex = len(self._WirelessList) -1
-       
-        cur_ni = self._WirelessList[self._PsIndex]
-        if cur_ni._PosY + cur_ni._Height > self._Height:
-            for i in range(0,len(self._WirelessList)):
-                self._WirelessList[i]._PosY -= self._WirelessList[i]._Height
-    
     def KeyDown(self,event):
         
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
@@ -698,13 +650,13 @@ class BluetoothPage(Page):
                 self.Rescan()   
 
         if event.key == CurKeys["Y"]:
-            if len(self._WirelessList) == 0:
+            if len(self._MyList) == 0:
                 return
             if self._Offline == True:
                 return
             
-            self._InfoPage._AList = self._WirelessList[self._PsIndex]._Atts
-            self._InfoPage._Path  = self._WirelessList[self._PsIndex]._Path
+            self._InfoPage._AList = self._MyList[self._PsIndex]._Atts
+            self._InfoPage._Path  = self._MyList[self._PsIndex]._Path
             self._Screen.PushPage(self._InfoPage)
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -715,23 +667,23 @@ class BluetoothPage(Page):
 
     def Draw(self):
         self.ClearCanvas()
-        if len(self._WirelessList) == 0:
+        if len(self._MyList) == 0:
             return
                 
-        if len(self._WirelessList) * NetItem._Height > self._Height:
+        if len(self._MyList) * NetItem._Height > self._Height:
             self._Ps._Width = self._Width - 11
             self._Ps.Draw()
             
-            for i in self._WirelessList:
+            for i in self._MyList:
                 i.Draw()        
             
-            self._Scroller.UpdateSize( len(self._WirelessList)*NetItem._Height, self._PsIndex*NetItem._Height)
+            self._Scroller.UpdateSize( len(self._MyList)*NetItem._Height, self._PsIndex*NetItem._Height)
             self._Scroller.Draw()
         else:
             self._Ps._Width = self._Width
             self._Ps.Draw()
 
-            for i in self._WirelessList:
+            for i in self._MyList:
                 i.Draw()
 
 

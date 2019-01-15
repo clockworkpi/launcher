@@ -23,10 +23,6 @@ from text_item import TextItem
 import myvars
 
 class KeyboardIcon(IconItem):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
-    _Height = 0
     _Color = MySkinManager.GiveColor('Text')
     _MyType  = ICON_TYPES["NAV"] 
     _Parent  = None
@@ -57,10 +53,6 @@ class KeyboardSelector(PageSelector):
 #        pygame.draw.rect(self._Parent._CanvasHWND,(0,0,0),rect,1)
 
 class Keyboard(Page):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
-    _Height = 0
     _SectionNumbers = 3
     _SectionIndex = 1
 

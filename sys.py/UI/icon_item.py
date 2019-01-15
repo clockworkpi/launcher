@@ -7,12 +7,8 @@ from constants  import icon_width,icon_height,ICON_TYPES,ALIGN,icon_ext,Width,He
 from util_funcs import color_surface,midRect
 from label      import Label
 from lang_manager import MyLangManager
-
-class IconItem:
-    _PosX=0
-    _PosY=0
-    _Width=0
-    _Height=0
+from widget     import Widget 
+class IconItem(Widget):
     _ImageName=""
     _ImgSurf = None
     _Parent = None
@@ -37,10 +33,6 @@ class IconItem:
     def SetLableColor(self,color):
         self._Label.SetColor(color)
         
-    def NewCoord(self,x,y):
-        self._PosX = x
-        self._PosY = y
-
     def AddLabel(self,text,fontobj):
         if self._Label == None:
             self._Label = Label()

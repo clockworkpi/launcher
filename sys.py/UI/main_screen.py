@@ -28,6 +28,7 @@ from Emulator    import MyEmulator
 
 from skin_manager import MySkinManager
 from lang_manager import MyLangManager
+from widget       import Widget
 
 from counter_screen import CounterScreen
 
@@ -121,11 +122,10 @@ python_package_flag = "__init__.py"
 emulator_flag       = "action.config"
 
 ##Abstract object for manage Pages ,not the pygame's physic screen
-class MainScreen(object):
+class MainScreen(Widget):
     _Pages = []
     _PageMax = 0
     _PageIndex = 0
-    _PosX  = 0
     _PosY  = TitleBar._BarHeight+1
     _Width = Width 
     _Height = Height -FootBar._BarHeight -TitleBar._BarHeight

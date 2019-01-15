@@ -19,7 +19,7 @@ from multi_icon_item import MultiIconItem
 from icon_pool   import MyIconPool
 from lang_manager import MyLangManager
 from util_funcs  import midRect,SwapAndShow,SkinMap
-
+from widget      import Widget
 from config import Battery
 
 from libs.roundrects import aa_round_rect
@@ -27,9 +27,7 @@ from libs.roundrects import aa_round_rect
 from libs.DBUS        import is_wifi_connected_now,wifi_strength
 
 icon_base_path = SkinMap("gameshell/titlebar_icons/")
-class TitleBar:
-    _PosX      = 0
-    _PosY      = 0
+class TitleBar(Widget):
     _Width     = Width
     _Height    = 25
     _BarHeight  = 24.5

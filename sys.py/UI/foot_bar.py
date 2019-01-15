@@ -13,7 +13,7 @@ from multi_icon_item import MultiIconItem
 from icon_pool  import MyIconPool
 from libs.roundrects import aa_round_rect
 from lang_manager import MyLangManager
-
+from widget      import Widget
 icon_base_path = SkinMap("gameshell/footbar_icons/")
 
 class FootBarIcon(MultiIconItem):
@@ -40,9 +40,7 @@ class FootBarIcon(MultiIconItem):
                                                                 self._PosY,
                                                                 self._Width,self._Height,Width,Height),
                                           (0,self._IconIndex*self._IconHeight,self._IconWidth,self._IconHeight))
-class FootBar:
-    _PosX      = 0
-    _PosY      = 0
+class FootBar(Widget):
     _Width     = Width
     _Height    = 20
     _BarHeight = 20.5 
