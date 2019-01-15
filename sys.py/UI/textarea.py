@@ -3,9 +3,6 @@
 import pygame
 from libs.roundrects import aa_round_rect
 
-
-
-
 ## local UI import
 from UI.page         import Page,PageStack,PageSelector
 from UI.label        import Label
@@ -67,7 +64,7 @@ class Textarea(Widget):
             self.BlitText()
             self.AddTextIndex()
         else:
-            print("is Full %s" % "".join(self._MyWords))
+            print("is Full %s" % "".join(str(self._MyWords)))
 
     def BuildBlitText(self):
         blit_rows = [[]]
