@@ -112,12 +112,12 @@ class Textbulletinboard(Textarea):
     _TextLimit   = 200
     _BackgroundColor = MySkinManager.GiveColor("White")
     _Align = "Left" ## Left or Center
+    _RowPitch = -1
     
     def SetAndBlitText(self,words):# words => []
         
         if self._TextFull != True:            
             self._MyWords = words
-            #self.BlitText()
             self._TextIndex = len(self._MyWords)
         else:
             print("is Full %s" % "".join(str(self._MyWords)))
@@ -130,13 +130,15 @@ class Textbulletinboard(Textarea):
         x = self._PosX+xmargin
         linenumber = 0
         cursor_row = 0
-
+        
+        #print(self._MyWords)
         for i, v in enumerate(self._MyWords):
             if str(v) == "\n":
                 w = 0
                 x = self._PosX+xmargin
-                linenumber+=1
-                blit_rows.append([])               
+                linenumber+=2
+                blit_rows.append([])
+                blit_rows.append([])                
             else:
                 t = v.Render()
                 t_width = t.get_width()
@@ -153,8 +155,7 @@ class Textbulletinboard(Textarea):
                     w = 0
                     linenumber += 1
                     blit_rows.append([])
-        
-        
+
         self._BlitWords = blit_rows
         self._BlitIndex = self._TextIndex
         
@@ -171,10 +172,13 @@ class Textbulletinboard(Textarea):
         self._TextFull = len(self._MyWords) > self._TextLimit
         last_height = 0
         
-        for row_idx, row in enumerate(self._BlitWords):
-                            
+        for row_idx, row in enumerate(self._BlitWords): 
             if len(row) == 0:
-                y = y + 16
+                if self._RowPitch > 0:
+                    y = y + self._RowPitch
+                else:
+                    y = y + 16
+                
                 w = 0
                 continue
                 
@@ -194,6 +198,7 @@ class Textbulletinboard(Textarea):
             last_height = 0
             total_row_width = 0
             x = start_x
+            y = y + last_height
             for i,v in enumerate(row):
                 t = v.Render()
                 total_row_width += t.get_width()
@@ -208,9 +213,7 @@ class Textbulletinboard(Textarea):
             
                 self._CanvasHWND.blit(t, (x,y))
                 x += t.get_width()
-            
-            y = y + last_height              
-            
+
     def Draw(self):
         #aa_round_rect(self._CanvasHWND, (4,24.5+6,312,60),self._BackgroundColor,4,0,self._BackgroundColor)
 

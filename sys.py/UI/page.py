@@ -98,6 +98,8 @@ class Page(Widget):
 
     _SelectedIconTopOffset=20
     _EasingDur   = 30
+    _Padding = pygame.Rect(0,0,0,0)# x,y,w,h
+    _Margin  = pygame.Rect(0,0,0,0)
     
     def __init__(self):
         self._Icons = []
@@ -519,7 +521,7 @@ class Page(Widget):
             if api_cb != None:
                 if callable(api_cb):
                     cur_icon._CmdPath.API(self._Screen)
-        elif cur_icon._MyType == ICON_TYPES["Emulator"]:
+        elif cur_icon._MyType == ICON_TYPES["Emulator"] or cur_icon._MyType == ICON_TYPES["Commercial"]:
             cur_icon._CmdPath.API(self._Screen)
             
     def ReturnToUpLevelPage(self):

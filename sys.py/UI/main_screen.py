@@ -5,7 +5,7 @@ from pygame.locals import *
 from sys import exit
 import os
 import sys
-
+import json
 from operator import itemgetter
 
 from libs import easing
@@ -25,6 +25,7 @@ from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
 from Emulator    import MyEmulator
+from CommercialSoftwarePackage import MyCommercialSoftwarePackage
 
 from skin_manager import MySkinManager
 from lang_manager import MyLangManager
@@ -120,6 +121,7 @@ class MessageBox(Label):
 
 python_package_flag = "__init__.py"
 emulator_flag       = "action.config"
+commercialsoftware_flag = "compkginfo.json" 
 
 ##Abstract object for manage Pages ,not the pygame's physic screen
 class MainScreen(Widget):
@@ -383,7 +385,14 @@ class MainScreen(Widget):
             if i.endswith(emulator_flag):
                 return True
         return False
-    
+        
+    def IsCommercialPackage(self,dirname):
+        files = os.listdir(dirname)
+        for i in sorted(files):
+            if i.endswith(commercialsoftware_flag):
+                return True
+        return False
+            
     def IsPythonPackage(self,dirname):
         files = os.listdir(dirname)
         for i in sorted(files):
@@ -435,6 +444,7 @@ class MainScreen(Widget):
     
     
     def ReadTheDirIntoPages(self,_dir,pglevel,cur_page):
+        global commercialsoftware_flag
         
         if FileExists(_dir) == False and os.path.isdir(_dir) == False:
             return
@@ -523,11 +533,30 @@ class MainScreen(Widget):
                         iconitem._MyType  = ICON_TYPES["Emulator"]
                         cur_page._Icons.append(iconitem)
 
-                    elif self.IsExecPackage(_dir+"/"+i):
+                    elif self.IsCommercialPackage( os.path.join(_dir,i)):
+                        data = None
+                        em = MyCommercialSoftwarePackage()
+                        if FileExists( _dir+"/"+i+"/.done"):
+                            print(_dir+"/"+i+"/.done")
+                            em._Done = os.path.realpath(_dir+"/"+i+"/"+i2+".sh")
+                        else:
+                            with open(os.path.join(_dir,i) +"/"+commercialsoftware_flag) as f:
+                                data = json.load(f)
+                            em._ComPkgInfo = data
+                            em._Done = ""
+                        
+                        em._InvokeDir = os.path.realpath( os.path.join(_dir,i))
+                        em.Init(self)
+                        
+                        iconitem._CmdPath = em
+                        iconitem._MyType  = ICON_TYPES["Commercial"]
+                        cur_page._Icons.append(iconitem)
+                        
+                    elif self.IsExecPackage(_dir+"/"+i): ## ExecPackage is the last one to check
                         iconitem._MyType  = ICON_TYPES["EXE"]                        
                         iconitem._CmdPath = os.path.realpath(_dir+"/"+i+"/"+i2+".sh")
                         MakeExecutable(iconitem._CmdPath)
-                        cur_page._Icons.append(iconitem)
+                        cur_page._Icons.append(iconitem)                    
                     else:                            
                         iconitem._MyType  = ICON_TYPES["DIR"]
                         iconitem._LinkPage = Page()

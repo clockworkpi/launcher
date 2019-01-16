@@ -11,4 +11,4 @@ sys.py/.lang
 !**/Jobs/.gitkeep
 !**/Jobs/00_lowpower.sh
 !**/Jobs/00_lowpower.alias
-
+.done

@@ -81,7 +81,26 @@ class IconItem(Widget):
 
     def Clear(self):
         pass
+        
+    def DrawTopLeft(self):
+        if self._Align==ALIGN["VCenter"]: #default
+            if self._Label != None:
+                self._Label._PosX = self._PosX - self._Label._Width/2 + self._Parent._PosX
+                self._Label._PosY = self._PosY + self._Height/2 +6  + self._Parent._PosY
+                
+        elif self._Align ==ALIGN["HLeft"]:
+            if self._Label != None:
+                self._Label._PosX = self._PosX + self._Width/2 + 3 + self._Parent._PosX
+                self._Label._PosY = self._PosY - self._Label._Height/2 + self._Parent._PosY
 
+        if self._Label!=None:
+            self._Label.Draw()
+        
+        if self._ImgSurf != None:
+            self._Parent._CanvasHWND.blit(self._ImgSurf,pygame.Rect(self._PosX+self._Parent._PosX,
+                                                                    self._PosY+self._Parent._PosY,
+                                                                    self._Width,
+                                                                    self._Height))
     def Draw(self):
         if self._Align==ALIGN["VCenter"]: #default
             if self._Label != None:

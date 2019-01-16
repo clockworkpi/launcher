@@ -89,7 +89,10 @@ class LangManager(object):
             return english_key_str
     
     def TrFont(self,orig_font_str):
-        font_size_number = int(filter(str.isdigit, orig_font_str))
+        try:
+            font_size_number = int(filter(str.isdigit, orig_font_str))
+        except TypeError:
+            font_size_number = int(filter(unicode.isdigit, orig_font_str))
         if font_size_number > 120:
             raise Exception('font string format error')
             
