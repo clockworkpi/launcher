@@ -41,7 +41,7 @@ class NotFoundPage(Page):
     _FootMsg =  ["Nav","","","Back",""]
     _BG = "pico8_notfound"
     _Leader = None
-    _Padding = pygame.Rect(0,20,0,0)    
+    _Padding = pygame.Rect(0,12,0,6)    
     def Init(self):
         self._PosX = self._Index*self._Screen._Width
         self._Width = self._Screen._Width
@@ -64,7 +64,7 @@ class NotFoundPage(Page):
         self._Board._Height = 100
         self._Board._CanvasHWND = self._CanvasHWND
         self._Board._Align = "Center"
-        self._Board._RowPitch =30
+        self._Board._RowPitch =28
         self._Board.Init()
         
         if self._Leader!= None and self._Leader._ComPkgInfo != None:
@@ -122,7 +122,7 @@ class NotFoundPage(Page):
         if self._BGpng != None:
             self._BGpng.NewCoord((self._Width-self._BGpng._Width)/2,self._Padding.y )
             self._BGpng.DrawTopLeft()
-            self._Board._PosY = self._BGpng._Height+self._Padding.y
+            self._Board._PosY = self._BGpng._Height+self._Padding.y+self._Padding.h
         else:
             self._Board._PosY = self._Padding.y
         
@@ -134,7 +134,7 @@ class HashErrPage(Page):
     _BG ="pico8_md5_err"
     
     _Leader = None
-    _Padding = pygame.Rect(0,20,0,0)
+    _Padding = pygame.Rect(0,12,0,6)
     
     def Init(self):
         self._PosX = self._Index*self._Screen._Width
@@ -152,11 +152,11 @@ class HashErrPage(Page):
         self._Board = Textbulletinboard()
         
         self._Board._PosX = 4
-        self._Board._PosY = self._Height/2 - 35
+        self._Board._PosY = self._Height/2 - 30
         self._Board._Width= self._Width - 4*2
         self._Board._Height = 100
         self._Board._CanvasHWND = self._CanvasHWND
-        self._Board._RowPitch =30
+        self._Board._RowPitch =28
         self._Board._Align = "Center"
         self._Board.Init()
 
@@ -227,7 +227,7 @@ class HashErrPage(Page):
         if self._BGpng != None:        
             self._BGpng.NewCoord((self._Width-self._BGpng._Width)/2,self._Padding.y)
             self._BGpng.DrawTopLeft()
-            self._Board._PosY = self._BGpng._Height+self._Padding.y
+            self._Board._PosY = self._BGpng._Height+self._Padding.y+self._Padding.h
         else:
             self._Board._PosY = self._Padding.y
             
@@ -327,7 +327,7 @@ class MyCommercialSoftwarePackage(object):
                 pygame.event.post( pygame.event.Event(RUNEVT, message=self._Done))
                 ####
             else:
-                print(self._ComPkgInfo)
+                #print(self._ComPkgInfo)
                 if FileExists( os.path.join(self._ComPkgInfo["GameDir"],self._ComPkgInfo["InstallDir"] )) == False:
                     main_screen.PushPage(self._Page1)
                     main_screen.Draw()
