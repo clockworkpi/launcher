@@ -241,7 +241,24 @@ class MyCommercialSoftwarePackage(object):
     
     def __init__(self):
         pass
-
+    
+    def CheckPackage(self,main_screen):##detect zip files
+        ret = False
+        json_config = self._ComPkgInfo
+        if not json_config:
+            return ret
+        
+        cur_dir = os.getcwd()
+        os.chdir(json_config["GameDir"])
+        if "MD5" in json_config:
+            for i,v in enumerate(json_config["MD5"]):
+                if FileExists(v):
+                    ret = True
+                    break
+        
+        os.chdir(cur_dir)
+        return ret
+                    
     def InstallPackage(self,main_screen):
         main_screen._MsgBox.SetText("Installing the package")
         main_screen._MsgBox.Draw()
@@ -286,7 +303,7 @@ class MyCommercialSoftwarePackage(object):
         
         if "MD5" in json_config:
             for i,v in enumerate(json_config["MD5"]):
-                print(i,v)
+                #print(i,v)
                 if FileExists( os.path.join(json_config["GameDir"], v  )):
                     print( os.path.join(json_config["GameDir"],v  ))
                     out = commands.getstatusoutput("md5sum %s" % os.path.join(json_config["GameDir"],v))
@@ -328,7 +345,8 @@ class MyCommercialSoftwarePackage(object):
                 ####
             else:
                 #print(self._ComPkgInfo)
-                if FileExists( os.path.join(self._ComPkgInfo["GameDir"],self._ComPkgInfo["InstallDir"] )) == False:
+                #if FileExists( os.path.join(self._ComPkgInfo["GameDir"],self._ComPkgInfo["InstallDir"] )) == False:
+                if self.CheckPackage(main_screen) == False:
                     main_screen.PushPage(self._Page1)
                     main_screen.Draw()
                     main_screen.SwapAndShow()
