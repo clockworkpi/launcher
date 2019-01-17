@@ -19,7 +19,7 @@ show_fps 0 // Draw frames per second in the corner
 windowed 0 // 1 to start up in windowed mode
 window_position -1 -1 // x and y position of window, or -1, -1 to let the window manager decide
 frameless 0 // 1 to use a window with no frame
-fullscreen_method 1 // 0 maximized window (linux)  1 borderless desktop-sized window  2 fullscreen
+fullscreen_method 0 // 0 maximized window (linux)  1 borderless desktop-sized window  2 fullscreen
 
 
 // :: System Settings
