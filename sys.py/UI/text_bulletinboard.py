@@ -112,7 +112,8 @@ class Textbulletinboard(Textarea):
     _TextLimit   = 200
     _BackgroundColor = MySkinManager.GiveColor("White")
     _Align = "Left" ## Left or Center
-    _RowPitch = -1
+    _RowPitch = -1 ## for \n
+    _BreakPitch = -1 ## for  linebreak line wrapp
     
     def SetAndBlitText(self,words):# words => []
         
@@ -150,12 +151,6 @@ class Textbulletinboard(Textarea):
                 if i == self._TextIndex - 1:
                     cursor_row = linenumber
 
-                if w + t_width >= self._Width-endmargin:
-                    x = self._PosX+xmargin
-                    w = 0
-                    linenumber += 1
-                    blit_rows.append([])
-
         self._BlitWords = blit_rows
         self._BlitIndex = self._TextIndex
         
@@ -183,33 +178,44 @@ class Textbulletinboard(Textarea):
                 continue
                 
             else:
+                
                 total_row_width = 0
                 for i,v in enumerate(row):
                     t = v.Render()
                     total_row_width += t.get_width() 
                     if total_row_width > self._Width-endmargin:
-                        total_row_width = self._Width
                         start_x = self._PosX + xmargin
-                        break
                     else:
                         if self._Align == "Center":
                             start_x = (self._Width - total_row_width)/2                            
         
             last_height = 0
-            total_row_width = 0
+            row_width = 0
             x = start_x
             y = y + last_height
             for i,v in enumerate(row):
                 t = v.Render()
-                total_row_width += t.get_width()
+                row_width += t.get_width()
                 
                 if last_height < v.FnHeight():
                     last_height = v.FnHeight()
-                    
-                if total_row_width > self._Width-endmargin:
+                
+                if row_width >= self._Width-endmargin:                    
                     x = start_x
-                    y = y + last_height 
-                    total_row_width = 0
+                    
+                    if self._Align == "Center":
+                        whatisleft = total_row_width - row_width
+                        if whatisleft >= self._Width-endmargin:
+                            x = start_x
+                        else:
+                            x = (self._Width-whatisleft)/2-endmargin
+                    
+                    if self._BreakPitch > 0:
+                        y = y + self._BreakPitch
+                    else:
+                        y = y + last_height
+                    
+                    row_width = 0
             
                 self._CanvasHWND.blit(t, (x,y))
                 x += t.get_width()
