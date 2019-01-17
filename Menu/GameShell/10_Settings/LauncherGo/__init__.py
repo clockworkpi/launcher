@@ -3,7 +3,7 @@ import os
 import pygame
 #import math
 #mport subprocess
-import glob
+import platform
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
 
@@ -24,8 +24,9 @@ class APIOBJ(object):
             main_screen._MsgBox.Draw()
             main_screen.SwapAndShow()
             pygame.time.delay(300)
-            os.system("sed -i s/launcher/launchergo/g ~/.bashrc" )
-            os.system("sudo reboot")
+            if "arm" in platform.machine():
+                os.system("sed -i s/launcher/launchergo/g ~/.bashrc" )
+                os.system("sudo reboot")
 
 OBJ = APIOBJ()
 def Init(main_screen):    

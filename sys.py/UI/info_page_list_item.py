@@ -3,11 +3,8 @@
 import pygame 
 from label  import Label
 from skin_manager import MySkinManager
-
-class InfoPageListItem(object):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
+from widget     import Widget
+class InfoPageListItem(Widget):
     _Height = 30
 
     _Labels = {}

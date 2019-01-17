@@ -5,7 +5,7 @@ from pygame.locals import *
 from sys import exit
 import os
 import sys
-
+import json
 from operator import itemgetter
 
 from libs import easing
@@ -25,9 +25,11 @@ from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
 from Emulator    import MyEmulator
+from CommercialSoftwarePackage import MyCommercialSoftwarePackage
 
 from skin_manager import MySkinManager
 from lang_manager import MyLangManager
+from widget       import Widget
 
 from counter_screen import CounterScreen
 
@@ -119,13 +121,13 @@ class MessageBox(Label):
 
 python_package_flag = "__init__.py"
 emulator_flag       = "action.config"
+commercialsoftware_flag = "compkginfo.json" 
 
 ##Abstract object for manage Pages ,not the pygame's physic screen
-class MainScreen(object):
+class MainScreen(Widget):
     _Pages = []
     _PageMax = 0
     _PageIndex = 0
-    _PosX  = 0
     _PosY  = TitleBar._BarHeight+1
     _Width = Width 
     _Height = Height -FootBar._BarHeight -TitleBar._BarHeight
@@ -383,7 +385,14 @@ class MainScreen(object):
             if i.endswith(emulator_flag):
                 return True
         return False
-    
+        
+    def IsCommercialPackage(self,dirname):
+        files = os.listdir(dirname)
+        for i in sorted(files):
+            if i.endswith(commercialsoftware_flag):
+                return True
+        return False
+            
     def IsPythonPackage(self,dirname):
         files = os.listdir(dirname)
         for i in sorted(files):
@@ -406,6 +415,27 @@ class MainScreen(object):
                 
                 tmp.append(tup)
             tmp = sorted(tmp, key=itemgetter(0))
+            
+            retro_games_idx = []
+            retro_games_dir = "20_Retro Games"
+            for i,x in enumerate(tmp):
+                if retro_games_dir in x[0]:
+                    retro_games_idx.append(x[1])
+            
+            if len(retro_games_idx) > 1:
+                for i in range(1,len(retro_games_idx)):
+                    p._Icons[retro_games_idx[0]]._LinkPage._Icons.extend( p._Icons[retro_games_idx[i]]._LinkPage._Icons) ### assumes the folder of ~/apps/Menu/20_Retro Games is legalzip","sfc"],
+                
+            
+                tmp_swap = []
+                for i, x in enumerate(tmp):
+                    if retro_games_dir not in x[0]:
+                        tmp_swap.append(x)
+                    if retro_games_dir in x[0] and i == retro_games_idx[0]:
+                        tmp_swap.append(x)
+                
+                tmp = tmp_swap
+            
             #print(tmp)
             new_icons = []
             for x in tmp:
@@ -414,6 +444,7 @@ class MainScreen(object):
     
     
     def ReadTheDirIntoPages(self,_dir,pglevel,cur_page):
+        global commercialsoftware_flag
         
         if FileExists(_dir) == False and os.path.isdir(_dir) == False:
             return
@@ -502,11 +533,30 @@ class MainScreen(object):
                         iconitem._MyType  = ICON_TYPES["Emulator"]
                         cur_page._Icons.append(iconitem)
 
-                    elif self.IsExecPackage(_dir+"/"+i):
+                    elif self.IsCommercialPackage( os.path.join(_dir,i)):
+                        data = None
+                        em = MyCommercialSoftwarePackage()
+                        if FileExists( _dir+"/"+i+"/.done"):
+                            print(_dir+"/"+i+"/.done")
+                            em._Done = os.path.realpath(_dir+"/"+i+"/"+i2+".sh")
+                        else:
+                            with open(os.path.join(_dir,i) +"/"+commercialsoftware_flag) as f:
+                                data = json.load(f)
+                            em._ComPkgInfo = data
+                            em._Done = ""
+                        
+                        em._InvokeDir = os.path.realpath( os.path.join(_dir,i))
+                        em.Init(self)
+                        
+                        iconitem._CmdPath = em
+                        iconitem._MyType  = ICON_TYPES["Commercial"]
+                        cur_page._Icons.append(iconitem)
+                        
+                    elif self.IsExecPackage(_dir+"/"+i): ## ExecPackage is the last one to check
                         iconitem._MyType  = ICON_TYPES["EXE"]                        
                         iconitem._CmdPath = os.path.realpath(_dir+"/"+i+"/"+i2+".sh")
                         MakeExecutable(iconitem._CmdPath)
-                        cur_page._Icons.append(iconitem)
+                        cur_page._Icons.append(iconitem)                    
                     else:                            
                         iconitem._MyType  = ICON_TYPES["DIR"]
                         iconitem._LinkPage = Page()

@@ -11,9 +11,6 @@ class InfoPageSelector(PageSelector):
     _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
-        self._PosX = 0
-        self._PosY = 0
-        self._Height = 0
         self._Width  = Width
 
     def AnimateDraw(self,x2,y2):

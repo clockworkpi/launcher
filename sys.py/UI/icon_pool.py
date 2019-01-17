@@ -13,6 +13,7 @@ class IconPool(object):
 
     _GameShellIconPath = SkinMap("gameshell/icons/")
     _Icons = {}
+    _Sizes = {}
     def __init__(self):
         self._Icons= {}
 
@@ -23,7 +24,24 @@ class IconPool(object):
             if os.path.isfile(self._GameShellIconPath+"/"+i) and i.endswith(".png"):
                 keyname = i.split(".")[0]
                 self._Icons[keyname] = pygame.image.load(self._GameShellIconPath+"/"+i).convert_alpha()
-                
+                self._Sizes[keyname] = self._Icons[keyname].get_size()
+    
+    def Width(self,keyname):
+        if keyname in self._Sizes:
+            return self._Sizes[keyname][0]
+            
+    def Height(self,keyname):
+        if keyname in self._Sizes:
+            return self._Sizes[keyname][1]
 
-MyIconPool = IconPool()
+##global Handler
+MyIconPool = None
+
+def InitMyIconPool():
+    global MyIconPool
+    if MyIconPool == None:
+        MyIconPool = IconPool()
+
+InitMyIconPool()
+
 

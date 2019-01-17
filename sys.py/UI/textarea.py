@@ -3,20 +3,14 @@
 import pygame
 from libs.roundrects import aa_round_rect
 
-
-
-
 ## local UI import
 from UI.page         import Page,PageStack,PageSelector
 from UI.label        import Label
 from UI.fonts        import fonts
 from UI.skin_manager import MySkinManager
+from UI.widget       import Widget 
 
-class Textarea:
-    _PosX =0 
-    _PosY = 0
-    _Width = 0
-    _Height = 0
+class Textarea(Widget):
     _BackgroundColor = MySkinManager.GiveColor('TitleBg')
     _CanvasHWND  = None
     _MyWords     = []
@@ -70,7 +64,7 @@ class Textarea:
             self.BlitText()
             self.AddTextIndex()
         else:
-            print("is Full %s" % "".join(self._MyWords))
+            print("is Full %s" % "".join(str(self._MyWords)))
 
     def BuildBlitText(self):
         blit_rows = [[]]

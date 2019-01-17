@@ -154,8 +154,8 @@ class RomListPage(Page):
                 bname = os.path.basename(v)  ### filter extension
                 if len(bname)> 1:
                     is_excluded = False
-                    for exclude_pattern in self._Emulator["EXCLUDE"]:
-                        if re.match(exclude_pattern, bname):
+                    for exclude_ext in self._Emulator["EXCLUDE"]:## only compares filename endswith ext in EXCLUDE,splited by ,
+                        if len(exclude_ext) > 1 and bname.endswith(exclude_ext):
                             is_excluded = True
                             break
 

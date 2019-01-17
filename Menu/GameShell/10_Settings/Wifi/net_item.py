@@ -10,7 +10,7 @@ from UI.icon_item import IconItem
 from UI.multi_icon_item  import MultiIconItem
 from UI.icon_pool   import MyIconPool
 from UI.skin_manager import MySkinManager
-
+from UI.widget      import Widget
 
 class NetItemMultiIcon(MultiIconItem):
     _CanvasHWND = None
@@ -33,10 +33,7 @@ class NetItemIcon(IconItem):
         self._CanvasHWND.blit(self._ImgSurf,(self._PosX,self._PosY+(self._Parent._Height-self._Height)/2,self._Width,self._Height))
 
             
-class NetItem(object):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
+class NetItem(Widget):
     _Height = 30
 
     _Bssid=""    # 50:3A:A0:51:18:3C

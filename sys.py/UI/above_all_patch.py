@@ -18,10 +18,10 @@ from fonts       import fonts
 from keys_def    import CurKeys
 from label       import Label
 from skin_manager import MySkinManager
+from widget      import Widget
 
 
-
-class AboveAllPatch(object):
+class AboveAllPatch(Widget):
     _PosX  =Width/2
     _PosY  =Height/2
     _Width =50

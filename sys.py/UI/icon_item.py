@@ -7,12 +7,8 @@ from constants  import icon_width,icon_height,ICON_TYPES,ALIGN,icon_ext,Width,He
 from util_funcs import color_surface,midRect
 from label      import Label
 from lang_manager import MyLangManager
-
-class IconItem:
-    _PosX=0
-    _PosY=0
-    _Width=0
-    _Height=0
+from widget     import Widget 
+class IconItem(Widget):
     _ImageName=""
     _ImgSurf = None
     _Parent = None
@@ -37,10 +33,6 @@ class IconItem:
     def SetLableColor(self,color):
         self._Label.SetColor(color)
         
-    def NewCoord(self,x,y):
-        self._PosX = x
-        self._PosY = y
-
     def AddLabel(self,text,fontobj):
         if self._Label == None:
             self._Label = Label()
@@ -89,7 +81,26 @@ class IconItem:
 
     def Clear(self):
         pass
+        
+    def DrawTopLeft(self):
+        if self._Align==ALIGN["VCenter"]: #default
+            if self._Label != None:
+                self._Label._PosX = self._PosX - self._Label._Width/2 + self._Parent._PosX
+                self._Label._PosY = self._PosY + self._Height/2 +6  + self._Parent._PosY
+                
+        elif self._Align ==ALIGN["HLeft"]:
+            if self._Label != None:
+                self._Label._PosX = self._PosX + self._Width/2 + 3 + self._Parent._PosX
+                self._Label._PosY = self._PosY - self._Label._Height/2 + self._Parent._PosY
 
+        if self._Label!=None:
+            self._Label.Draw()
+        
+        if self._ImgSurf != None:
+            self._Parent._CanvasHWND.blit(self._ImgSurf,pygame.Rect(self._PosX+self._Parent._PosX,
+                                                                    self._PosY+self._Parent._PosY,
+                                                                    self._Width,
+                                                                    self._Height))
     def Draw(self):
         if self._Align==ALIGN["VCenter"]: #default
             if self._Label != None:
