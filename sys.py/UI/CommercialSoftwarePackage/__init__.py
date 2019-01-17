@@ -61,7 +61,7 @@ class NotFoundPage(Page):
         self._Board._PosX = 4
         self._Board._PosY = 100
         self._Board._Width= self._Width - 4*2
-        self._Board._Height = 100
+        self._Board._Height = 200
         self._Board._CanvasHWND = self._CanvasHWND
         self._Board._Align = "Center"
         self._Board._RowPitch =28

@@ -2,7 +2,7 @@
 "GameDir":"/home/cpi/games/PICO-8/",
 "InstallDir":"pico-8",
 "NotFoundMsg":["Please purchase the PICO-8 \n|None|varela16",
-"and copy it to the \"Games\" folder|None|varela16"],
+"and copy it to the \"~/games/PICO-8\"|None|varela16"],
 
 "MD5":{"pico-8_0.1.11g_raspi.zip":"a3f2995cf117499f880bd964d6a0e1f2","pico-8_0.1.11g_amd64.zip":"6726141c784afd4a41be6b7414c1b932"},
 "Post-Up":"bash Post-Up.sh" 
