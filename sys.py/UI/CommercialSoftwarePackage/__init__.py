@@ -249,7 +249,10 @@ class MyCommercialSoftwarePackage(object):
             return ret
         
         cur_dir = os.getcwd()
-        os.chdir(json_config["GameDir"])
+        
+        if FileExists(json_config["GameDir"]):
+            os.chdir(json_config["GameDir"])
+        
         if "MD5" in json_config:
             for i,v in enumerate(json_config["MD5"]):
                 if FileExists(v):
