@@ -252,6 +252,8 @@ class MyCommercialSoftwarePackage(object):
         
         if FileExists(json_config["GameDir"]):
             os.chdir(json_config["GameDir"])
+        else:
+            os.system( "mkdir %s" % json_config["GameDir"] )
         
         if "MD5" in json_config:
             for i,v in enumerate(json_config["MD5"]):
