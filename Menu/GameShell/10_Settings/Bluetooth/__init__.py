@@ -28,8 +28,11 @@ from UI.info_page_list_item import InfoPageListItem
 
 from UI.multilabel import MultiLabel
 from UI.lang_manager import MyLangManager
+from UI.keyboard import Keyboard
 
 from net_item import NetItem
+
+from agent import BleAgent,BleAgentPairPage
 
 class BleForgetConfirmPage(ConfirmPage):
 
@@ -189,9 +192,16 @@ class BleInfoPage(Page):
         try:
             adapter.RemoveDevice(dev)
         except Exception,e:
-            print(str(e)) 
+            err_name = e.get_dbus_name()
+            if err_name == "org.freedesktop.DBus.Error.NoReply":
+                self._Screen._MsgBox.SetText("DBus noreply")
+            else:
+                self._Screen._MsgBox.SetText("Forget failed")
+            
+            self._Screen._MsgBox.Draw()
+            self._Screen.SwapAndShow()
         
-        pygame.time.delay(400)
+        pygame.time.delay(500)
         
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
@@ -215,9 +225,15 @@ class BleInfoPage(Page):
         try:
             dev.Disconnect()
         except Exception,e:
-            print(str(e))        
+            err_name = e.get_dbus_name()
+            if err_name == "org.freedesktop.DBus.Error.NoReply":
+                self._Screen._MsgBox.SetText("DBus noreply")
+            else:
+                self._Screen._MsgBox.SetText("Disconnect failed")
+            self._Screen._MsgBox.Draw()
+            self._Screen.SwapAndShow()
         
-        pygame.time.delay(300)
+        pygame.time.delay(500)
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
@@ -372,6 +388,8 @@ class BluetoothPage(Page):
     
     _Offline = False
     
+    _Leader = None
+    
     def __init__(self):
         Page.__init__(self)
         self._MyList = []
@@ -480,7 +498,7 @@ class BluetoothPage(Page):
         self._Screen.SwapAndShow()
         
     def ShutDownConnecting(self):
-        print("Shutdownconnecting...")
+        print("Bluetooth Shutdown connecting...")
     
     def AbortedAndReturnToUpLevel(self):
         self.HideBox()
@@ -512,13 +530,18 @@ class BluetoothPage(Page):
         self._Screen._FootBar.UpdateNavText("Connecting")
         self.ShowBox(MyLangManager.Tr("Connecting"))
         
+        self._Leader._MyAgent.device_obj = dev
+        self._Leader._MyAgent.dev_path = cur_li._Path
+        
         try:
-            dev.Connect()
+            dev.Pair(reply_handler=self._Leader._MyAgent.pair_reply, 
+                                error_handler=self._Leader._MyAgent.pair_error,timeout=60000)
         except Exception,e:
             print(str(e))        
         
-        self.HideBox()
-        self._Screen._FootBar.ResetNavText()
+        
+        #self.HideBox()
+        #self._Screen._FootBar.ResetNavText()
         
     def RefreshDevices(self):
         global devices
@@ -577,7 +600,7 @@ class BluetoothPage(Page):
         proxy_obj = self._Dbus.get_object("org.bluez", "/org/bluez/" + self._ADAPTER_DEV)
         adapter_props = dbus.Interface(proxy_obj,"org.freedesktop.DBus.Properties")
         discoverying = adapter_props.Get("org.bluez.Adapter1", "Discovering") 
-        print(discoverying)
+        print("discoverying", discoverying)
         
         
         if self._Adapter!= None:
@@ -589,7 +612,11 @@ class BluetoothPage(Page):
             try:
                 self._Adapter.StartDiscovery()
             except Exception,e:
-                print(str(e))
+                err_name = e.get_dbus_name()
+                if err_name == "org.freedesktop.DBus.Error.NoReply":
+                    print("start discovery timeout")
+                else:
+                    print("start discovery unknown err: ", str(e))
             
     def OnReturnBackCb(self):
         self.RefreshDevices()
@@ -688,17 +715,59 @@ class BluetoothPage(Page):
 
 
 
-
-
-
-
+BUS_NAME = 'org.bluez'
+AGENT_INTERFACE = 'org.bluez.Agent1'
+AGENT_PATH = "/gameshell/bleagent"
 
 class APIOBJ(object):
 
     _Page = None
-    def __init__(self):
-        pass
+    _PairPage = None
+    _Page3 = None
+    _Prompts = {} # string key,string value
+    _PromptType = None
+    _MyAgent = None
     
+    def __init__(self):
+        self._Prompts["PIN"]=""
+        self._Prompts["PASS"]=""
+
+    def OnKbdReturnBackCb(self):
+        if self._PromptType == None:
+            return
+        else:
+            if self._PromptType in self._Prompts:
+                inputed = "".join(self._Page3._Textarea._MyWords)
+                self._Prompts[self._PromptType] = inputed
+            
+            self._PromptType = None ##clear 
+                
+        
+    def Ask(self,prompt,prompt_type=None):
+        
+        self._Screen.PushPage(self._Page3)
+        self._Page3.SetPassword("")
+        self._Page3._Name = prompt
+        self._Page3._Caller = self
+        
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        
+        if prompt_type != None:
+            self._PromptType = prompt_type
+        
+    def RegisterMyAgent(self):
+        global AGENT_PATH, bus,devices,adapter
+        
+        capability = "KeyboardDisplay"
+        self._MyAgent = BleAgent(bus, AGENT_PATH)
+        self._MyAgent._Leader = self
+        
+        obj = bus.get_object(BUS_NAME, "/org/bluez");
+        manager = dbus.Interface(obj, "org.bluez.AgentManager1")
+        manager.RegisterAgent(AGENT_PATH, capability)
+        print("BleAgent %s registered" % AGENT_PATH)
+        
     def Init(self,main_screen):
         global bus,devices,adapter
         
@@ -710,14 +779,28 @@ class APIOBJ(object):
         self._Page._Screen = main_screen
         self._Page._Name ="Bluetooth"
         
+        self._Page._Leader = self
+        
         self._Page.Init()
+        
+        self._PairPage = BleAgentPairPage()
+        self._PairPage._Screen = main_screen
+        self._PairPage._Name = "Bluetooth"
+        self._PairPage.Init()
+        
+        self._Page3= Keyboard()
+        self._Page3._Name = "Enter"
+        self._Page3._Screen = main_screen
+        self._Page3.Init()
         
         bus.add_signal_receiver(self._Page.DbusPropertiesChanged,
             dbus_interface = "org.freedesktop.DBus.Properties",
             signal_name = "PropertiesChanged",
             arg0 = "org.bluez.Device1",
             path_keyword = "path")
-            
+        
+        self.RegisterMyAgent()
+        
     def API(self,main_screen):
         if main_screen !=None:
             main_screen.PushPage(self._Page)
