@@ -33,7 +33,12 @@ class BleAgent(dbus.service.Object):
         global BUS_NAME
         dev = dbus.Interface(bus.get_object(BUS_NAME, path),
                                 "org.bluez.Device1")
-        dev.Connect() 
+                                
+        print("dev_connect %s" % path)
+        try:
+            dev.Connect() 
+        except Exception,e:
+            print(str(e))
     
     @dbus.service.method(AGENT_INTERFACE,in_signature="", out_signature="")
     def Release(self):
