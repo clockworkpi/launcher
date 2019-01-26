@@ -9,7 +9,7 @@ import gobject
 
 ## local UI import
 from UI.page  import Page
-from UI.constants import ICON_TYPES,Width,Height,RUNEVT
+from UI.constants import ICON_TYPES,Width,Height,RUNEVT,RUNSH
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.label  import Label
@@ -118,8 +118,8 @@ class UpdateConfirmPage(ConfirmPage):
             
         if event.key == CurKeys["B"]:
             if self._GIT == True:
-                cmdpath = "feh --bg-center %s/sys.py/gameshell/wallpaper/updating.png; cd %s ;git pull; git reset --hard %s ; feh --bg-center %s/sys.py/gameshell/wallpaper/loading.png " % (LauncherLoc,LauncherLoc,self._Version,LauncherLoc)
-                pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
+                cmdpath = "%s/update.sh %s" % (LauncherLoc,self._Version)
+                pygame.event.post( pygame.event.Event(RUNSH, message=cmdpath))
                 self._GIT = False
                 return
             

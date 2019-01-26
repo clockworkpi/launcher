@@ -31,7 +31,7 @@ else:
 
 
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI
+from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
@@ -352,6 +352,13 @@ def event_process(event,main_screen):
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             os.chdir( GetExePath())
             os.exelp("python","python"," "+myscriptname)
+            return
+        if event.type == RUNSH:
+            pygame.quit()
+            gobject_main_loop.quit()
+            exec_app_cmd = event.message +";"
+            os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
+            sys.exit(-1)
             return
         if event.type == POWEROPT:
             everytime_keydown = time.time()
