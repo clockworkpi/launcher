@@ -603,7 +603,6 @@ class Page(Widget):
         if cur_li._PosY +cur_li._Height > self._Height:
             for i in range(0,len(self._MyList)):
                 self._MyList[i]._PosY -= self._MyList[i]._Height*dy
-
     
     def KeyDown(self,event):##default keydown,every inherited page class should have it's own KeyDown
         if event.key == CurKeys["A"]:
