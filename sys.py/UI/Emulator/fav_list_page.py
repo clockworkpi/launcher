@@ -3,7 +3,7 @@
 import os
 import pygame
 import glob
-
+import time
 from libs.roundrects import aa_round_rect
 
 ## local UI import
@@ -255,30 +255,33 @@ class FavListPage(Page):
         if len(self._MyList) == 0:
             return
         
-        self._PsIndex -= 1
+        tmp = self._PsIndex
+        self._PsIndex -= self._ScrollStep
+        
         if self._PsIndex < 0:
             self._PsIndex = 0
-        
+        dy = tmp - self._PsIndex
         cur_li = self._MyList[self._PsIndex]
         if cur_li._PosY < 0:
             for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-
-            self._Scrolled += 1
+                self._MyList[i]._PosY += self._MyList[i]._Height*dy
+            self._Scrolled +=dy
 
     def ScrollDown(self):
         if len(self._MyList) == 0:
             return
-        
-        self._PsIndex +=1
+        tmp = self._PsIndex
+        self._PsIndex +=self._ScrollStep
         if self._PsIndex >= len(self._MyList):
             self._PsIndex = len(self._MyList) -1
-
+        
+        dy = self._PsIndex - tmp 
         cur_li = self._MyList[self._PsIndex]
         if cur_li._PosY +cur_li._Height > self._Height:
             for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-            self._Scrolled -=1
+                self._MyList[i]._PosY -= self._MyList[i]._Height*dy
+            self._Scrolled -= dy
+    
     def SyncScroll(self):
         ## 
         if self._Scrolled == 0:
@@ -374,6 +377,19 @@ class FavListPage(Page):
         self._Screen.Draw()
         self._Screen.SwapAndShow()
         
+    def SpeedScroll(self, thekey):
+        if self._Screen._LastKey == thekey:
+            self._ScrollStep+=1
+            if self._ScrollStep >=5:
+                self._ScrollStep = 5
+        else:
+            self._ScrollStep = 1
+           
+        cur_time = time.time()
+            
+        if cur_time - self._Screen._LastKeyDown > 0.3:
+            self._ScrollStep = 1 
+    
     def KeyDown(self,event):
         
         if event.key == CurKeys["Menu"] or event.key == CurKeys["Left"]: 
@@ -383,10 +399,12 @@ class FavListPage(Page):
 
         
         if event.key == CurKeys["Up"]:
+            self.SpeedScroll(event.key)
             self.ScrollUp()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         if event.key == CurKeys["Down"]:
+            self.SpeedScroll(event.key)
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()

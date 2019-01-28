@@ -145,6 +145,9 @@ class MainScreen(Widget):
     _Closed      = False
     _CounterScreen = None
     
+    _LastKey = -1
+    _LastKeyDown = -1
+    
     def __init__(self):
         self._Pages = []
         self._MyPageStack = PageStack()
@@ -636,7 +639,8 @@ class MainScreen(Widget):
             if callable( current_page_key_down_cb ):
                 self._CurrentPage.KeyDown(event)
                 
-    
+        self._LastKey = event.key
+        
     def DrawRun(self):
         self._MsgBox.SetText(MyLangManager.Tr("Launching"))
         self._MsgBox.Draw()
