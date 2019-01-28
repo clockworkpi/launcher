@@ -120,7 +120,6 @@ class UpdateConfirmPage(ConfirmPage):
             if self._GIT == True:
                 cmdpath = "%s/update.sh %s" % (LauncherLoc,self._Version)
                 pygame.event.post( pygame.event.Event(RUNSH, message=cmdpath))
-                self._GIT = False
                 return
             
             if self._DownloadPage == None:
