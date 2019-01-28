@@ -34,13 +34,11 @@ ALIGN = {"HLeft":0,"HCenter":1,"HRight":2,"VMiddle":3,"SLeft":4,"VCenter":5,"SCe
 DT = pygame.time.Clock().tick(30)   # fps in ms,eg:50
 
 
-GMEVT = pygame.USEREVENT+1
-update_titlebar_event = pygame.event.Event(GMEVT, message="titlebar")
-
+RUNSH = pygame.USEREVENT+1
+#update_titlebar_event = pygame.event.Event(GMEVT, message="titlebar")
 RUNEVT    = pygame.USEREVENT+2
 RUNSYS    = pygame.USEREVENT+3
 LOWLIGHT  = pygame.USEREVENT+4 ## when dim screen backlight
 FOOTMSG   = pygame.USEREVENT+5 ## 
 POWEROPT  = pygame.USEREVENT+6
 RESTARTUI = pygame.USEREVENT+7 ##restart launcher
-RUNSH     = pygame.USEREVENT+8

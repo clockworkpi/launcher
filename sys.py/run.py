@@ -31,7 +31,7 @@ else:
 
 
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
+from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
@@ -299,11 +299,6 @@ def event_process(event,main_screen):
             return
         if event.type == pygame.QUIT:
             exit()
-        if event.type == GMEVT:
-            main_screen.Draw()
-            main_screen.SwapAndShow()
-            pygame.event.clear(GMEVT)
-            return
         if event.type == RUNEVT:            
             if config.DontLeave==True:
                 os.chdir(GetExePath())
@@ -575,7 +570,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
 
     pygame.event.set_allowed(None) 
-    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
+    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
 
