@@ -100,7 +100,8 @@ class Page(Widget):
     _EasingDur   = 30
     _Padding = pygame.Rect(0,0,0,0)# x,y,w,h
     _Margin  = pygame.Rect(0,0,0,0)
-    
+    _ScrollStep = 1
+        
     def __init__(self):
         self._Icons = []
 

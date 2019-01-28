@@ -146,6 +146,7 @@ class MainScreen(Widget):
     _CounterScreen = None
     
     _LastKey = -1
+    _LastKeyDown = -1
     
     def __init__(self):
         self._Pages = []

@@ -416,6 +416,7 @@ def event_process(event,main_screen):
                     if callable( key_down_cb ):
                         main_screen.KeyDown(event)
             
+            main_screen._LastKeyDown = everytime_keydown
             return
                     
 def gobject_pygame_event_poll_timer(main_screen):
