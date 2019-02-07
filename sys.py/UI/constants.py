@@ -2,14 +2,14 @@
 
 import pygame
 from pygame.locals import *
-from sys import exit
-import os
-import sys
+#from sys import exit
+#import os
+#import sys
 
-from datetime import datetime
+#from datetime import datetime
 
-import base64
-from beeprint import pp
+#import base64
+#from beeprint import pp
 
 #UI lib
 from skin_manager import MySkinManager
@@ -32,7 +32,6 @@ ICON_TYPES={"Commercial":8,"Emulator":7,"FILE":6,"STAT":5,"NAV":4,"LETTER":3,"FU
 ALIGN = {"HLeft":0,"HCenter":1,"HRight":2,"VMiddle":3,"SLeft":4,"VCenter":5,"SCenter":6}
 
 DT = pygame.time.Clock().tick(30)   # fps in ms,eg:50
-
 
 RUNSH = pygame.USEREVENT+1
 #update_titlebar_event = pygame.event.Event(GMEVT, message="titlebar")

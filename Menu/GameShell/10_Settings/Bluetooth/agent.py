@@ -134,6 +134,7 @@ class BleAgentPairPage(Page):
     _Pin = ""
     _Pass = ""
     _dev_obj = None
+    _FootMsg    = ["Nav","","","Back",""]
     
     def Init(self):
         self._PosX = self._Index * self._Screen._Width
@@ -144,7 +145,7 @@ class BleAgentPairPage(Page):
         self._CanvasHWND = self._Screen._CanvasHWND
     
     def ShowPinCode(self,device,pincode):
-        print("ShowPinCode %s %d" % (pincode))
+        print("ShowPinCode %s %s" % (device,pincode))
         if self._Screen.CurPage() != self:
             self._Screen.PushPage(self)
             self.ClearCanvas()
@@ -152,6 +153,7 @@ class BleAgentPairPage(Page):
             self._Screen.SwapAndShow()
         
         self._Pin = "%s" % pincode
+        txt = self.Pin
         if len(self._Pin) > 0:
             txt = "Pin code: %s" % self._Pin
         self._Screen._MsgBox.SetText(txt)
@@ -159,14 +161,14 @@ class BleAgentPairPage(Page):
         self._Screen.SwapAndShow() 
         
     def ShowPassKey(self,device,passkey,entered):
-        print("ShowPassKey %s %d" % (passkey,entered))
+        print("ShowPassKey %06u %u" % (passkey,entered))
         if self._Screen.CurPage() != self:
             self._Screen.PushPage(self)
             self.ClearCanvas()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         
-        self._Pass = "%s" % passkey
+        self._Pass = "%06u" % passkey
         if len(self._Pass) > 0:
             txt = "Pair code: %s" % self._Pass
         self._Screen._MsgBox.SetText(txt)
