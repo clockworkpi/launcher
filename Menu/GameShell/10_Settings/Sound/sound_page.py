@@ -13,7 +13,7 @@ from UI.icon_item import IconItem
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.slider     import Slider
 from UI.multi_icon_item import MultiIconItem
 
@@ -145,7 +145,7 @@ class SoundPage(Page):
         
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()

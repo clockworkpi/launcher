@@ -17,7 +17,7 @@ from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
@@ -39,12 +39,12 @@ class BleForgetConfirmPage(ConfirmPage):
     _ConfirmText = MyLangManager.Tr("ConfirmForgetQ")
     
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.SnapMsg(MyLangManager.Tr("Deleting"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -97,7 +97,7 @@ class BleInfoPageSelector(PageSelector):
                           (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
 
 class BleInfoPage(Page):
-    _FootMsg =  ["Nav","Disconnect","Forget","Back",""]
+    _FootMsg =  ["Nav","Forget","Disconnect","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
     _ListSmFontObj = fonts["varela12"]  # small font
@@ -266,7 +266,7 @@ class BleInfoPage(Page):
         self._Screen.SwapAndShow()
 
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -280,7 +280,7 @@ class BleInfoPage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
         if event.key == CurKeys["X"]:
@@ -378,7 +378,7 @@ class BluetoothPage(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav","Scan","Info","Back","TryConnect"]
+    _FootMsg           = ["Nav","Info","Scan","Back","TryConnect"]
     _Scroller          = None
     _ListFontObj       = fonts["notosanscjk15"]
 
@@ -637,7 +637,7 @@ class BluetoothPage(Page):
             
     def KeyDown(self,event):
         
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             if self._Offline == True:
                 self.AbortedAndReturnToUpLevel()
                 return
@@ -688,7 +688,7 @@ class BluetoothPage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             if self._Offline == False:
                 self.TryConnect()
 

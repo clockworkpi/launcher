@@ -12,7 +12,7 @@ from UI.icon_item import IconItem
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_pool  import MyIconPool
 from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
@@ -61,7 +61,7 @@ class PlayListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","RTA","Remove","Back","Play/Pause"]
+    _FootMsg = ["Nav","Remove","RTA","Back","Play/Pause"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
 
@@ -252,7 +252,7 @@ class PlayListPage(Page):
         self.SyncScroll()
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             if myvars.Poller != None:
                 myvars.Poller.stop()
                 self._CurSongTime=""
@@ -283,7 +283,7 @@ class PlayListPage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
 
         if event.key == CurKeys["X"]: # start spectrum

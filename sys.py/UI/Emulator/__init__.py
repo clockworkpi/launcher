@@ -10,7 +10,7 @@ import sys
 ## local UI import
 from UI.delete_confirm_page import DeleteConfirmPage
 from UI.icon_pool           import MyIconPool
-from UI.keys_def            import CurKeys
+from UI.keys_def            import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.lang_manager        import MyLangManager
 
 from rom_list_page import RomListPage
@@ -20,14 +20,14 @@ class FavDeleteConfirmPage(DeleteConfirmPage):
     
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
                 
         
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             try:
                 #self._FileName
                 stats = os.stat(self._FileName)

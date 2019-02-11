@@ -7,7 +7,7 @@ import dbus
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
 from UI.page   import Page,PageSelector
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from libs.DBUS import  bus, adapter,devices
 
 
@@ -204,7 +204,7 @@ class BleAgentPairPage(Page):
         self._Screen._FootBar.ResetNavText()        
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             if self._dev_obj != None:
                 try:
                     self._dev_obj.CancelPairing()

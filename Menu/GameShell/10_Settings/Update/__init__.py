@@ -15,7 +15,7 @@ from UI.icon_pool import MyIconPool
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,get_git_revision_short_hash
-from UI.keys_def import CurKeys
+from UI.keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.confirm_page import ConfirmPage
 from UI.download     import Download
 from UI.download_process_page import DownloadProcessPage
@@ -111,12 +111,12 @@ class UpdateConfirmPage(ConfirmPage):
     
     def KeyDown(self,event):
         global LauncherLoc
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             if self._GIT == True:
                 cmdpath = "%s/update.sh %s" % (LauncherLoc,self._Version)
                 pygame.event.post( pygame.event.Event(RUNSH, message=cmdpath))
@@ -155,7 +155,7 @@ class UpdateConfirmPage(ConfirmPage):
 
 class UpdatePage(Page):
     _Icons = {}
-    _FootMsg = ["Nav","Check Update","","Back",""]
+    _FootMsg = ["Nav","","Check Update","Back",""]
 
     _ListFontObj = fonts["varela15"]    
     _ConfirmPage = None
@@ -277,7 +277,7 @@ class UpdatePage(Page):
         pass
 
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()

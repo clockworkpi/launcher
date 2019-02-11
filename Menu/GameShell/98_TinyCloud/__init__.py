@@ -9,7 +9,7 @@ from UI.label  import Label
 from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
-from UI.keys_def  import CurKeys
+from UI.keys_def  import CurKeys, IsKeyMenuOrB
 from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
 
@@ -174,12 +174,10 @@ class TinyCloudPage(Page):
         self.SetLabels()
 
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
-            if self._FootMsg[3] == "Back":
-                self.ReturnToUpLevelPage()
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-            return
+        if IsKeyMenuOrB(event.key):
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
         
     def Draw(self):
         if self._DrawOnce == False:

@@ -20,7 +20,7 @@ from UI.label  import Label
 from UI.icon_item import IconItem
 from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.scroller   import ListScroller
@@ -99,7 +99,8 @@ class RomListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","Scan","Del","AddFav","Run"]
+    # TODO: show "AddFav"
+    _FootMsg = ["Nav","Del","Scan","Back","Run"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     _MyStack = None
@@ -428,7 +429,7 @@ class RomListPage(Page):
 
     def KeyDown(self,event):
 
-        if event.key == CurKeys["Menu"] : 
+        if IsKeyMenuOrB(event.key): 
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -451,10 +452,10 @@ class RomListPage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
 
-        if event.key == CurKeys["A"]:
+        if event.key == CurKeys["Select"]:
             if len(self._MyList) == 0:
                 return
             

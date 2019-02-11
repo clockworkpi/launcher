@@ -15,7 +15,7 @@ from UI.label  import Label
 from UI.icon_item import IconItem
 from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.download   import Download
@@ -176,7 +176,7 @@ class DownloadProcessPage(Page):
         self._DownloaderTimer = gobject.timeout_add(100, self.GObjectUpdateProcessInterval)
         
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             gobject.source_remove(self._DownloaderTimer)
             self._DownloaderTimer = -1
             

@@ -14,7 +14,7 @@ from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
@@ -268,7 +268,7 @@ class InfoPage(Page):
         """
     
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -290,7 +290,7 @@ class InfoPage(Page):
             i.Draw()
 
 class PowerOptionsPage(Page):
-    _FootMsg =  ["Nav","","Detail","Back","Select"]
+    _FootMsg =  ["Nav","Detail","","Back","Select"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     
@@ -461,12 +461,12 @@ class PowerOptionsPage(Page):
         self._Screen.SwapAndShow()
         """
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
         if event.key == CurKeys["Up"]:
