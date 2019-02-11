@@ -49,11 +49,7 @@ GameShell["Menu"] = pygame.K_ESCAPE
 
 SetXYABButtons(GetButtonsLayoutMode())
 
-GameShell["Vol-"] = pygame.K_SPACE
-GameShell["Vol+"] = pygame.K_RETURN
 GameShell["Select"] = pygame.K_SPACE
-
-GameShell["Enter"] = pygame.K_k # delete this
 GameShell["Start"] = pygame.K_RETURN
 
 GameShell["LK1"] = pygame.K_h
@@ -70,9 +66,6 @@ PC["X"]     = pygame.K_x
 PC["Y"]     = pygame.K_y
 PC["A"]     = pygame.K_a
 PC["B"]     = pygame.K_b
-PC["Vol-"]  = pygame.K_SPACE
-PC["Vol+"]  = pygame.K_RETURN
-PC["Enter"] = pygame.K_RETURN
 PC["Select"] = pygame.K_SPACE
 PC["Start"] = pygame.K_s
 
