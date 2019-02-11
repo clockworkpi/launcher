@@ -72,12 +72,12 @@ class UpdateConfirmPage(ConfirmPage):
             self._Screen.SwapAndShow()
             return
 
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
 
             if self._LayoutMode == "xbox":
                 keymap = ["j","k","u","i"]
