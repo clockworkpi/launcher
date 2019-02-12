@@ -12,7 +12,7 @@ from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect,SwapAndShow
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.confirm_page import ConfirmPage
 from UI.skin_manager import MySkinManager
@@ -32,12 +32,12 @@ class WifiDisconnectConfirmPage(ConfirmPage):
     _ConfirmText = MyLangManager.Tr("ConfirmDisconnectQ")
     
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.SnapMsg(MyLangManager.Tr("Disconnecting"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -60,7 +60,7 @@ class WifiDisconnectConfirmPage(ConfirmPage):
         self.Reset()
         
 class WifiInfoPage(Page):
-    _FootMsg =  ["Nav","Disconnect","","Back",""]
+    _FootMsg =  ["Nav","","Disconnect","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
 
@@ -171,7 +171,7 @@ class WifiInfoPage(Page):
         self._Screen.SwapAndShow()
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -186,7 +186,7 @@ class WifiInfoPage(Page):
             self._Screen.SwapAndShow()
         
 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
 
         if event.key == CurKeys["X"]:
@@ -264,7 +264,7 @@ class WifiList(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav","Scan","Info","Back","Enter"]
+    _FootMsg           = ["Nav","Info","Scan","Back","Enter"]
     _EncMethods        = None
     _Scroller          = None
     _ListFontObj       = fonts["notosanscjk15"]
@@ -580,7 +580,7 @@ class WifiList(Page):
 #            print("UI blocking ...")
 #            return
         
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             if self._Wireless != None:
                 wireless_connecting = self._Wireless.CheckIfWirelessConnecting()
                 if wireless_connecting:
@@ -605,7 +605,7 @@ class WifiList(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["Enter"]: ## enter to set password,enter is B on GM
+        if IsKeyStartOrA(event.key): ## enter to set password,enter is B on GM
             if len(self._MyList) == 0:
                 return
             

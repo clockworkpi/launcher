@@ -11,7 +11,7 @@ from UI.label  import Label
 from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool           import MyIconPool
 from UI.scroller   import ListScroller
@@ -82,7 +82,7 @@ class MusicLibListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","Scan","","Back","Add to Playlist"]
+    _FootMsg = ["Nav","","Scan","Back","Add to Playlist"]
     _MyList = []
     _SwapMyList = []
     _ListFont = fonts["notosanscjk15"]
@@ -226,7 +226,7 @@ class MusicLibListPage(Page):
         
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["Left"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key) or event.key == CurKeys["Left"]:
             
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
@@ -258,7 +258,7 @@ class MusicLibListPage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
                                      
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
     def Draw(self):

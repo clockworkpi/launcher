@@ -4,7 +4,7 @@ import pygame
 
 #UI lib
 from UI.constants    import RUNSYS
-from UI.keys_def     import CurKeys
+from UI.keys_def     import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.confirm_page import ConfirmPage
 
 import config
@@ -12,7 +12,7 @@ import config
 class PowerOffConfirmPage(ConfirmPage):
     
     _ConfirmText = "Awaiting Input"
-    _FootMsg = ["Nav","Reboot","","Cancel","Shutdown"]
+    _FootMsg = ["Nav","","Reboot","Cancel","Shutdown"]
 
     def CheckBattery(self):
         try:
@@ -41,13 +41,12 @@ class PowerOffConfirmPage(ConfirmPage):
         
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
-            
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             if self.CheckBattery() < 20:
                 cmdpath = "feh --bg-center gameshell/wallpaper/gameover.png;"
             else:

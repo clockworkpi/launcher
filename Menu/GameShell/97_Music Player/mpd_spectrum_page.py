@@ -17,7 +17,7 @@ from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_item import IconItem
 from UI.icon_pool  import MyIconPool
 from UI.skin_manager import MySkinManager
@@ -265,7 +265,7 @@ class MPDSpectrumPage(Page):
             
     
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             try:
                 os.close(self._FIFO)
                 self._FIFO = None
@@ -280,13 +280,6 @@ class MPDSpectrumPage(Page):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-
-        if event.key == CurKeys["Start"]:
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
-            
-        if event.key == CurKeys["Enter"]:
-            pass
 
         
     def Draw(self):

@@ -14,7 +14,7 @@ from libs.roundrects import aa_round_rect
 
 from UI.confirm_page import ConfirmPage
 from UI.download_process_page import DownloadProcessPage
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.fonts  import fonts
 from UI.multilabel import MultiLabel
 from UI.lang_manager import MyLangManager
@@ -87,12 +87,12 @@ class RomSoConfirmPage(ConfirmPage):
         self._Screen.SwapAndShow()
     
     def KeyDown(self,event):    
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             if self.CheckBattery() < 5:
                 self.SnapMsg(MyLangManager.Tr("BATOver5Pct"))
             else:

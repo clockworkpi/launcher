@@ -10,7 +10,7 @@ from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def import CurKeys
+from UI.keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_item import IconItem
 from UI.icon_pool    import MyIconPool
 from UI.skin_manager import MySkinManager
@@ -63,7 +63,7 @@ class Keyboard(Page):
     _Textarea = None
     _Selector = None
     _LeftOrRight = 1
-    _FootMsg           = ["Nav.","ABC","Done","Backspace","Enter"]
+    _FootMsg           = ["Nav.","Done","ABC","Backspace","Enter"]
 
     _RowIndex    = 0
     _Caller   = None
@@ -291,7 +291,7 @@ class Keyboard(Page):
             self.SelectNextChar()
         if event.key == CurKeys["Left"]:
             self.SelectPrevChar()
-        if event.key == CurKeys["B"] or event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.ClickOnChar()
         if event.key == CurKeys["X"]:
             if self._SectionIndex <= 0:
@@ -317,7 +317,7 @@ class Keyboard(Page):
                         self._Caller.OnKbdReturnBackCb()
             #Uplevel page  invokes OnReturnBackCb,eg: ConfigWireless
 
-        if event.key == CurKeys["A"]:
+        if event.key == CurKeys["B"]:
             self._Textarea.RemoveFromLastText()
             self._Textarea.Draw()
             self._Screen.SwapAndShow()

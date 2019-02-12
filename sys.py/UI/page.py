@@ -15,7 +15,7 @@ from libs import easing
 ### local import
 from constants    import ALIGN,icon_width,icon_height,Width,Height,ICON_TYPES
 from util_funcs   import midRect
-from keys_def     import CurKeys
+from keys_def     import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from icon_pool    import MyIconPool
 from lang_manager import MyLangManager
 from widget       import Widget
@@ -606,14 +606,7 @@ class Page(Widget):
                 self._MyList[i]._PosY -= self._MyList[i]._Height*dy
     
     def KeyDown(self,event):##default keydown,every inherited page class should have it's own KeyDown
-        if event.key == CurKeys["A"]:
-            if self._FootMsg[3] == "Back":
-                self.ReturnToUpLevelPage()
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-                return
-    
-        if event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -641,7 +634,7 @@ class Page(Widget):
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
                 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.IconClick()
             self._Screen.Draw()
             self._Screen.SwapAndShow()

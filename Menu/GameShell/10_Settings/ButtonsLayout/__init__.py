@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import pygame
 import commands
@@ -11,7 +11,7 @@ from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, GetButtonsLayoutMode, SetButtonsLayoutMode, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
@@ -23,15 +23,15 @@ class UpdateConfirmPage(ConfirmPage):
     _ConfirmText = "Apply to RetroArch?"
     _RetroArchConf = "/home/cpi/.config/retroarch/retroarch.cfg"
     _LayoutMode = "Unknown"
-    
+
     def ModifyRetroArchConf(self,keys):
-    
+
         try:
             with open(self._RetroArchConf, mode="r") as f:
                 confarr = f.readlines()
         except:
             return "retroarch.cfg cannot open."
-    
+
         bka = bkb = bkx = bky = False
         try:
             for i, ln in enumerate(confarr):
@@ -50,35 +50,35 @@ class UpdateConfirmPage(ConfirmPage):
                     bky = True
         except:
             return "retroarch.cfg cannot parse."
-        
+
         if bka and bkb and bkx and bky:
             None
         else:
             return "retroarch.cfg validation error."
-        
+
         try:
             with open(self._RetroArchConf, mode="w") as f:
                 confarr = f.writelines(confarr)
         except:
             return "retroarch.cfg cannot write."
-        
+
         return "Completed! Your RA keymap: " + self._LayoutMode.upper()
-        
+
     def KeyDown(self,event):
-    
+
         def finalizeWithDialog(msg):
             self._Screen._MsgBox.SetText(msg)
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             return
-        
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-            
-        if event.key == CurKeys["B"]:
-            
+
+        if IsKeyStartOrA(event.key):
+
             if self._LayoutMode == "xbox":
                 keymap = ["j","k","u","i"]
             elif self._LayoutMode == "snes":
@@ -87,17 +87,17 @@ class UpdateConfirmPage(ConfirmPage):
                 finalizeWithDialog("Internal error.")
                 return
             print("mode: " + self._LayoutMode)
-            
+
             if not os.path.isfile(self._RetroArchConf):
                 finalizeWithDialog("retroarch.cfg was not found.")
                 return
-            
+
             try:
                 shutil.copyfile(self._RetroArchConf, self._RetroArchConf + ".blbak")
             except:
                 finalizeWithDialog("Cannot create .blbak")
                 return
-            
+
             finalizeWithDialog(self.ModifyRetroArchConf(keymap))
             return
 
@@ -105,24 +105,24 @@ class UpdateConfirmPage(ConfirmPage):
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
-            
+
     def Draw(self):
         self.ClearCanvas()
         self.DrawBG()
         for i in self._MyList:
             i.Draw()
-        
+
         self.Reset()
 
 class ButtonsLayoutPage(Page):
-    _FootMsg =  ["Nav.","UpdateRetroArch","","Back","Toggle"]
+    _FootMsg =  ["Nav.","","UpdateRetroArch","Back","Toggle"]
     _MyList = []
     _ListFontObj = fonts["varela13"]
-    
+
     _AList = {}
 
     _Scrolled = 0
-    
+
     _BGwidth = 320
     _BGheight = 240-24-20
 
@@ -133,24 +133,24 @@ class ButtonsLayoutPage(Page):
     _EasingDur = 30
 
     _dialog_index = 0
-    
+
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
 
     def GenList(self):
-        
+
         self._MyList = []
-        
-        
-            
+
+
+
     def Init(self):
         if self._Screen != None:
             if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
                 self._HWND = self._Screen._CanvasHWND
                 self._CanvasHWND = pygame.Surface( (self._Screen._Width,self._BGheight) )
 
-        self._PosX = self._Index*self._Screen._Width 
+        self._PosX = self._Index*self._Screen._Width
         self._Width = self._Screen._Width ## equal to screen width
         self._Height = self._Screen._Height
 
@@ -172,7 +172,7 @@ class ButtonsLayoutPage(Page):
         self._Scroller.SetCanvasHWND(self._HWND)
 
         self._ConfirmPage = UpdateConfirmPage()
-        self._ConfirmPage._LayoutMode = self.GetButtonsLayoutMode()
+        self._ConfirmPage._LayoutMode = GetButtonsLayoutMode()
         self._ConfirmPage._Screen = self._Screen
         self._ConfirmPage._Name  = "Overwrite RA conf"
         self._ConfirmPage._Parent = self
@@ -184,38 +184,23 @@ class ButtonsLayoutPage(Page):
         if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 0:
             self._PosY -= dis
             self._Scrolled -= dis
-        
+
     def ScrollUp(self):
         dis = 10
         if self._PosY < 0:
             self._PosY += dis
             self._Scrolled += dis
 
-    def GetButtonsLayoutMode(self):
-        lm = "xbox"
-        try:
-            with open(".buttonslayout", "r") as f:
-                lm = f.read()
-        except:
-            None
-        if lm not in ["xbox","snes"]:
-            lm = "xbox"
-        return lm
-
     def ToggleMode(self):
-        
-        if self.GetButtonsLayoutMode() == "xbox":
-            
-            with open(".buttonslayout", "w") as f:
-                f.write("snes")
-            
+
+        if GetButtonsLayoutMode() == "xbox":
+            SetButtonsLayoutMode("snes")
+
             self._dialog_index = 1
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         else:
-
-            with open(".buttonslayout", "w") as f:
-                f.write("xbox")
+            SetButtonsLayoutMode("xbox")
 
             self._dialog_index = 0
             self._Screen.Draw()
@@ -225,39 +210,36 @@ class ButtonsLayoutPage(Page):
         self._Scrolled = 0
         self._PosY = 0
         self._DrawOnce = False
-        
-        if self.GetButtonsLayoutMode() == "xbox":
-            self._dialog_index = 0
-        else:
-            self._dialog_index = 1
-        
+
+        self._dialog_index = 0 if GetButtonsLayoutMode() == "xbox" else 1
+
     def OnReturnBackCb(self):
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
-        
+
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.ToggleMode()
-            
+
         if event.key == CurKeys["X"]:
-            self._ConfirmPage._LayoutMode = self.GetButtonsLayoutMode()
+            self._ConfirmPage._LayoutMode = GetButtonsLayoutMode()
             self._Screen.PushPage(self._ConfirmPage)
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-                                
+
     def Draw(self):
         self.ClearCanvas()
 
-        self._Icons["DialogBoxs"].NewCoord(0,30)        
+        self._Icons["DialogBoxs"].NewCoord(0,30)
         self._Icons["DialogBoxs"]._IconIndex = self._dialog_index
         self._Icons["DialogBoxs"].DrawTopLeft()
-        
+
         if self._HWND != None:
             self._HWND.fill((255,255,255))
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
@@ -272,7 +254,7 @@ class APIOBJ(object):
         self._Page._Screen = main_screen
         self._Page._Name ="Buttons Layout"
         self._Page.Init()
-        
+
     def API(self,main_screen):
         if main_screen !=None:
             main_screen.PushPage(self._Page)
@@ -280,8 +262,8 @@ class APIOBJ(object):
             main_screen.SwapAndShow()
 
 OBJ = APIOBJ()
-def Init(main_screen):    
+def Init(main_screen):
     OBJ.Init(main_screen)
 def API(main_screen):
     OBJ.API(main_screen)
-    
+

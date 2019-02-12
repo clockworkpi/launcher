@@ -13,7 +13,7 @@ from UI.label  import Label
 from UI.icon_item import IconItem
 from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool import MyIconPool
 from UI.scroller  import ListScroller
@@ -92,7 +92,7 @@ class FavListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","Scan","Remove","","Run"]
+    _FootMsg = ["Nav","Remove","Scan","","Run"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     _MyStack = None
@@ -392,7 +392,7 @@ class FavListPage(Page):
     
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["Left"]: 
+        if IsKeyMenuOrB(event.key) or event.key == CurKeys["Left"]: 
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -410,7 +410,7 @@ class FavListPage(Page):
             self._Screen.SwapAndShow()
         
 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
 
                 

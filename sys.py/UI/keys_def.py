@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import pygame
 from pygame.locals import *
@@ -9,6 +9,36 @@ import sys
 
 from config import CurKeySet
 
+
+def GetButtonsLayoutMode():
+    lm = "xbox"
+    try:
+        with open(".buttonslayout", "r") as f:
+            lm = f.read()
+    except:
+        None
+    if lm not in ["xbox","snes"]:
+        lm = "xbox"
+    return lm
+
+def SetButtonsLayoutMode(mode):
+    SetXYABButtons(mode)
+    with open(".buttonslayout", "w") as f:
+        f.write(mode)
+
+def SetXYABButtons(mode):
+    if mode == "snes":
+        GameShell["Y"] = pygame.K_u
+        GameShell["X"] = pygame.K_i
+        GameShell["B"] = pygame.K_j
+        GameShell["A"] = pygame.K_k
+    else:
+        GameShell["X"] = pygame.K_u
+        GameShell["Y"] = pygame.K_i
+        GameShell["A"] = pygame.K_j
+        GameShell["B"] = pygame.K_k
+
+
 GameShell = {}
 GameShell["Up"]   = pygame.K_UP
 GameShell["Down"] = pygame.K_DOWN
@@ -16,16 +46,10 @@ GameShell["Left"] = pygame.K_LEFT
 GameShell["Right"]= pygame.K_RIGHT
 
 GameShell["Menu"] = pygame.K_ESCAPE
-GameShell["X"]    = pygame.K_u
-GameShell["Y"]    = pygame.K_i
-GameShell["A"]    = pygame.K_j
-GameShell["B"]    = pygame.K_k
 
-GameShell["Vol-"] = pygame.K_SPACE
-GameShell["Vol+"] = pygame.K_RETURN
-GameShell["Space"] = pygame.K_SPACE
+SetXYABButtons(GetButtonsLayoutMode())
 
-GameShell["Enter"] = pygame.K_k
+GameShell["Select"] = pygame.K_SPACE
 GameShell["Start"] = pygame.K_RETURN
 
 GameShell["LK1"] = pygame.K_h
@@ -42,10 +66,7 @@ PC["X"]     = pygame.K_x
 PC["Y"]     = pygame.K_y
 PC["A"]     = pygame.K_a
 PC["B"]     = pygame.K_b
-PC["Vol-"]  = pygame.K_SPACE
-PC["Vol+"]  = pygame.K_RETURN
-PC["Enter"] = pygame.K_RETURN
-PC["Space"] = pygame.K_SPACE
+PC["Select"] = pygame.K_SPACE
 PC["Start"] = pygame.K_s
 
 PC["LK1"] = pygame.K_h
@@ -55,3 +76,10 @@ if CurKeySet == "PC":
     CurKeys = PC
 else:
     CurKeys = GameShell
+
+
+def IsKeyStartOrA(key):
+    return key == CurKeys["Start"] or key == CurKeys["A"]
+
+def IsKeyMenuOrB(key):
+    return key == CurKeys["Menu"] or key == CurKeys["B"]
