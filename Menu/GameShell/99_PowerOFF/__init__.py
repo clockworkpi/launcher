@@ -6,12 +6,13 @@ import pygame
 from UI.constants    import RUNSYS
 from UI.keys_def     import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.confirm_page import ConfirmPage
+from UI.lang_manager import MyLangManager
 
 import config
 
 class PowerOffConfirmPage(ConfirmPage):
     
-    _ConfirmText = "Awaiting Input"
+    _ConfirmText = MyLangManager.Tr("Awaiting Input")
     _FootMsg = ["Nav","","Reboot","Cancel","Shutdown"]
 
     def CheckBattery(self):
