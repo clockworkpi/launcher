@@ -63,7 +63,7 @@ class FootBar(Widget):
         if FileExists(icondir) == False and os.path.isdir(icondir) == False:
             return
 
-        keynames = ["nav","x","y","a","b"]
+        keynames = ["nav","x","y","a","b","select"]
 
         share_surf = pygame.image.load(icon_base_path+"footbar.png").convert_alpha()
 
@@ -133,11 +133,12 @@ class FootBar(Widget):
         self.Draw()
 
     def SetLabelTexts(self,texts):
-        barr = ["nav","y","x","b","a"]
+        barr = ["nav","y","x","b","a","select"]
+        texts2 = texts + [""] if len(texts) == 5 else texts
 
         for idx,x in enumerate(barr):
             try:
-                self._Icons[x]._Label.SetText(MyLangManager.Tr(texts[idx]))
+                self._Icons[x]._Label.SetText(MyLangManager.Tr(texts2[idx]))
             except IndexError:
                 print("Index "+x+" doesn't exist!")
 
@@ -169,7 +170,7 @@ class FootBar(Widget):
         if self._State == "normal":
             _w=0
             #for i,x in enumerate(("a","b","x","y")):
-            for i, x in enumerate(("b","a","y","x")):
+            for i, x in enumerate(("b","a","y","x","select")):
                 if self._Icons[x]._Label._Text!="":
                     if i==0:
                         _w += self._Icons[x].TotalWidth()

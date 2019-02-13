@@ -99,8 +99,7 @@ class RomListPage(Page):
 
     _Icons = {}
     _Selector=None
-    # TODO: show "AddFav"
-    _FootMsg = ["Nav","Del","Scan","Back","Run"]
+    _FootMsg = ["Nav","Del","Scan","Back","Run","AddFav"]
     _MyList = []
     _ListFont = fonts["notosanscjk15"]
     _MyStack = None
