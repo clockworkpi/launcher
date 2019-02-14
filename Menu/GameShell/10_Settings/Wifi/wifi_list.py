@@ -60,7 +60,7 @@ class WifiDisconnectConfirmPage(ConfirmPage):
         self.Reset()
         
 class WifiInfoPage(Page):
-    _FootMsg =  ["Nav","","Disconnect","Back",""]
+    _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
 
@@ -159,9 +159,9 @@ class WifiInfoPage(Page):
     def OnLoadCb(self):
         if self._Wireless.GetCurrentNetworkID(self._Wireless.GetIwconfig()) == self._NetworkId \
            and self._Wireless.GetWirelessIP('') is not None:
-            self._FootMsg[1] = "Disconnect"
+            self._FootMsg[2] = "Disconnect"
         else:
-            self._FootMsg[1] =  ""
+            self._FootMsg[2] =  ""
 
         self.GenList()
 
@@ -705,7 +705,7 @@ class WifiList(Page):
 
         self._InfoPage = WifiInfoPage()
         self._InfoPage._Screen = self._Screen
-        self._InfoPage._Name   = "Wifi info"
+        self._InfoPage._Name   = MyLangManager.Tr("Wifi info")
         self._InfoPage.Init()
         
     def Draw(self):
