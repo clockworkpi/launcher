@@ -477,25 +477,20 @@ class Page(Widget):
             self._Ps.Draw()
             
     def MoveIconIndexPrev(self):
-        
+        self._PrevIconIndex = self._IconIndex
         self._IconIndex-=1
         if self._IconIndex < 0:
-            self._IconIndex = 0
-            self._PrevIconIndex = self._IconIndex
+            self._IconIndex = max(0, self._IconNumbers - 1) # Wrap Icon Index
             return False
-        self._PrevIconIndex = self._IconIndex+1
         return True
     
     def MoveIconIndexNext(self):
-        #True for Moved,False is boundary
+        self._PrevIconIndex = self._IconIndex
         self._IconIndex+=1
         if self._IconIndex > (self._IconNumbers - 1):
-            self._IconIndex = self._IconNumbers -1
-            self._PrevIconIndex = self._IconIndex
+            self._IconIndex = 0 # Wrap Icon Index
             return False
-        self._PrevIconIndex = self._IconIndex-1
         return True
-
     
     def IconClick(self):
         
@@ -614,25 +609,36 @@ class Page(Widget):
         if event.key == CurKeys["Right"]:
             if self.MoveIconIndexNext() == True:
                 if self._IconIndex == (self._IconNumbers -1) or self._PrevIconIndex == 0:
-                    self.IconSmoothUp(icon_width+ self._PageIconMargin) # only move up selected icon,no horizontal translation
+                    self.IconSmoothUp(icon_width + self._PageIconMargin)
                 else:
                     self.IconsEasingLeft(icon_width + self._PageIconMargin)
+            else:
+                screen_icons = int(math.floor(self._Screen._Width / (icon_width + self._PageIconMargin)))
+                if self._IconNumbers > screen_icons:
+                    self.IconsEasingRight((icon_width + self._PageIconMargin) * (self._IconNumbers - screen_icons))
+                elif self._IconNumbers > 0:
+                    self.IconSmoothUp(icon_width+ self._PageIconMargin)
 
-                self._PsIndex  = self._IconIndex
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-                
+            self._PsIndex  = self._IconIndex
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
             
         if event.key == CurKeys["Left"]:
             if self.MoveIconIndexPrev() == True:
                 if self._IconIndex == 0 or self._PrevIconIndex == (self._IconNumbers -1):
-                    self.IconSmoothUp(icon_width+ self._PageIconMargin)
+                    self.IconSmoothUp(icon_width + self._PageIconMargin)
                 else:
                     self.IconsEasingRight(icon_width + self._PageIconMargin)
+            else:
+                screen_icons = int(math.floor(self._Screen._Width / (icon_width + self._PageIconMargin)))
+                if self._IconNumbers > screen_icons:
+                    self.IconsEasingLeft((icon_width + self._PageIconMargin) * (self._IconNumbers - screen_icons))
+                elif self._IconNumbers > 0:
+                    self.IconSmoothUp(icon_width+ self._PageIconMargin)
 
-                self._PsIndex = self._IconIndex
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
+            self._PsIndex = self._IconIndex
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
                 
         if IsKeyStartOrA(event.key):
             self.IconClick()
