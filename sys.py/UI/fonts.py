@@ -13,7 +13,7 @@ if not pygame.font.get_init():
 
 fonts = {}
 if not fonts:
-    skinpath = "../skin/"+config.SKIN+"/truetype"
+    skinpath = config.SKIN+"/truetype"
     fonts_path = {}
 
     fonts_path["varela"]   = "%s/VarelaRound-Regular.ttf" % skinpath

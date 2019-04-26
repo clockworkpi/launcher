@@ -4,6 +4,8 @@ import pygame
 import config
 import ConfigParser
 
+from util_funcs  import FileExists
+
 class CaseConfigParser(ConfigParser.SafeConfigParser):
     def optionxform(self, optionstr):
         return optionstr
@@ -21,7 +23,8 @@ class SkinManager(object):
     
     _Colors = {}
     _Config = None
-    
+    DefaultSkin = "../skin/default"
+
     def __init__(self):
         self.Init()
 
@@ -52,7 +55,7 @@ class SkinManager(object):
 
         self._Config = CaseConfigParser()
 
-        fname = "../skin/"+config.SKIN+"/config.cfg"
+        fname = config.SKIN+"/config.ini"
 
         try:
             self._Config.read(fname)
@@ -78,6 +81,24 @@ class SkinManager(object):
         else:
             return  pygame.Color(255,0,0)
     
+    def GiveIcon(self,orig_file_or_dir):
+        #doing a wrapper for items under /home/cpi/apps/Menu/*, to be like Menu/GameShell/*
+        if orig_file_or_dir.startswith("/home/cpi/apps/Menu"):
+            orig_file_or_dir = orig_file_or_dir.replace("/home/cpi/apps/Menu/","../Menu/GameShell/")
+    
+        if orig_file_or_dir.startswith(".."):
+            ret  = orig_file_or_dir.replace("..",config.SKIN)
+            if FileExists(ret) == False:
+                ret = orig_file_or_dir.replace("..",self.DefaultSkin)
+        else:
+            ret = config.SKIN+"/sys.py/"+orig_file_or_dir
+            if FileExists(ret) == False:
+                ret = self.DefaultSkin+"/sys.py/"+orig_file_or_dir
+    
+        if FileExists( ret ):
+            return ret
+        else:  ## if not existed both in default or custom skin ,return where it is
+            return orig_file_or_dir
 
 ##global MySkinManager Handler
 MySkinManager = None

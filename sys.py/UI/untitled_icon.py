@@ -11,12 +11,12 @@ from datetime import datetime
 import base64
 from beeprint import pp
 
-from util_funcs import midRect, SkinMap
+from util_funcs import midRect
 from fonts import fonts
 
 from skin_manager import MySkinManager
 
-BlankPng = SkinMap("gameshell/blank.png")  # 80x80
+BlankPng = MySkinManager.GiveIcon("gameshell/blank.png")  # 80x80
 ## use blank circle as bg, Two alpha As Icon Label
 #Upper and Lower
 
