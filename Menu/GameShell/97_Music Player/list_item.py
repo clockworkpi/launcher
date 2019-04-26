@@ -7,7 +7,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import ICON_TYPES
 from UI.page   import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
 from UI.skin_manager import MySkinManager

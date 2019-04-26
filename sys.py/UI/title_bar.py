@@ -13,7 +13,6 @@ import alsaaudio
 
 ##local import
 from constants   import ICON_TYPES,Width,Height
-from fonts       import fonts
 from icon_item   import IconItem
 from multi_icon_item import MultiIconItem
 from icon_pool   import MyIconPool
@@ -300,13 +299,14 @@ class TitleBar(Widget):
         self._Title = title
         
         cur_time =  datetime.now().strftime("%H:%M")
-        time_text_size = fonts["varela12"].size(cur_time)
+        time_text_font = MySkinManager.GiveFont("varela12")
+        time_text_size = time_text_font.size(cur_time)
         title_text_size = MyLangManager.TrFont("varela16").size(title)
 
         self._CanvasHWND.blit(MyLangManager.TrFont("varela16").render(title,True,self._SkinManager.GiveColor("Text")),midRect(title_text_size[0]/2+self._LOffset,
                                                                     title_text_size[1]/2+(self._BarHeight-title_text_size[1])/2,
                                                                     title_text_size[0],title_text_size[1],Width,Height))
-        self._CanvasHWND.blit( fonts["varela12"].render(cur_time,True,self._SkinManager.GiveColor("Text")),midRect(Width-time_text_size[0]/2-self._ROffset,
+        self._CanvasHWND.blit( time_text_font.render(cur_time,True,self._SkinManager.GiveColor("Text")),midRect(Width-time_text_size[0]/2-self._ROffset,
                                                                         time_text_size[1]/2+(self._BarHeight-time_text_size[1])/2,
                                                                         time_text_size[0],time_text_size[1],Width,Height))
 

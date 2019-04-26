@@ -23,6 +23,7 @@ class SkinManager(object):
     
     _Colors = {}
     _Config = None
+    _Fonts = {}
     DefaultSkin = "../skin/default"
 
     def __init__(self):
@@ -36,7 +37,39 @@ class SkinManager(object):
     def Init(self):
         if not SkinManager._Colors:
             self.SetColors()
+        if not SkinManager._Fonts:
+            self.SetFonts()
+    
+    def SetFonts(self):
+        if not pygame.font.get_init():
+            pygame.font.init()
+            
+        skinpath = config.SKIN+"/truetype"
+        fonts_path = {}
+        fonts_path["varela"]   = "%s/VarelaRound-Regular.ttf" % skinpath
+        print(fonts_path["varela"])
+        fonts_path["veramono"] = "%s/VeraMono.ttf" % skinpath
+        fonts_path["noto"]     = "%s/NotoSansMono-Regular.ttf" % skinpath
+        fonts_path["notocjk"]     = "%s/NotoSansCJK-Regular.ttf" % skinpath
+    
+        for i in range(10,29):
+          self._Fonts["varela%d"%i] = pygame.font.Font(fonts_path["varela"],i)
+          
+        self._Fonts["varela34"] = pygame.font.Font(fonts_path["varela"],34)
+        self._Fonts["varela40"] = pygame.font.Font(fonts_path["varela"],40)
+        self._Fonts["varela120"] = pygame.font.Font(fonts_path["varela"],120)
+        
+        for i in range(10,26):
+            self._Fonts["veramono%d"%i] = pygame.font.Font(fonts_path["veramono"],i)
+        
+        for i in range(10,28):
+            self._Fonts["notosansmono%d"%i] = pygame.font.Font(fonts_path["noto"],i)
 
+        for i in range(10,28):
+            self._Fonts["notosanscjk%d"%i] = pygame.font.Font(fonts_path["notocjk"],i)
+    
+        self._Fonts["arial"] = pygame.font.SysFont("arial",16)
+        
     def SetColors(self):
         Colors = {}
         Colors["High"] = pygame.Color(51, 166, 255)
@@ -75,6 +108,9 @@ class SkinManager(object):
                             print("error in ConvertToRGB %s" % str(e))
                             continue
     
+    def GiveFont(self,name):
+        return SkinManager._Fonts[name]
+        
     def GiveColor(self,name):
         if name in SkinManager._Colors:
             return SkinManager._Colors[name]

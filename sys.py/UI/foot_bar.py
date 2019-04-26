@@ -8,7 +8,6 @@ import os
 from constants  import Width,Height,ICON_TYPES,ALIGN
 from util_funcs import FileExists,midRect
 from icon_item  import IconItem
-from fonts      import fonts
 from multi_icon_item import MultiIconItem
 from icon_pool  import MyIconPool
 from libs.roundrects import aa_round_rect

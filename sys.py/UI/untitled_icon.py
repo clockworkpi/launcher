@@ -12,7 +12,6 @@ import base64
 from beeprint import pp
 
 from util_funcs import midRect
-from fonts import fonts
 
 from skin_manager import MySkinManager
 
@@ -28,7 +27,7 @@ class UntitledIcon(object):
     _Height = 80
 
     _Words = ["G", "s"]
-    _FontObj = fonts["varela40"]
+    _FontObj = MySkinManager.GiveFont("varela40")
 
     _BG = None  # initial surface
 

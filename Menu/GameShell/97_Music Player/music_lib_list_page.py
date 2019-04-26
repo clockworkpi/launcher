@@ -8,7 +8,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
@@ -85,7 +84,7 @@ class MusicLibListPage(Page):
     _FootMsg = ["Nav","","Scan","Back","Add to Playlist"]
     _MyList = []
     _SwapMyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
 
     _Scroller = None

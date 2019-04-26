@@ -6,8 +6,8 @@ from libs.roundrects import aa_round_rect
 ## local UI import
 from UI.page         import Page,PageStack,PageSelector
 from UI.label        import Label
-from UI.fonts        import fonts
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 from UI.widget       import Widget 
 
 class Textarea(Widget):
@@ -26,7 +26,7 @@ class Textarea(Widget):
         pass
     
     def Init(self):
-        self._FontObj = fonts["veramono24"] 
+        self._FontObj = MyLangManager.TrFont("veramono24")
         #pygame.font.Font(fonts_path["veramono"],24)
 
     def SubTextIndex(self):

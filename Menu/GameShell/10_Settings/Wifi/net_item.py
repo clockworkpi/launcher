@@ -5,7 +5,6 @@ import pygame
 ## local UI import
 from UI.page   import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.multi_icon_item  import MultiIconItem
 from UI.icon_pool   import MyIconPool

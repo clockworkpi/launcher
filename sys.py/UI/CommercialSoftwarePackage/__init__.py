@@ -27,7 +27,6 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT,RESTARTUI
 #from UI.simple_name_space import SimpleNamespace
 from UI.page  import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.keys_def  import CurKeys

@@ -12,7 +12,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,POWEROPT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -292,7 +291,7 @@ class InfoPage(Page):
 class PowerOptionsPage(Page):
     _FootMsg =  ["Nav","Detail","","Back","Select"]
     _MyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     
     _AList = {}
 

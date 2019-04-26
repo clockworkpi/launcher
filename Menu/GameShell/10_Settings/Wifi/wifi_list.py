@@ -10,7 +10,6 @@ from wicd import misc
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,SwapAndShow
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -94,7 +93,7 @@ class WifiInfoPage(Page):
             li._PosY   = start_y + i*InfoPageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MyLangManager.TrFont("varela12")
             
             if self._AList[v]["label"] != "":
                 li.Init(  self._AList[v]["label"] )
@@ -267,7 +266,7 @@ class WifiList(Page):
     _FootMsg           = ["Nav","Info","Scan","Back","Enter"]
     _EncMethods        = None
     _Scroller          = None
-    _ListFontObj       = fonts["notosanscjk15"]
+    _ListFontObj       = MyLangManager.TrFont("notosanscjk15")
 
     _InfoPage          = None
     _CurBssid          = ""
