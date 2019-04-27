@@ -51,7 +51,16 @@ class SkinManager(object):
         fonts_path["veramono"] = "%s/VeraMono.ttf" % skinpath
         fonts_path["noto"]     = "%s/NotoSansMono-Regular.ttf" % skinpath
         fonts_path["notocjk"]     = "%s/NotoSansCJK-Regular.ttf" % skinpath
-    
+        fonts_path["Eurostile"] = "%s/EurostileMN-Medium.pfb.ttf" %skinpath
+        fonts_path["EurostileBold"] = "%s/EurostileMN-ExtendedBold.pfb.ttf" % skinpath
+        
+        self._Fonts["Eurostile10"]  = pygame.font.Font(fonts_path["Eurostile"],10)
+        self._Fonts["Eurostile11"]  = pygame.font.Font(fonts_path["Eurostile"],11)
+        self._Fonts["Eurostile12"]  = pygame.font.Font(fonts_path["Eurostile"],12)
+        self._Fonts["Eurostile13"]  = pygame.font.Font(fonts_path["Eurostile"],13)
+        
+        self._Fonts["EurostileBold30"]  = pygame.font.Font(fonts_path["EurostileBold"],30)
+
         for i in range(10,29):
           self._Fonts["varela%d"%i] = pygame.font.Font(fonts_path["varela"],i)
           
@@ -80,6 +89,7 @@ class SkinManager(object):
         Colors["Line"] = pygame.Color(169, 169, 169)
         Colors["TitleBg"] = pygame.Color(11, 16, 22)
         Colors["Active"] = pygame.Color(175, 90, 0)
+        Colors["Inactive"] = pygame.Color(27,78,72)
         Colors["Disabled"] = pygame.Color(204, 204, 204)
         Colors["White"] = pygame.Color(11, 16, 22)
         Colors["Black"] = pygame.Color(0, 0, 0)
