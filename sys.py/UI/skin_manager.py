@@ -73,15 +73,15 @@ class SkinManager(object):
     def SetColors(self):
         Colors = {}
         Colors["High"] = pygame.Color(51, 166, 255)
-        Colors["Text"] = pygame.Color(83, 83, 83)
+        Colors["Text"] = pygame.Color(42, 140, 121)
         Colors["ReadOnlyText"] = pygame.Color(130,130,130)
         Colors["Front"] = pygame.Color(131, 199, 219)
         Colors["URL"] = pygame.Color(51, 166, 255)
         Colors["Line"] = pygame.Color(169, 169, 169)
-        Colors["TitleBg"] = pygame.Color(228, 228, 228)
+        Colors["TitleBg"] = pygame.Color(11, 16, 22)
         Colors["Active"] = pygame.Color(175, 90, 0)
         Colors["Disabled"] = pygame.Color(204, 204, 204)
-        Colors["White"] = pygame.Color(255, 255, 255)
+        Colors["White"] = pygame.Color(11, 16, 22)
         Colors["Black"] = pygame.Color(0, 0, 0)
 
         SkinManager._Colors = Colors
