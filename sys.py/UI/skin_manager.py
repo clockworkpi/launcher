@@ -47,7 +47,7 @@ class SkinManager(object):
         skinpath = config.SKIN+"/truetype"
         fonts_path = {}
         fonts_path["varela"]   = "%s/VarelaRound-Regular.ttf" % skinpath
-        print(fonts_path["varela"])
+       
         fonts_path["veramono"] = "%s/VeraMono.ttf" % skinpath
         fonts_path["noto"]     = "%s/NotoSansMono-Regular.ttf" % skinpath
         fonts_path["notocjk"]     = "%s/NotoSansCJK-Regular.ttf" % skinpath
