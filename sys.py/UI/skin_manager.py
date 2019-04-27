@@ -59,8 +59,10 @@ class SkinManager(object):
         self._Fonts["Eurostile12"]  = pygame.font.Font(fonts_path["Eurostile"],12)
         self._Fonts["Eurostile13"]  = pygame.font.Font(fonts_path["Eurostile"],13)
         
+        self._Fonts["EurostileBold13"]  = pygame.font.Font(fonts_path["EurostileBold"],13)
+        
         self._Fonts["EurostileBold30"]  = pygame.font.Font(fonts_path["EurostileBold"],30)
-
+        
         for i in range(10,29):
           self._Fonts["varela%d"%i] = pygame.font.Font(fonts_path["varela"],i)
           

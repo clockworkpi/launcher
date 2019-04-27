@@ -100,7 +100,7 @@ class RomListPage(Page):
     _Selector=None
     _FootMsg = ["Nav","Del","Scan","Back","Run","AddFav"]
     _MyList = []
-    _ListFont = MyLangManager.Tr("notosanscjk15")
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
     _Emulator = None
     _Parent   = None
