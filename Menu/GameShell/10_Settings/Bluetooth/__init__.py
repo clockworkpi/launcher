@@ -15,7 +15,6 @@ from libs.DBUS import  bus, adapter,devices
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -100,8 +99,8 @@ class BleInfoPage(Page):
     _FootMsg =  ["Nav","Forget","Disconnect","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
-    _ListSmFontObj = fonts["varela12"]  # small font
-    _ListSm2FontObj= fonts["varela11"]
+    _ListSmFontObj = MySkinManager.GiveFont("varela12")  # small font
+    _ListSm2FontObj= MySkinManager.GiveFont("varela11")
     
     _AList = {}
     _Path = ""
@@ -380,7 +379,7 @@ class BluetoothPage(Page):
     _LastStatusMsg     = ""
     _FootMsg           = ["Nav","Info","Scan","Back","TryConnect"]
     _Scroller          = None
-    _ListFontObj       = fonts["notosanscjk15"]
+    _ListFontObj       = MyLangManager.TrFont("notosanscjk15")
 
     _InfoPage          = None
     

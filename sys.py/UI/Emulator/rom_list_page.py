@@ -18,7 +18,6 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
@@ -101,7 +100,7 @@ class RomListPage(Page):
     _Selector=None
     _FootMsg = ["Nav","Del","Scan","Back","Run","AddFav"]
     _MyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.Tr("notosanscjk15")
     _MyStack = None
     _Emulator = None
     _Parent   = None

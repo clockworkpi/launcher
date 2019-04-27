@@ -9,7 +9,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller

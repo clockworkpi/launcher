@@ -12,15 +12,14 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multilabel import MultiLabel
-
-
+from UI.lang_manager import MyLangManager
+from UI.skin_manager import MySkinManager
 
 class InfoPageListItem(object):
     _PosX = 0
@@ -79,7 +78,7 @@ class InfoPageListItem(object):
 class AboutPage(Page):
     _FootMsg =  ["Nav.","","","Back",""]
     _MyList = []
-    _ListFontObj = fonts["varela13"]
+    _ListFontObj = MyLangManager.TrFont("varela13")
     
     _AList = {}
 
@@ -229,7 +228,7 @@ class AboutPage(Page):
             li._PosY   = start_y + last_height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MySkinManager.GiveFont("varela12")
             
             if self._AList[u]["label"] != "":
                 li.Init(  self._AList[u]["label"] )

@@ -9,7 +9,6 @@ from libs.roundrects import aa_round_rect
 from constants import Width,Height,ICON_TYPES
 from page   import Page,PageSelector
 from label  import Label
-from fonts  import fonts
 from util_funcs import midRect
 from keys_def   import CurKeys
 from skin_manager import MySkinManager

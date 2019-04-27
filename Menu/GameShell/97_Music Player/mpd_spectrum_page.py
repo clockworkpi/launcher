@@ -15,12 +15,12 @@ from beeprint import pp
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_item import IconItem
 from UI.icon_pool  import MyIconPool
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from threading  import Thread
 
@@ -79,8 +79,8 @@ class MPDSpectrumPage(Page):
     _Selector=None
     _FootMsg = ["Nav","","","Back",""]
     _MyList = []
-    _ListFont = fonts["veramono12"]
-    _SongFont = fonts["notosanscjk12"]
+    _ListFont = MyLangManager.TrFont("veramono12")
+    _SongFont = MyLangManager.TrFont("notosanscjk12")
     _PIFI   =  None
     _FIFO   = None
     _Color  = MySkinManager.GiveColor('Front')

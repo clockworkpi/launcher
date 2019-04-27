@@ -4,6 +4,9 @@ import dbus
 import dbus.service
 import sys
 import commands
+import logging
+import errno
+
 from wicd import misc 
 ##misc.to_bool
 ##misc.misc.noneToString
@@ -288,7 +291,36 @@ def RecordKeyDns(thekey,main_screen):
         return True
     
     return False
+
+
+
+def release_self_fds():
+    fds_flags= ["pipe","socket",".ttf"]
+    """List process currently open FDs and their target """
+    if sys.platform != 'linux2':
+        raise NotImplementedError('Unsupported platform: %s' % sys.platform)
+
+    ret = {}
+    base = '/proc/self/fd'
+    for num in os.listdir(base):
+        path = None
+        try:
+            path = os.readlink(os.path.join(base, num))
+        except OSError as err:
+            # Last FD is always the "listdir" one (which may be closed)
+            if err.errno != errno.ENOENT:
+                raise
+        ret[int(num)] = path
     
+    for key in ret:
+      if ret[key] != None and isinstance(ret[key], str):
+        for i in fds_flags:
+          if i in ret[key]:
+            os.close(key)
+            break
+    return ret  
+
+  
 def event_process(event,main_screen):
     global sound_patch
     global everytime_keydown 
@@ -316,6 +348,7 @@ def event_process(event,main_screen):
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -334,6 +367,7 @@ def event_process(event,main_screen):
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -541,7 +575,14 @@ def PreparationInAdv():
     
     if "arm" not in platform.machine():
         return
-    
+
+    if FileExists("%s/.gameshell_skin" % os.path.expanduser('~')) == True:
+        with open("%s/.gameshell_skin" % os.path.expanduser('~'),"r") as f:
+          gameshell_skin = f.read()
+        
+        gameshell_skin = gameshell_skin.strip()
+        config.SKIN= gameshell_skin
+
     if FileExists(".powerlevel") == False:
         os.system("touch .powerlevel")
     

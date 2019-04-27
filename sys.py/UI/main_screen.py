@@ -20,7 +20,7 @@ from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
 from constants   import Width,Height,bg_color
-from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable,SkinMap
+from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
 from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
@@ -469,8 +469,8 @@ class MainScreen(Widget):
                     iconitem.AddLabel(MyLangManager.Tr(i2),self._IconFont)
                     if FileExists( _dir+"/"+i+"/"+i2+".png"): ### 20_Prog/Prog.png , cut 20_ 
                         iconitem._ImageName = _dir+"/"+i+"/"+i2+".png"
-                    elif FileExists( SkinMap(_dir+"/"+i2+".png") ):
-                        iconitem._ImageName = SkinMap(_dir+"/"+i2+".png")
+                    elif FileExists( MySkinManager.GiveIcon(_dir+"/"+i2+".png") ):
+                        iconitem._ImageName = MySkinManager.GiveIcon(_dir+"/"+i2+".png")
                     else:
                         untitled = UntitledIcon()
                         untitled.Init()
@@ -577,8 +577,8 @@ class MainScreen(Widget):
                     iconitem._CmdPath = os.path.realpath(_dir+"/"+i)
                     MakeExecutable(iconitem._CmdPath)
                     iconitem._MyType  = ICON_TYPES["EXE"]
-                    if FileExists( SkinMap( _dir+"/"+ReplaceSuffix(i2,"png"))):
-                        iconitem._ImageName = SkinMap(_dir+"/"+ReplaceSuffix(i2,"png"))
+                    if FileExists( MySkinManager.GiveIcon( _dir+"/"+ReplaceSuffix(i2,"png"))):
+                        iconitem._ImageName = MySkinManager.GiveIcon(_dir+"/"+ReplaceSuffix(i2,"png"))
                     else:
                         untitled = UntitledIcon()
                         untitled.Init()

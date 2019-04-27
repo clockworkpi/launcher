@@ -3,8 +3,8 @@ import os
 import pygame
 import config
 import ConfigParser
+from skin_manager import MySkinManager
 from util_funcs  import FileExists
-from fonts       import fonts
 
 class CaseConfigParser(ConfigParser.SafeConfigParser):
     def optionxform(self, optionstr):
@@ -97,12 +97,12 @@ class LangManager(object):
             raise Exception('font string format error')
             
         if "English.ini" in self._ConfigFileName:
-            return fonts[orig_font_str]
+            return MySkinManager.GiveFont(orig_font_str)
         else:
             if font_size_number > 28:
                 raise Exception('cjk font string format error '+ str(font_size_number))
             
-            return fonts["notosanscjk"+str(font_size_number)]
+            return MySkinManager.GiveFont("notosanscjk%d" % font_size_number)
 
 ##global MyLangManager Handler
 MyLangManager = None

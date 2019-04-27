@@ -9,7 +9,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, GetButtonsLayoutMode, SetButtonsLayoutMode, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -117,7 +116,6 @@ class UpdateConfirmPage(ConfirmPage):
 class ButtonsLayoutPage(Page):
     _FootMsg =  ["Nav.","","UpdateRetroArch","Back","Toggle"]
     _MyList = []
-    _ListFontObj = fonts["varela13"]
 
     _AList = {}
 

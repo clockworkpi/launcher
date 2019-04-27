@@ -13,7 +13,6 @@ from UI.constants import ICON_TYPES,Width,Height,RUNEVT,RUNSH
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,get_git_revision_short_hash
 from UI.keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.confirm_page import ConfirmPage
@@ -157,7 +156,7 @@ class UpdatePage(Page):
     _Icons = {}
     _FootMsg = ["Nav","","Check Update","Back",""]
 
-    _ListFontObj = fonts["varela15"]    
+    _ListFontObj = MyLangManager.TrFont("varela15")    
     _ConfirmPage = None
     _AList    = {}
     _MyList   = []
@@ -177,7 +176,7 @@ class UpdatePage(Page):
             li._PosY   = start_y + i*InfoPageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MySkinManager.GiveFont("varela12")
             
             if self._AList[v]["label"] != "":
                 li.Init(  self._AList[v]["label"] )

@@ -13,27 +13,6 @@ import string
 from Xlib import X,display
 import config
 
-def SkinMap(orig_file_or_dir):
-    DefaultSkin = "default"
-    
-    #doing a wrapper for items under /home/cpi/apps/Menu/*, to be like Menu/GameShell/*
-    if orig_file_or_dir.startswith("/home/cpi/apps/Menu"):
-        orig_file_or_dir = orig_file_or_dir.replace("/home/cpi/apps/Menu/","../Menu/GameShell/")
-    
-    if orig_file_or_dir.startswith(".."):
-        ret  = orig_file_or_dir.replace("..","../skin/"+config.SKIN)
-        if FileExists(ret) == False:
-            ret = orig_file_or_dir.replace("..","../skin/"+DefaultSkin)
-    else:
-        ret = "../skin/"+config.SKIN+"/sys.py/"+orig_file_or_dir
-        if FileExists(ret) == False:
-            ret = "../skin/"+DefaultSkin+"/sys.py/"+orig_file_or_dir
-    
-    if FileExists( ret ):
-        return ret
-    else:  ## if not existed both in default or custom skin ,return where it is
-        return orig_file_or_dir
-
 def get_git_revision_hash():
     return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
 

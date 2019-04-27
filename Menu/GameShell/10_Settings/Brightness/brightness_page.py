@@ -10,7 +10,6 @@ from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.slider     import Slider
