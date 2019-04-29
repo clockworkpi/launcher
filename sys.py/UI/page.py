@@ -157,7 +157,7 @@ class Page(Widget):
         ps = PageSelector()
         ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
-        ps.Init(start_x,start_y,92,92,128)
+        ps.Init(start_x,start_y,MyIconPool._Sizes["blueselector"][0],MyIconPool._Sizes["blueselector"][1],128)
         
         self._Ps = ps
         self._PsIndex = 0
@@ -209,7 +209,7 @@ class Page(Widget):
         ps = PageSelector()
         ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
-        ps.Init(start_x,start_y,92,92,128)
+        ps.Init(start_x,start_y,MyIconPool._Sizes["blueselector"][0],MyIconPool._Sizes["blueselector"][1],128)
         
         self._Ps = ps
         self._PsIndex = 0
@@ -247,7 +247,7 @@ class Page(Widget):
         ps = PageSelector()
         ps._IconSurf = MyIconPool._Icons["blueselector"]
         ps._Parent = self
-        ps.Init(icon_width/2,icon_height/2,92,92,128)
+        ps.Init(icon_width/2,icon_height/2,MyIconPool._Sizes["blueselector"][0],MyIconPool._Sizes["blueselector"][1],128)
         self._Ps = ps
         self._PsIndex = 0
         self._OnShow = False
@@ -270,7 +270,7 @@ class Page(Widget):
             ps = PageSelector()
             ps._IconSurf = MyIconPool._Icons["blueselector"]
             ps._Parent = self
-            ps.Init(start_x,start_y,92,92,128)
+            ps.Init(start_x,start_y,MyIconPool._Sizes["blueselector"][0],MyIconPool._Sizes["blueselector"][1],128)
             self._Ps = ps
             self._PsIndex = 0
             self._OnShow = False
@@ -289,7 +289,7 @@ class Page(Widget):
             ps = PageSelector()
             ps._IconSurf = MyIconPool._Icons["blueselector"]
             ps._Parent = self
-            ps.Init(start_x,start_y-self._SelectedIconTopOffset,92,92,128)
+            ps.Init(start_x,start_y-self._SelectedIconTopOffset,MyIconPool._Sizes["blueselector"][0],MyIconPool._Sizes["blueselector"][1],128)
             
             self._Ps = ps
             self._PsIndex = 0
@@ -325,7 +325,7 @@ class Page(Widget):
             ps = PageSelector()
             ps._IconSurf = MyIconPool._Icons["blueselector"]
             ps._Parent = self
-            ps.Init(start_x,start_y,icon_width+4,icon_height+4,128)
+            ps.Init(start_x,start_y,MyIconPool._Sizes["blueselector"][0]+4,MyIconPool._Sizes["blueselector"][1]+4,128)
             self._Ps = ps
             self._PsIndex = 0
             self._OnShow = False
@@ -648,6 +648,6 @@ class Page(Widget):
     def Draw(self):
         self.ClearCanvas()
         self.DrawIcons()
-        self.DrawPageSelector()
+        #self.DrawPageSelector()
 
 
