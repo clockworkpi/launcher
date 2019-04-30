@@ -26,8 +26,6 @@ import myvars
 class SoundSlider(Slider):
     OnChangeCB = None
     
-    _NeedleSurf = None
-    _Scale      = None
     _Parent     = None
     _VolumeLabel =None
     
