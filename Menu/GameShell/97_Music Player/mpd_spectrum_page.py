@@ -163,16 +163,16 @@ class MPDSpectrumPage(Page):
 
         self._song_title = Label()
         self._song_title.SetCanvasHWND(self._RollCanvas)
-        self._song_title.Init("Untitled",self._SongFont,MySkinManager.GiveColor('White'))
+        self._song_title.Init("Untitled",self._SongFont,MySkinManager.GiveColor('Text'))
 
 
         self._title = Label()
         self._title.SetCanvasHWND(self._CanvasHWND)
-        self._title.Init("Title:",self._ListFont,MySkinManager.GiveColor('White'))
+        self._title.Init("Title:",self._ListFont,MySkinManager.GiveColor('Text'))
 
         self._time = Label()
         self._time.SetCanvasHWND(self._CanvasHWND)
-        self._time.Init("Time:",self._ListFont,MySkinManager.GiveColor('White'))        
+        self._time.Init("Time:",self._ListFont,MySkinManager.GiveColor('Text'))        
 
 
         self._time2 = Label()
@@ -336,7 +336,7 @@ class MPDSpectrumPage(Page):
     
         if self._RollCanvas != None:
 #            self._RollCanvas.fill((111,22,33))
-            self._RollCanvas.fill(MySkinManager.GiveColor('Text'))
+            self._RollCanvas.fill(MySkinManager.GiveColor('White'))
             if self._song_title._Width > self._RollW:
                 if (self._song_title._PosX + self._song_title._Width) > self._RollW and self._frames % 30 == 0:
                     self._song_title._PosX -= 1
