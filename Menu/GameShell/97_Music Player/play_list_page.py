@@ -3,7 +3,7 @@ import os
 import pygame
 import gobject
 
-from libs.roundrects import aa_round_rect
+#from libs.roundrects import aa_round_rect
 
 ## local UI import
 from UI.constants import Width,Height,ICON_TYPES
