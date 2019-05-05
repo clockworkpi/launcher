@@ -10,7 +10,7 @@ import gobject
 import validators
 #from pySmartDL import SmartDL
 
-from libs.roundrects import aa_round_rect
+#from libs.roundrects import aa_round_rect
 
 from UI.confirm_page import ConfirmPage
 from UI.download_process_page import DownloadProcessPage
