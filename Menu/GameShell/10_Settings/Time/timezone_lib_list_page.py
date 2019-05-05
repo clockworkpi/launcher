@@ -50,7 +50,7 @@ class TimeLibStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Line')
 
     def __init__(self):
         self._PosX = 0
@@ -73,9 +73,9 @@ class ListPageSelector(PageSelector):
             self._PosY = y
             self._Height = h
             
-            aa_round_rect(self._Parent._CanvasHWND,  
-                          (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
-
+            #aa_round_rect(self._Parent._CanvasHWND,  
+            #              (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width-4,h),0)
 
 
 class TimezoneListPage(Page):

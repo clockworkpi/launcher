@@ -648,6 +648,6 @@ class Page(Widget):
     def Draw(self):
         self.ClearCanvas()
         self.DrawIcons()
-        #self.DrawPageSelector()
+        self.DrawPageSelector()
 
 

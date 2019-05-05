@@ -14,7 +14,7 @@ class ListScroller(object):
     _Height = 0
     _MinHeight = 6 ## tested 
     _Parent    = None
-    _Color     = MySkinManager.GiveColor('Front')
+    _Color     = MySkinManager.GiveColor('Line')
     
     _StartX   = 0
     _StartY   = 0
@@ -60,4 +60,5 @@ class ListScroller(object):
     def Draw(self):
         
         start_rect = midRect(self._PosX+self._StartX,self._StartY+self._Value,self._Width,self._Height,self._Parent._Width,self._Parent._Height)
-        aa_round_rect(self._CanvasHWND,start_rect, self._Color,3,0, self._Color)
+        #aa_round_rect(self._CanvasHWND,start_rect, self._Color,3,0, self._Color)
+        pygame.draw.rect(self._CanvasHWND,self._Color,start_rect,0)

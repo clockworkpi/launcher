@@ -54,21 +54,16 @@ class SkinManager(object):
         fonts_path["Eurostile"] = "%s/EurostileMN-Medium.pfb.ttf" %skinpath
         fonts_path["EurostileBold"] = "%s/EurostileMN-ExtendedBold.pfb.ttf" % skinpath
         
-        self._Fonts["Eurostile10"]  = pygame.font.Font(fonts_path["Eurostile"],10)
-        self._Fonts["Eurostile11"]  = pygame.font.Font(fonts_path["Eurostile"],11)
-        self._Fonts["Eurostile12"]  = pygame.font.Font(fonts_path["Eurostile"],12)
-        self._Fonts["Eurostile13"]  = pygame.font.Font(fonts_path["Eurostile"],13)
         
-        self._Fonts["EurostileBold13"]  = pygame.font.Font(fonts_path["EurostileBold"],13)
-        
+        self._Fonts["EurostileBold13"]  = pygame.font.Font(fonts_path["EurostileBold"],13)        
         self._Fonts["EurostileBold30"]  = pygame.font.Font(fonts_path["EurostileBold"],30)
         
         for i in range(10,29):
-          self._Fonts["varela%d"%i] = pygame.font.Font(fonts_path["varela"],i)
+          self._Fonts["varela%d"%i] = pygame.font.Font(fonts_path["Eurostile"],i)
           
-        self._Fonts["varela34"] = pygame.font.Font(fonts_path["varela"],34)
-        self._Fonts["varela40"] = pygame.font.Font(fonts_path["varela"],40)
-        self._Fonts["varela120"] = pygame.font.Font(fonts_path["varela"],120)
+        self._Fonts["varela34"] = pygame.font.Font(fonts_path["Eurostile"],34)
+        self._Fonts["varela40"] = pygame.font.Font(fonts_path["Eurostile"],40)
+        self._Fonts["varela120"] = pygame.font.Font(fonts_path["Eurostile"],120)
         
         for i in range(10,26):
             self._Fonts["veramono%d"%i] = pygame.font.Font(fonts_path["veramono"],i)
@@ -86,9 +81,9 @@ class SkinManager(object):
         Colors["High"] = pygame.Color(51, 166, 255)
         Colors["Text"] = pygame.Color(42, 140, 121)
         Colors["ReadOnlyText"] = pygame.Color(130,130,130)
-        Colors["Front"] = pygame.Color(131, 199, 219)
+        Colors["Front"] = pygame.Color(42,140,121)
         Colors["URL"] = pygame.Color(51, 166, 255)
-        Colors["Line"] = pygame.Color(42, 140, 121)
+        Colors["Line"] = pygame.Color(21, 70, 60)
         Colors["TitleBg"] = pygame.Color(11, 16, 22)
         Colors["Active"] = pygame.Color(175, 90, 0)
         Colors["Inactive"] = pygame.Color(27,78,72)
