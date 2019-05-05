@@ -110,7 +110,7 @@ class MessageBox(Label):
             #self._HWND.blit(self._CanvasHWND,rect)
 
         if withborder == True:
-            pygame.draw.rect(self._HWND,MySkinManager.GiveColor('Black'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
+            pygame.draw.rect(self._HWND,MySkinManager.GiveColor('Text'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
         
     def Draw(self):        
         x = (self._Parent._Width)/2
