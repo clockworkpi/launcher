@@ -8,6 +8,8 @@ import pygame
 from UI.page   import Page
 from UI.label  import Label
 from UI.lang_manager import MyLangManager
+from UI.skin_manager import MySkinManager
+
 # a item for List
 # - - - - - - - - - - - -- 
 # | Icon  Text.....    > |
@@ -50,6 +52,6 @@ class ListItem(object):
         self._Labels["Text"]._PosY = self._PosY + (self._Height - self._Labels["Text"]._Height)/2
         self._Labels["Text"].Draw()
 
-        pygame.draw.line(self._Parent._CanvasHWND,(169,169,169),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
     
 

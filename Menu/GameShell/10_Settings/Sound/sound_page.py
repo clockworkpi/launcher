@@ -15,25 +15,19 @@ from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.slider     import Slider
 from UI.multi_icon_item import MultiIconItem
-
+from UI.skin_manager import MySkinManager
 
 from UI.icon_pool  import MyIconPool
+
+from libs.roundrects import aa_round_rect
 
 import myvars
 
 class SoundSlider(Slider):
     OnChangeCB = None
     
-    _BGpng = None
-    _BGwidth = 192
-    _BGheight = 173
-
-    _NeedleSurf = None
-    _Scale      = None
     _Parent     = None
-    
-    snd_segs = [ [0,20],[21,40],[41,50],[51,60],[61,70],[71,85],[86,90],[91,95],[96,100] ]
-
+    _VolumeLabel =None
     
     def __init__(self):
         Slider.__init__(self)
@@ -42,64 +36,67 @@ class SoundSlider(Slider):
         self._Width = self._Parent._Width
         self._Height = self._Parent._Height
         
-        self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["vol"]
-        self._BGpng._MyType = ICON_TYPES["STAT"]
-        self._BGpng._Parent = self
-        self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
-
-        ##self._NeedleSurf = pygame.Surface( (38,12),pygame.SRCALPHA )
-        
-        self._Scale = MultiIconItem()
-        self._Scale._MyType = ICON_TYPES["STAT"]
-        self._Scale._Parent = self
-        self._Scale._ImgSurf = MyIconPool._Icons["scale"]
-        self._Scale._IconWidth = 82
-        self._Scale._IconHeight = 63
-        self._Scale.Adjust(0,0,82,63,0)
+        self._VolumeLabel = Label()
+        self._VolumeLabel.SetCanvasHWND(self._CanvasHWND)
+        self._VolumeLabel.Init("VOLUME",MySkinManager.GiveFont("EurostileBold13"))
+        self._VolumeLabel.SetColor(MySkinManager.GiveColor('Text'))
         
     def SetValue(self,vol):#pct 0-100
-        for i,v in enumerate(self.snd_segs):
-            if vol  >= v[0] and vol <= v[1]:
-                self._Value = i # self._Value :  0 - 8
-                break
+        if vol  >= 0 and vol <= 100:
+            self._Value = vol
         
     def Further(self):
-        self._Value+=1
+        self._Value+=5
 
-        if self._Value > len(self.snd_segs)-1:
-            self._Value = len(self.snd_segs) -1
-
-        vol = self.snd_segs[self._Value][0] + (self.snd_segs[self._Value][1] - self.snd_segs[self._Value][0])/2 
+        if self._Value > 100:
+            self._Value = 100
         
         if self.OnChangeCB != None:
             if callable(self.OnChangeCB):
-                self.OnChangeCB( vol )
+                self.OnChangeCB( self._Value )
         
     def StepBack(self):
-        self._Value-=1
+        self._Value-=5
 
         if self._Value < 0:
             self._Value = 0
-
-        vol = self.snd_segs[self._Value][0] + (self.snd_segs[self._Value][1] - self.snd_segs[self._Value][0])/2 
-        
+            
         if self.OnChangeCB != None:
             if callable(self.OnChangeCB):
-                self.OnChangeCB( vol )
+                self.OnChangeCB( self._Value )
     
     def Draw(self):
-        
-        self._BGpng.NewCoord(self._Width/2,self._Height/2 )
-        self._BGpng.Draw()
+        start_x = 82
+        start_y = self._Parent._Screen._Height/2-5
+        height = 30
+        width = 4
+        seg = self._Value / 5
 
-        self._Scale.NewCoord(self._Width/2,self._Height/2)
-
-        self._Scale._IconIndex = self._Value
+        for i in range(0, 20):
+            rect = pygame.Rect(start_x+i*(width*2),start_y,width,height)
+            if i > seg:
+                pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),rect, 1)
+                #aa_round_rect(self._CanvasHWND,rect, MySkinManager.GiveColor('Text'),1,1, MySkinManager.GiveColor('White'))
+            else:
+                pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),rect, 0)   
+                #aa_round_rect(self._CanvasHWND,rect, MySkinManager.GiveColor('Text'),1,0, MySkinManager.GiveColor('White'))
         
-        self._Scale.Draw()
+        self._VolumeLabel.NewCoord(118,self._Parent._Screen._Height/2-30)
+        self._VolumeLabel.Draw(True)
         
+        minus_box_rect = pygame.Rect(start_x- (4+6)*4,start_y,6*4,30)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),minus_box_rect, 0) 
         
+        minus_rect     = pygame.Rect(start_x-8*4,start_y+14,2*4,2)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),minus_rect, 0) 
+        
+        plus_box_rect = pygame.Rect(start_x + 39*4 +4*4,start_y,6*4,30)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),plus_box_rect, 0) 
+        
+        cross1_rect     = pygame.Rect(start_x+39*4+4*4+2*4,start_y+14,2*4,2)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),cross1_rect, 0) 
+        cross2_rect     = pygame.Rect(start_x+39*4+4*4+2*4+3,start_y+14-3,2,2*4)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),cross2_rect, 0) 
         
 class SoundPage(Page):
 
