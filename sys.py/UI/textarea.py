@@ -76,7 +76,7 @@ class Textarea(Widget):
         cursor_row = 0
 
         for i, v in enumerate(self._MyWords):
-            t = self._FontObj.render(v, True, (8, 135, 174))
+            t = self._FontObj.render(v, True, MySkinManager.GiveColor("Text"))
             t_width = t.get_width()
             w += t_width
             del(t)
