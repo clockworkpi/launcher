@@ -138,7 +138,7 @@ class MainScreen(Widget):
     _TitleBar    = None
     _FootBar     = None
     _MsgBox      = None
-    _MsgBoxFont  = MyLangManager.TrFont("veramono20")
+    _MsgBoxFont  = MyLangManager.TrFont("varela20")
     _IconFont    = MyLangManager.TrFont("varela15")
     _SkinManager = None
 
