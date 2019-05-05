@@ -178,7 +178,7 @@ class MPDSpectrumPage(Page):
         self._time2 = Label()
         self._time2.SetCanvasHWND(self._CanvasHWND)
         self._time2.Init("00:00-00:00", self._ListFont,
-                         MySkinManager.GiveColor('White'))
+                         MySkinManager.GiveColor('Text'))
 
         
         self.Start()
@@ -336,7 +336,7 @@ class MPDSpectrumPage(Page):
     
         if self._RollCanvas != None:
 #            self._RollCanvas.fill((111,22,33))
-            self._RollCanvas.fill(MySkinManager.GiveColor('Black'))
+            self._RollCanvas.fill(MySkinManager.GiveColor('Text'))
             if self._song_title._Width > self._RollW:
                 if (self._song_title._PosX + self._song_title._Width) > self._RollW and self._frames % 30 == 0:
                     self._song_title._PosX -= 1
@@ -410,9 +410,9 @@ class MPDSpectrumPage(Page):
                 else:
                     self._capYPositionArray[i] = value
 
-                pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(i*(bw+gap)+margin_left,self._Height-gap-self._capYPositionArray[i]-margin_bottom,bw,gap),0)
+                pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),(i*(bw+gap)+margin_left,self._Height-gap-self._capYPositionArray[i]-margin_bottom,bw,gap),0)
                 
-                pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(i*(bw+gap)+margin_left,self._Height-value-gap-margin_bottom,bw,value+gap),0)
+                pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),(i*(bw+gap)+margin_left,self._Height-value-gap-margin_bottom,bw,value+gap),0)
                 
                 self._vis_values[i] -= 2       
 

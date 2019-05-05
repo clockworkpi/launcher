@@ -37,9 +37,10 @@ class ListPageSelector(InfoPageSelector):
             self._PosY = y
             self._Height = h
             
-            aa_round_rect(self._Parent._CanvasHWND,  
-                          (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
-
+            #aa_round_rect(self._Parent._CanvasHWND,  
+            #              (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+            
+            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width-4,h) ,0)
 
 class PageListItem(InfoPageListItem):
     _PosX = 0

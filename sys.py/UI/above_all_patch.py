@@ -31,7 +31,7 @@ class AboveAllPatch(Widget):
     _FontObj=  MyLangManager.TrFont("veramono20")
     _Parent =None
     _Color = MySkinManager.GiveColor('Text')
-    _ValColor = MySkinManager.GiveColor('URL')
+    _ValColor = MySkinManager.GiveColor('Text')
     _CanvasHWND = None
     _TextSurf = None
     _Icons   = {}
@@ -130,5 +130,6 @@ class SoundPatch(AboveAllPatch):
             #w = 10,h = 40
             vol_rect = pygame.Rect(80+i*20, self._Height/2+20,10, 40)
             
-            aa_round_rect(self._CanvasHWND,vol_rect,MySkinManager.GiveColor("Front"),3,0,MySkinManager.GiveColor("Front"))
+            pygame.draw.rect(self._CanvasHWND,self._ValColor,vol_rect,0)
+            #aa_round_rect(self._CanvasHWND,vol_rect,self._ValColor,3,0,self._ValColor)
     

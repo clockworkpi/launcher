@@ -8,7 +8,7 @@ from UI.page   import Page,PageSelector
 from UI.skin_manager import MySkinManager
 
 class InfoPageSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Line')
 
     def __init__(self):
         self._Width  = Width
@@ -25,5 +25,6 @@ class InfoPageSelector(PageSelector):
             self._PosY = y
             self._Height = h
             
-            aa_round_rect(self._Parent._CanvasHWND,  
-                          (self._PosX,self._PosY,self._Width-4,self._Height),self._BackgroundColor,4,0,self._BackgroundColor)
+            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(self._PosX,self._PosY,self._Width-4,self._Height),0)
+            #aa_round_rect(self._Parent._CanvasHWND,  
+            #              (self._PosX,self._PosY,self._Width-4,self._Height),self._BackgroundColor,4,0,self._BackgroundColor)
