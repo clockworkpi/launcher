@@ -238,7 +238,7 @@ class WifiListMessageBox(Label):
         padding = 10 
         pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))        
 
-        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
 
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 
