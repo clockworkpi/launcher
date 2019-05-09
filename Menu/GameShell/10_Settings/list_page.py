@@ -63,7 +63,7 @@ class ListPage(Page):
                          ["","Notification","Notification"],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],
+                         ["","PowerOFF","Power OFF"],
                          ["","ButtonsLayout","Buttons Layout"],
                          ["","LauncherGo","Switch to LauncherGo"],
                          ["","Lima","GPU driver switch"],
