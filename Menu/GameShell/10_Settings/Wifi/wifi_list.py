@@ -568,7 +568,9 @@ class WifiList(Page):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
-            
+        else:
+            self.ShowBox(MyLangManager.Tr("Disconnect first"))
+        
     def OnReturnBackCb(self):
         pass
         
@@ -621,8 +623,8 @@ class WifiList(Page):
                 for i in wicd_wirelss_encrypt_pwd:
                     if "preshared_key" in i:
                         if i["preshared_key"] != None:
-                            if len(i["preshared_key"]) > 0:
-                                thepass = i["preshared_key"]
+                            if len(str(i["preshared_key"])) > 0:
+                                thepass = str(i["preshared_key"])
                                 break
                 
                 myvars.PasswordPage.SetPassword(thepass)
