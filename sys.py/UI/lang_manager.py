@@ -100,9 +100,10 @@ class LangManager(object):
             return MySkinManager.GiveFont(orig_font_str)
         else:
             if font_size_number > 28:
-                raise Exception('cjk font string format error '+ str(font_size_number))
-            
-            return MySkinManager.GiveFont("notosanscjk%d" % font_size_number)
+            #    raise Exception('cjk font string format error '+ str(font_size_number))
+                return MySkinManager.GiveFont(orig_font_str)
+            else:
+                return MySkinManager.GiveFont("notosanscjk%d" % font_size_number)
 
 ##global MyLangManager Handler
 MyLangManager = None
