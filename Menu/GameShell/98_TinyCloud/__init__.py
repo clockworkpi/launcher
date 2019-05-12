@@ -18,8 +18,9 @@ class TinyCloudPage(Page):
     _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     
-    _ListFontObj = MyLangManager.TrFont("varela13")
-    
+    _ListFontObj = MyLangManager.TrFont("veramono13")
+    _ListLabelFontObj = MyLangManager.TrFont("varela13")
+
     _AList = {}
     _Labels = {}
 
@@ -117,17 +118,21 @@ class TinyCloudPage(Page):
             self._IP = "xxx.xxx.xxx.xxx"
         
         labels = \
-        [["forssh","For ssh and scp:",self._ListFontObj,self._TextColor],
+        [["forssh","For ssh and scp:",self._ListLabelFontObj,self._TextColor],
          ["ssh_addr","ssh cpi@%s" % self._IP, self._ListFontObj,self._URLColor],
-         ["forwin", "For Windows network:",    self._ListFontObj, self._TextColor],
+         
+         ["forwin", "For Windows network:",    self._ListLabelFontObj, self._TextColor],
          ["samba_games", "\\\\%s\games" % self._IP, self._ListFontObj,self._URLColor],
          ["samba_music", "\\\\%s\music" % self._IP, self._ListFontObj,self._URLColor],
-         ["forID",      "ID:",                     self._ListFontObj, self._TextColor],
-         ["forKey",     "Key:",                    self._ListFontObj, self._TextColor],
+         
+         ["forID",      "ID:",                     self._ListLabelFontObj, self._TextColor],
+         ["forKey",     "Key:",                    self._ListLabelFontObj, self._TextColor],
          ["key_and_pass", "cpi",                   self._ListFontObj, self._URLColor],
-         ["for_airplay", "Airplay:",               self._ListFontObj, self._TextColor],
+         
+         ["for_airplay", "Airplay:",               self._ListLabelFontObj, self._TextColor],
          ["airplay_name","clockworkpi",            self._ListFontObj, self._URLColor],
-         ["for-usb-eth","USB-Ethernet:",            self._ListFontObj, self._TextColor],
+         
+         ["for-usb-eth","USB-Ethernet:",            self._ListLabelFontObj, self._TextColor],
          ["usb-eth-addr","192.168.10.1",            self._ListFontObj, self._URLColor]]
 
         for i in labels:
