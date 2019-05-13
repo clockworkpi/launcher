@@ -143,7 +143,11 @@ class RomListPage(Page):
                     continue
                 
                 if FileExists(v+"/"+gameshell_bat):
-                    dirmap["gamedir"] = v.decode("utf8")
+                    try:
+                        dirmap["gamedir"] = v.decode("utf8","ignore")
+                    except:
+                        dirmap["gamedir"] = v.decode("ascii","ignore")
+                    
                     ret.append(dirmap)
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
@@ -162,7 +166,11 @@ class RomListPage(Page):
                         pieces  = bname.split(".")
                         if len(pieces) > 1:
                             if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                                dirmap["file"] = v.decode("utf8")
+                                try:
+                                    dirmap["file"] = v.decode("utf8","ignore")
+                                except:
+                                    dirmap["file"] = v.decode("ascii","ignore")
+                                
                                 ret.append(dirmap)
 #            else:
 #                print("not file or dir")
