@@ -129,8 +129,11 @@ class FavListPage(Page):
                     stats = os.stat(v)
                     if stats.st_gid != self._Parent._FavGID: ## only favs
                         continue
+                    try:
+                        dirmap["gamedir"] = v.decode("utf8","ignore")
+                    except:
+                        dirmap["gamedir"] = v.decode("ascii","ignore")
                     
-                    dirmap["gamedir"] = v.decode("utf8")
                     ret.append(dirmap)            
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
@@ -141,7 +144,11 @@ class FavListPage(Page):
                     pieces  = bname.split(".")
                     if len(pieces) > 1:
                         if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                            dirmap["file"] = v.decode("utf8")
+                            try:
+                                dirmap["file"] = v.decode("utf8","ignore")
+                            except:
+                                dirmap["file"] = v.decode("ascii","ignore")
+                            
                             ret.append(dirmap)
                 
 #            else:
