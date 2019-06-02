@@ -10,6 +10,7 @@ import fnmatch
 import random
 
 
+
 from libs import easing
 
 # import base64
@@ -114,14 +115,14 @@ class Page(Widget):
 
     def __init__(self):
         self._Icons = []
-        path = config.SKIN + '/Menu/GameShell/Wallpaper/'
+        path = '/home/cpi/launcher/skin/'+config.SKIN+'/Menu/GameShell/Wallpaper/'
 
         if os.path.exists(path):
             image = os.listdir(path)[0]
             if image:
                 self._Wallpaper = pygame.transform.scale(pygame.image.load(path+image).convert(), (320,240))  
         
- 
+
 
     def AdjustHLeftAlign(self): ## adjust coordinator and append the PageSelector
         self._PosX = self._Index*self._Screen._Width
