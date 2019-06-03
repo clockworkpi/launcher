@@ -115,12 +115,9 @@ class Page(Widget):
 
     def __init__(self):
         self._Icons = []
-        path = '/home/cpi/launcher/skin/'+config.SKIN+'/Menu/GameShell/Wallpaper/'
-
-        if os.path.exists(path):
-            image = os.listdir(path)[0]
-            if image:
-                self._Wallpaper = pygame.transform.scale(pygame.image.load(path+image).convert(), (320,240))  
+        
+        if os.path.isfile(config.Wallpaper):
+            self._Wallpaper = pygame.transform.scale(pygame.image.load(config.Wallpaper).convert(), (320,240))  
         
 
 
