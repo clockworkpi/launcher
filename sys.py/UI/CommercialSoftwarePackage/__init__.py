@@ -29,7 +29,7 @@ from UI.page  import Page
 from UI.label  import Label
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
-from UI.keys_def  import CurKeys
+from UI.keys_def  import CurKeys,IsKeyMenuOrB,IsKeyStartOrA
 from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
 from UI.text_bulletinboard import Textbulletinboard,Text
@@ -208,13 +208,13 @@ class HashErrPage(Page):
                 self._Board.SetAndBlitText(a.Words()+b.Words())
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             return   
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self._Leader.InstallPackage(self._Screen)
             return
         
