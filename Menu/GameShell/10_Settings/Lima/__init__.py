@@ -172,10 +172,10 @@ class GPUDriverPage(Page):
             
             if "modesetting" in cur_li._Value:
                 os.system("touch %s/.lima" % os.path.expanduser('~') )
-                os.system("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so  /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima")
+                os.system("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima  /usr/lib/xorg/modules/drivers/modesetting_drv.so")
             else:
                 os.system("rm %s/.lima" % os.path.expanduser('~') )
-                os.system("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima /usr/lib/xorg/modules/drivers/modesetting_drv.so")
+                os.system("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima")
             
             pygame.time.delay(800)
             os.system("sudo reboot")
