@@ -31,7 +31,8 @@ PowerLevel = "balance_saving"
 
 def PreparationInAdv():
     global SKIN
-
+    global PowerLevel
+    
     if SKIN != None:
         return
 
@@ -52,7 +53,7 @@ def PreparationInAdv():
     
     powerlevel = powerlevel.strip()
     if powerlevel != "":
-        config.PowerLevel = powerlevel
+        PowerLevel = powerlevel
         if powerlevel != "supersaving":
             ArmSystem("sudo iw wlan0 set power_save off >/dev/null")
         else:
