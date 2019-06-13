@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*- 
 import os
 import pygame
-#import math
-#mport subprocess
+#import commands
 import glob
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
@@ -11,7 +10,7 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect
+from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
@@ -73,8 +72,8 @@ class PageListItem(InfoPageListItem):
         
         pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
-class LanguagesPage(Page):
-    _FootMsg =  ["Nav","","","Back","Select"]
+class SkinsPage(Page):
+    _FootMsg =  ["Nav","","Scan","Back","Select"]
     _MyList = []
     _ListFont = MyLangManager.TrFont("notosanscjk15")
     
@@ -94,16 +93,23 @@ class LanguagesPage(Page):
         self._Icons = {}
 
     def GenList(self):
-        
         self._MyList = []
         
         start_x  = 0
         start_y  = 0
         last_height = 0
 
-        files_path = [os.path.basename(x) for x in sorted(glob.glob('langs/*.ini'))]
+
+        skins = [["../skin/default","Default"]]
+        files_path = glob.glob("/home/cpi/skins/*")
         
-        for i,u in enumerate( files_path ):            
+        for i ,v in enumerate(files_path):
+            if os.path.isdir(v):
+                bname = os.path.basename(v)
+                print(v,bname)
+                skins.append([v,bname])
+        
+        for i,u in enumerate( skins ):            
             #print(i,u)
             li = PageListItem()
             li._Parent = self
@@ -112,11 +118,8 @@ class LanguagesPage(Page):
             li._Width  = Width
             li._Fonts["normal"] = self._ListFont
             li._Active = False
-            li._Value = u.decode("utf8")
-            lang_name = u.split("_")[1]
-            lang_name = lang_name.split(".")[0]
-            
-            li.Init( lang_name.decode("utf8") )
+            li._Value = u[0]
+            li.Init( u[1] )
             
             last_height += li._Height
             
@@ -152,31 +155,6 @@ class LanguagesPage(Page):
         self._Scroller.Init()
         self._Scroller.SetCanvasHWND(self._HWND)
 
-        
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-    
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-    
-
     def Click(self):
         if len(self._MyList) == 0:
             return
@@ -184,42 +162,35 @@ class LanguagesPage(Page):
         cur_li = self._MyList[self._PsIndex]
         if cur_li._Active == True:
             return
+
+        print(cur_li._Value)
         
         for i in self._MyList:
             i._Active = False
-
+            
         cur_li._Active = True
-        print(cur_li._Value)
-        with open(".lang","w") as f:
-            f.write(cur_li._Value)
-        
         self._Screen._MsgBox.SetText("Applying")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
+            
+        if "../skin/default" in cur_li._Value:
+            os.system("rm %s/.gameshell_skin" % os.path.expanduser('~') )
+        else:
+            os.system("echo %s > %s/.gameshell_skin" % (cur_li._Value,os.path.expanduser('~') ))
         
-        MyLangManager.UpdateLang()
-        
-        pygame.event.post( pygame.event.Event(RESTARTUI, message="")) ##Restart Launcher
-        
-        pygame.time.delay(1000)
-        
-        self._Screen.Draw()
-        self._Screen.SwapAndShow()
+        pygame.time.delay(700)
+        pygame.event.post( pygame.event.Event(RESTARTUI, message=""))
         
     def OnLoadCb(self):
         self._Scrolled = 0
         self._PosY = 0
         self._DrawOnce = False
-        with open(".lang", "r") as f:
-            thelang = f.read()
-
-        thelang = thelang.strip()
-
-        if thelang == "":
-            thelang = "English"
-
+                        
         for i in self._MyList:
-            if thelang in i._Value:
+            i._Active = False
+        
+        for i in self._MyList:
+            if config.SKIN in i._Value:
                 i._Active = True
         
     def OnReturnBackCb(self):
@@ -230,6 +201,7 @@ class LanguagesPage(Page):
         self._Screen.SwapAndShow()
         """
     def KeyDown(self,event):
+    
         if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
@@ -242,11 +214,24 @@ class LanguagesPage(Page):
             self.ScrollUp()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
+        
         if event.key == CurKeys["Down"]:
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-
+        
+        if event.key == CurKeys["X"]:
+            self.GenList()
+            
+            for i in self._MyList:
+                i._Active = False
+        
+            for i in self._MyList:
+                if config.SKIN in i._Value:
+                    i._Active = True
+                
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()            
     
     def Draw(self):
 
@@ -289,9 +274,9 @@ class APIOBJ(object):
     def __init__(self):
         pass
     def Init(self,main_screen):
-        self._Page = LanguagesPage()
+        self._Page = SkinsPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="Languages"
+        self._Page._Name ="Skin selection"
         self._Page.Init()
         
     def API(self,main_screen):

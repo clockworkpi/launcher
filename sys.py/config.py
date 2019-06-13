@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*- 
+import os
+import platform
+from UI.util_funcs   import FileExists,ArmSystem
 
 CurKeySet = "GameShell" ## >>>    PC or GameShell   <<<
 
@@ -14,7 +17,7 @@ UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ve
 
 VERSION="stable 1.24"
 
-SKIN="../skin/default"
+SKIN=None
 
 ## three timer values in seconds: dim screen, close screen,PowerOff
 ## zero means no action
@@ -26,5 +29,38 @@ PowerLevels["balance_saving"] = [40,0,0]
 
 PowerLevel = "balance_saving"
 
+def PreparationInAdv():
+    global SKIN
+    global PowerLevel
+    
+    if SKIN != None:
+        return
+
+    SKIN= "../skin/default"
+    
+    if FileExists("%s/.gameshell_skin" % os.path.expanduser('~')) == True:
+        with open("%s/.gameshell_skin" % os.path.expanduser('~'),"r") as f:
+          gameshell_skin = f.read()
+        
+        gameshell_skin = gameshell_skin.strip()
+        SKIN= gameshell_skin
+    
+    if FileExists(".powerlevel") == False:
+        os.system("touch .powerlevel")
+    
+    with open(".powerlevel","r") as f:
+        powerlevel = f.read()
+    
+    powerlevel = powerlevel.strip()
+    if powerlevel != "":
+        PowerLevel = powerlevel
+        if powerlevel != "supersaving":
+            ArmSystem("sudo iw wlan0 set power_save off >/dev/null")
+        else:
+            ArmSystem("sudo iw wlan0 set power_save on > /dev/null")
+    else:
+        ArmSystem("sudo iw wlan0 set power_save off >/dev/null")
+
+PreparationInAdv()
 ##sys.py/.powerlevel
 
