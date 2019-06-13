@@ -254,7 +254,7 @@ class AboutPage(Page):
         self._Height = self._Screen._Height
 
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["about_bg"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("about_bg")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)

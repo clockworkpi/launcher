@@ -180,7 +180,7 @@ class PlayListPage(Page):
         gobject.timeout_add(850,self.GObjectInterval)
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["heart"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("heart")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.AddLabel(MyLangManager.Tr("my favorite music"), MyLangManager.TrFont("varela18"))

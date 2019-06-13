@@ -234,7 +234,7 @@ class FavListPage(Page):
 
 
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["star"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("star")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.AddLabel(MyLangManager.Tr("MyFavGames"), MyLangManager.TrFont("varela18"))

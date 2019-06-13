@@ -58,14 +58,14 @@ class DownloadProcessPage(Page):
         self._PngSize["needwifi_bg"] = (253,132)
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["rom_download"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("rom_download")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._PngSize["bg"][0],self._PngSize["bg"][1],0)
         self._Icons["bg"] = bgpng
 
         needwifi_bg = IconItem()
-        needwifi_bg._ImgSurf = MyIconPool._Icons["needwifi_bg"]
+        needwifi_bg._ImgSurf = MyIconPool.GiveIconSurface("needwifi_bg")
         needwifi_bg._MyType = ICON_TYPES["STAT"]
         needwifi_bg._Parent = self
         needwifi_bg.Adjust(0,0,self._PngSize["needwifi_bg"][0],self._PngSize["needwifi_bg"][1],0)

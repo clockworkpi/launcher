@@ -136,26 +136,26 @@ class MPDSpectrumPage(Page):
         
         """
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["sheep_bg"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("sheep_bg")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
         
         self._SheepHead = IconItem()
-        self._SheepHead._ImgSurf = MyIconPool._Icons["sheep_head"]
+        self._SheepHead._ImgSurf = MyIconPool.GiveIconSurface("sheep_head")
         self._SheepHead._MyType = ICON_TYPES["STAT"]
         self._SheepHead._Parent = self
         self._SheepHead.Adjust(0,0,self._SheepHeadW,self._SheepHeadH,0)
 
         self._SheepBody = IconItem()
-        self._SheepBody._ImgSurf = MyIconPool._Icons["sheep_body"]
+        self._SheepBody._ImgSurf = MyIconPool.GiveIconSurface("sheep_body")
         self._SheepBody._MyType = ICON_TYPES["STAT"]
         self._SheepBody._Parent = self
         self._SheepBody.Adjust(0,0,self._SheepBodyW,self._SheepBodyH,0)
         """
         
         self._cwp_png = IconItem()
-        self._cwp_png._ImgSurf = MyIconPool._Icons["tape"]
+        self._cwp_png._ImgSurf = MyIconPool.GiveIconSurface("tape")
         self._cwp_png._MyType = ICON_TYPES["STAT"]
         self._cwp_png._Parent = self
         self._cwp_png.Adjust(0,0,79,79,0)

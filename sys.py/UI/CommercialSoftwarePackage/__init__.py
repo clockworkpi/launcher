@@ -49,7 +49,7 @@ class NotFoundPage(Page):
         self._CanvasHWND = self._Screen._CanvasHWND
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons[self._BG]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface(self._BG)
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         #print( MyIconPool.Width(self._BG),MyIconPool.Height(self._BG) )
@@ -143,7 +143,7 @@ class HashErrPage(Page):
         self._CanvasHWND = self._Screen._CanvasHWND
         
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons[self._BG]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface(self._BG)
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.Adjust(0,0,MyIconPool.Width(self._BG),MyIconPool.Height(self._BG),0)

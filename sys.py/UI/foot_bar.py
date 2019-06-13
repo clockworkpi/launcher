@@ -94,7 +94,7 @@ class FootBar(Widget):
 
         round_corners._MyType = ICON_TYPES["STAT"]
         round_corners._Parent = self
-        round_corners._ImgSurf = MyIconPool._Icons["roundcorners"]
+        round_corners._ImgSurf = MyIconPool.GiveIconSurface("roundcorners")
         round_corners.Adjust(0,0,10,10,0)
 
         self._Icons["round_corners"] = round_corners

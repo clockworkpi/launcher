@@ -54,7 +54,7 @@ class StoragePage(Page):
         self._Height = self._Screen._Height
         
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["icon_sd"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("icon_sd")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         

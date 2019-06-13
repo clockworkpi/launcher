@@ -137,13 +137,13 @@ class NetItem(Widget):
         
 
         lock_icon = NetItemIcon()
-        lock_icon._ImgSurf = MyIconPool._Icons["lock"]
+        lock_icon._ImgSurf = MyIconPool.GiveIconSurface("lock")
         lock_icon._CanvasHWND = self._Parent._CanvasHWND
         lock_icon._Parent = self
         self._Icons["lock"] = lock_icon
         
         done_icon = NetItemIcon()
-        done_icon._ImgSurf = MyIconPool._Icons["done"]
+        done_icon._ImgSurf = MyIconPool.GiveIconSurface("done")
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         
