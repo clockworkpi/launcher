@@ -74,7 +74,7 @@ class PageListItem(InfoPageListItem):
         pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)        
     
 class SkinsPage(Page):
-    _FootMsg =  ["Nav","","","Back","Select"]
+    _FootMsg =  ["Nav","","Scan","Back","Select"]
     _MyList = []
     _ListFont = MyLangManager.TrFont("notosanscjk15")
     
@@ -94,7 +94,6 @@ class SkinsPage(Page):
         self._Icons = {}
 
     def GenList(self):
-        
         self._MyList = []
         
         start_x  = 0
@@ -221,7 +220,19 @@ class SkinsPage(Page):
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-
+        
+        if event.key == CurKeys["X"]:
+            self.GenList()
+            
+            for i in self._MyList:
+                i._Active = False
+        
+            for i in self._MyList:
+                if config.SKIN in i._Value:
+                    i._Active = True
+                
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()            
     
     def Draw(self):
 
