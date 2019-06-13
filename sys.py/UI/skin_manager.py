@@ -117,7 +117,7 @@ class SkinManager(object):
         else:
             return  pygame.Color(255,0,0)
     
-    def GiveIcon(self,orig_file_or_dir):
+    def GiveIcon(self,orig_file_or_dir): ## return is string,not Surface
         #doing a wrapper for items under /home/cpi/apps/Menu/*, to be like Menu/GameShell/*
         if orig_file_or_dir.startswith("/home/cpi/apps/Menu"):
             orig_file_or_dir = orig_file_or_dir.replace("/home/cpi/apps/Menu/","../Menu/GameShell/")

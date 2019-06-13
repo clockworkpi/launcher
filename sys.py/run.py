@@ -377,6 +377,7 @@ def event_process(event,main_screen):
             os.chdir(GetExePath())
             exec_app_cmd = " sync & cd "+GetExePath()+"; exec python "+myscriptname
             print(exec_app_cmd)
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             os.chdir( GetExePath())
             os.exelp("python","python"," "+myscriptname)
@@ -385,6 +386,7 @@ def event_process(event,main_screen):
             pygame.quit()
             gobject_main_loop.quit()
             exec_app_cmd = event.message +";"
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             sys.exit(-1)
             return
