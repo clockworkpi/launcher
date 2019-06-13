@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*- 
 import os
 import pygame
-import platform
 #import commands
 import glob
 #from beeprint import pp

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import platform
 import pygame
 import os
 import subprocess
@@ -110,3 +110,14 @@ def DrawText(canvas,text, x,y,width,height,canWidth,canHeight,fontObj):# text fo
 
 def SwapAndShow():
     pygame.display.update()
+
+def ArmSystem(cmd):
+    if "arm" not in platform.machine():
+        return
+    os.system(cmd)
+
+def InGameShell():
+    if "arm" not in platform.machine():
+        return True
+    else:
+        return False
