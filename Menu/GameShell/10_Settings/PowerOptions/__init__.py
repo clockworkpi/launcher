@@ -378,7 +378,7 @@ class PowerOptionsPage(Page):
         self._Height = self._Screen._Height
 
         done = IconItem()
-        done._ImgSurf = MyIconPool._Icons["done"]
+        done._ImgSurf = MyIconPool.GiveIconSurface("done")
         done._MyType = ICON_TYPES["STAT"]
         done._Parent = self
         self._Icons["done"] = done

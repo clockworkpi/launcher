@@ -44,7 +44,7 @@ class NotifyJobListItem(InfoPageListItem):
         self._Labels["Text"] = l    
         
         done_icon = IconItem()
-        done_icon._ImgSurf = MyIconPool._Icons["done"]
+        done_icon._ImgSurf = MyIconPool.GiveIconSurface("done")
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         

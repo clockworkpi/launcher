@@ -153,7 +153,7 @@ class ButtonsLayoutPage(Page):
         self._Height = self._Screen._Height
 
         DialogBoxs = MultiIconItem()
-        DialogBoxs._ImgSurf = MyIconPool._Icons["buttonslayout"]
+        DialogBoxs._ImgSurf = MyIconPool.GiveIconSurface("buttonslayout")
         DialogBoxs._MyType = ICON_TYPES["STAT"]
         DialogBoxs._Parent = self
         DialogBoxs._IconWidth = 300

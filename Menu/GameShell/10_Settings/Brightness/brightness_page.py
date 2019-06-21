@@ -39,7 +39,7 @@ class BSlider(Slider):
         self._Height = self._Parent._Height
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["light"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("light")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
@@ -49,7 +49,7 @@ class BSlider(Slider):
         scale = MultiIconItem()
         scale._MyType = ICON_TYPES["STAT"]
         scale._Parent = self
-        scale._ImgSurf = MyIconPool._Icons["scale"]
+        scale._ImgSurf = MyIconPool.GiveIconSurface("scale")
         scale._IconWidth = 82
         scale._IconHeight = 63
         scale.Adjust(0,0,82,63,0)

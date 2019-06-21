@@ -176,7 +176,7 @@ class TimezoneListPage(Page):
         self.SyncList("/usr/share/zoneinfo/posix")
 
         icon_for_list = MultiIconItem()
-        icon_for_list._ImgSurf = MyIconPool._Icons["sys"]
+        icon_for_list._ImgSurf = MyIconPool.GiveIconSurface("sys")
         icon_for_list._MyType = ICON_TYPES["STAT"]
         icon_for_list._Parent = self
         
@@ -185,7 +185,7 @@ class TimezoneListPage(Page):
 
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["empty"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("empty")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.AddLabel("No timezones found on system!", MyLangManager.TrFont("varela22"))

@@ -172,7 +172,7 @@ class MusicLibListPage(Page):
         self.SyncList("/")
 
         icon_for_list = MultiIconItem()
-        icon_for_list._ImgSurf = MyIconPool._Icons["sys"]
+        icon_for_list._ImgSurf = MyIconPool.GiveIconSurface("sys")
         icon_for_list._MyType = ICON_TYPES["STAT"]
         icon_for_list._Parent = self
         
@@ -181,7 +181,7 @@ class MusicLibListPage(Page):
 
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["empty"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("empty")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela22"))

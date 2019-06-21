@@ -70,7 +70,7 @@ class MyEmulator(object):
                 keyname = i.split(".")[0]
                 self._Icons[keyname] = pygame.image.load(basepath+"/"+i).convert_alpha()
         """
-        self._Icons["sys"] = MyIconPool._Icons["sys"]
+        self._Icons["sys"] = MyIconPool.GiveIconSurface("sys")
         
         
     def InitDeleteConfirmPage(self,main_screen):
