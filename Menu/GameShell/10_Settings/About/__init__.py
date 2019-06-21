@@ -16,7 +16,7 @@ from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
-from UI.icon_item  import IconItem
+from UI.multi_icon_item  import MultiIconItem
 from UI.multilabel import MultiLabel
 from UI.lang_manager import MyLangManager
 from UI.skin_manager import MySkinManager
@@ -280,7 +280,7 @@ class AboutPage(Page):
         self._Width = self._Screen._Width ## equal to screen width
         self._Height = self._Screen._Height
 
-        bgpng = IconItem()
+        bgpng = MultiIconItem()
         bgpng._ImgSurf = MyIconPool.GiveIconSurface("about_bg")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
@@ -350,13 +350,16 @@ class AboutPage(Page):
             self.ClearCanvas()
             #self._Ps.Draw()
         
-            self._Icons["bg"].NewCoord(self._Width/2,self._Height/2 + (self._BGheight - Height)/2 + self._Screen._TitleBar._Height)
-            self._Icons["bg"].Draw()
-
             for i in self._MyList:
                 i.Draw()
                 
             self._DrawOnce = True
+            
+            self._Icons["bg"].DrawRect((230,0,82,184),(228,0,82,184))
+            
+            y = self._MyList[len(self._MyList)-1]._PosY+30
+            
+            self._Icons["bg"].DrawRect(( (self._Width-191)/2,y,191,68),(65,232,191,68))
             
         if self._HWND != None:
             self._HWND.fill(MySkinManager.GiveColor("White"))
