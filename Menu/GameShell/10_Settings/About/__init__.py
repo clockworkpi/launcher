@@ -274,7 +274,7 @@ class AboutPage(Page):
         if self._Screen != None:
             if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
                 self._HWND = self._Screen._CanvasHWND
-                self._CanvasHWND = pygame.Surface( (self._Screen._Width,self._BGheight) )
+                self._CanvasHWND = pygame.Surface( (self._Screen._Width,self._BGheight+50) )
 
         self._PosX = self._Index*self._Screen._Width 
         self._Width = self._Screen._Width ## equal to screen width
@@ -307,7 +307,7 @@ class AboutPage(Page):
         
     def ScrollDown(self):
         dis = 10
-        if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 50:
+        if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 100:
             self._PosY -= dis
             self._Scrolled -= dis
         
