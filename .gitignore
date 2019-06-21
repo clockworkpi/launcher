@@ -13,5 +13,9 @@ sys.py/.lang
 !**/Jobs/00_lowpower.alias
 .done
 bios
+bios/*
+screenshots
+screenshots/*
 .pcsx
+.pcsx/*
 *.log
