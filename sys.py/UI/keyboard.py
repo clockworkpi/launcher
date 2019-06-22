@@ -128,7 +128,7 @@ class Keyboard(Page):
 
                     if val == "_L" or val == "_R":
                         it  = KeyboardIcon()
-                        it._ImgSurf = MyIconPool._Icons[val]
+                        it._ImgSurf = MyIconPool.GiveIconSurface(val)
                         it._Parent = self
                         it._Str = val
                         it.Init(start_x+it._ImgSurf.get_width()/2  ,start_y,it._ImgSurf.get_width(),it._ImgSurf.get_height(),0)

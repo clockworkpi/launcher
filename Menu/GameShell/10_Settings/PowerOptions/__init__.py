@@ -378,7 +378,7 @@ class PowerOptionsPage(Page):
         self._Height = self._Screen._Height
 
         done = IconItem()
-        done._ImgSurf = MyIconPool._Icons["done"]
+        done._ImgSurf = MyIconPool.GiveIconSurface("done")
         done._MyType = ICON_TYPES["STAT"]
         done._Parent = self
         self._Icons["done"] = done
@@ -521,7 +521,7 @@ class PowerOptionsPage(Page):
                     i.Draw()                
 
         if self._HWND != None:
-            self._HWND.fill((255,255,255))
+            self._HWND.fill(MySkinManager.GiveColor("White"))
             
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             

@@ -19,7 +19,7 @@ from icon_item   import IconItem
 from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
-from constants   import Width,Height,bg_color
+from constants   import Width,Height
 from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
 from keys_def    import CurKeys
 from label       import Label

@@ -12,14 +12,16 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect
+from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
-from UI.icon_item  import IconItem
+from UI.multi_icon_item  import MultiIconItem
 from UI.multilabel import MultiLabel
 from UI.lang_manager import MyLangManager
 from UI.skin_manager import MySkinManager
+
+from config import VERSION
 
 class InfoPageListItem(object):
     _PosX = 0
@@ -206,7 +208,32 @@ class AboutPage(Page):
                     memory["value"] = str( int(parts[1].strip())/1000.0) +" MB"
                     self._AList["memory"] = memory                    
                     break
-        
+                    
+    def LauncherVersion(self):
+        launcher_version = {}
+        launcher_version["key"] = "launcher_ver"
+        launcher_version["label"] = "Launcher:"
+        launcher_version["value"] = VERSION
+        self._AList["launcher_ver"] = launcher_version
+    
+    def OsImageVersion(self):
+        if FileExists("/etc/clockworkpi_os_image_version"):
+            try:
+                with open("/etc/clockworkpi_os_image_version") as f:
+                    content = f.readlines()
+                content = [x.strip() for x in content]
+            
+            except:
+                print("open %s failed" % "/etc/clockworkpi_os_image_version")
+                content = None
+            
+            if content != None and len(content) > 0:
+                os_image_ver = {}
+                os_image_ver["key"] = "os_image_ver"
+                os_image_ver["label"] = "OS Image:"
+                os_image_ver["value"] = content[0][:12]
+                self._AList["os_image_ver"] = os_image_ver
+    
     def GenList(self):
         
         self._MyList = []
@@ -215,7 +242,7 @@ class AboutPage(Page):
         start_y  = 10
         last_height = 0
 
-        for i,u in enumerate( ["processor","armcores","cpuscalemhz","features","memory","uname"] ):
+        for i,u in enumerate( ["processor","armcores","cpuscalemhz","features","memory","uname","launcher_ver","os_image_ver"] ):
         #for i,u in enumerate( ["processor","cpucores","cpumhz","flags","memory","uname"] ):
             if u not in self._AList:
                 continue
@@ -247,14 +274,14 @@ class AboutPage(Page):
         if self._Screen != None:
             if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
                 self._HWND = self._Screen._CanvasHWND
-                self._CanvasHWND = pygame.Surface( (self._Screen._Width,self._BGheight) )
+                self._CanvasHWND = pygame.Surface( (self._Screen._Width,self._BGheight+50) )
 
         self._PosX = self._Index*self._Screen._Width 
         self._Width = self._Screen._Width ## equal to screen width
         self._Height = self._Screen._Height
 
-        bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["about_bg"]
+        bgpng = MultiIconItem()
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("about_bg")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
@@ -265,6 +292,9 @@ class AboutPage(Page):
         self.MemInfo()
         self.CpuMhz()
         self.Uname()
+        
+        self.LauncherVersion()
+        self.OsImageVersion()
         
         self.GenList()
 
@@ -277,7 +307,7 @@ class AboutPage(Page):
         
     def ScrollDown(self):
         dis = 10
-        if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 50:
+        if abs(self._Scrolled) <  (self._BGheight - self._Height)/2 + 100:
             self._PosY -= dis
             self._Scrolled -= dis
         
@@ -320,16 +350,19 @@ class AboutPage(Page):
             self.ClearCanvas()
             #self._Ps.Draw()
         
-            self._Icons["bg"].NewCoord(self._Width/2,self._Height/2 + (self._BGheight - Height)/2 + self._Screen._TitleBar._Height)
-            self._Icons["bg"].Draw()
-
             for i in self._MyList:
                 i.Draw()
                 
             self._DrawOnce = True
             
+            self._Icons["bg"].DrawRect((230,0,82,184),(228,0,82,184))
+            
+            y = self._MyList[len(self._MyList)-1]._PosY+30
+            
+            self._Icons["bg"].DrawRect(( (self._Width-191)/2,y,191,68),(65,232,191,68))
+            
         if self._HWND != None:
-            self._HWND.fill((255,255,255))
+            self._HWND.fill(MySkinManager.GiveColor("White"))
             
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             

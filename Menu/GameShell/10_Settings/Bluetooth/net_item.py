@@ -98,7 +98,7 @@ class NetItem(object):
         self._Labels["mac_addr"] = name_label
 
         done_icon = NetItemIcon()
-        done_icon._ImgSurf = MyIconPool._Icons["done"]
+        done_icon._ImgSurf = MyIconPool.GiveIconSurface("done")
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         

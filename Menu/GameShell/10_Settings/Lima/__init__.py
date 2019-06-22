@@ -11,7 +11,7 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect,FileExists
+from UI.util_funcs import midRect,FileExists,ArmSystem
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
@@ -132,7 +132,7 @@ class GPUDriverPage(Page):
         self._Height = self._Screen._Height
 
         done = IconItem()
-        done._ImgSurf = MyIconPool._Icons["done"]
+        done._ImgSurf = MyIconPool.GiveIconSurface("done")
         done._MyType = ICON_TYPES["STAT"]
         done._Parent = self
         self._Icons["done"] = done
@@ -170,10 +170,16 @@ class GPUDriverPage(Page):
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             
-            if "modesetting" in cur_li._Value:
+            if "modesetting" in cur_li._Value: ## enable lima
                 os.system("touch %s/.lima" % os.path.expanduser('~') )
-            else:
+                ArmSystem("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima  /usr/lib/xorg/modules/drivers/modesetting_drv.so")
+                ArmSystem("sudo sed -i '/^#.*lima/s/^#//' /etc/ld.so.conf.d/00-arm-linux-gnueabihf.conf")
+                ArmSystem("sudo ldconfig")
+            else: #disable lima
                 os.system("rm %s/.lima" % os.path.expanduser('~') )
+                ArmSystem("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima")
+                ArmSystem("sudo sed -i 's/^[^#]*lima/#&/' /etc/ld.so.conf.d/00-arm-linux-gnueabihf.conf")
+                ArmSystem("sudo ldconfig")
             
             pygame.time.delay(800)
             os.system("sudo reboot")
@@ -265,7 +271,7 @@ class GPUDriverPage(Page):
                     i.Draw()                
 
         if self._HWND != None:
-            self._HWND.fill((255,255,255))
+            self._HWND.fill(MySkinManager.GiveColor("White"))
             
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             

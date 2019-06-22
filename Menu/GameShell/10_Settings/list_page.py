@@ -65,6 +65,7 @@ class ListPage(Page):
                          ["","About",  "About"],
                          ["","PowerOFF","Power OFF"],
                          ["","ButtonsLayout","Buttons Layout"],
+                         ["","Skins","Skins"],
                          ["","LauncherGo","Switch to LauncherGo"],
                          ["","Lima","GPU driver switch"],
                          ["","GateWay","Network gateway switch"]]

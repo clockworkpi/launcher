@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-import platform
+
 import dbus
 import dbus.service
 import sys
@@ -21,7 +21,7 @@ import pygame
 from sys import exit
 import os
 
-from beeprint import pp
+#from beeprint import pp
 ########
 if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
@@ -29,10 +29,10 @@ else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
 
-
+import config
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
-from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
+from UI.constants    import Width,Height,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
+from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse,ArmSystem
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
 from UI.icon_item    import IconItem
@@ -43,10 +43,9 @@ from UI.main_screen  import MainScreen
 from UI.above_all_patch import SoundPatch
 from UI.icon_pool    import MyIconPool
 from UI.createby_screen import CreateByScreen
-
+from UI.skin_manager import MySkinManager
 from libs.DBUS            import setup_dbus
 
-import config
 
 if not pygame.display.get_init():
     pygame.display.init()
@@ -344,6 +343,7 @@ def event_process(event,main_screen):
             os.chdir(GetExePath())
             exec_app_cmd = " sync & cd "+GetExePath()+"; exec python "+myscriptname
             print(exec_app_cmd)
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             os.chdir( GetExePath())
             os.exelp("python","python"," "+myscriptname)
@@ -352,6 +352,7 @@ def event_process(event,main_screen):
             pygame.quit()
             gobject_main_loop.quit()
             exec_app_cmd = event.message +";"
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             sys.exit(-1)
             return
@@ -521,7 +522,7 @@ def big_loop():
     sound_patch.Init()
     #pp(main_screen._Pages[0],True,6)
 
-    screen.fill(bg_color)
+    screen.fill(MySkinManager.GiveColor("White"))
     main_screen.Draw()
     main_screen.SwapAndShow()
 
@@ -584,8 +585,7 @@ if __name__ == '__main__':
     pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
-
-
+    
     MyIconPool.Init()
     
     setup_dbus()
@@ -601,8 +601,6 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
-    
-    PreparationInAdv()
     
     crt_screen = CreateByScreen()
     crt_screen.Init()
