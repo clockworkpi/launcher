@@ -13,9 +13,9 @@ Battery   = "/sys/class/power_supply/axp20x-battery/uevent"
 
 MPD_socket = "/tmp/mpd.socket"
 
-UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ver.json"
+UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ver0.4.json"
 
-VERSION="stable 1.24"
+VERSION="stable 1.25"
 
 SKIN=None
 
