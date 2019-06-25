@@ -562,39 +562,7 @@ def big_loop():
     socket_thread(main_screen)
     
     gobject_loop()
-    
-
-def PreparationInAdv():
-    
-    if "arm" not in platform.machine():
-        return
-    
-    if FileExists(".powerlevel") == False:
-        os.system("touch .powerlevel")
-    
-    with open(".powerlevel","r") as f:
-        powerlevel = f.read()
-    
-    powerlevel = powerlevel.strip()
-    if powerlevel != "":
-        config.PowerLevel = powerlevel
-        if powerlevel != "supersaving":
-            os.system("sudo iw wlan0 set power_save off >/dev/null")
-        else:
-            os.system("sudo iw wlan0 set power_save on > /dev/null")
-    else:
-        os.system("sudo iw wlan0 set power_save off >/dev/null")
-
-
-    if FileExists(".wallpaper") == False:
-        os.system("touch .wallpaper")
-    
-    with open(".wallpaper","r") as f:
-        wallpaper = f.read()
-    
-    wallpaper = wallpaper.strip()
-    if wallpaper != "":
-        config.Wallpaper = wallpaper
+       
         
 ###MAIN()###
 if __name__ == '__main__':
