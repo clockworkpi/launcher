@@ -287,6 +287,32 @@ def RecordKeyDns(thekey,main_screen):
         return True
     
     return False
+
+def release_self_fds():
+    fds_flags= ["pipe","socket",".ttf"]
+    """List process currently open FDs and their target """
+    if sys.platform != 'linux2':
+        raise NotImplementedError('Unsupported platform: %s' % sys.platform)
+
+    ret = {}
+    base = '/proc/self/fd'
+    for num in os.listdir(base):
+        path = None
+        try:
+            path = os.readlink(os.path.join(base, num))
+        except OSError as err:
+            # Last FD is always the "listdir" one (which may be closed)
+            if err.errno != errno.ENOENT:
+                raise
+        ret[int(num)] = path
+    
+    for key in ret:
+      if ret[key] != None and isinstance(ret[key], str):
+        for i in fds_flags:
+          if i in ret[key]:
+            os.close(key)
+            break
+    return ret  
     
 def event_process(event,main_screen):
     global sound_patch

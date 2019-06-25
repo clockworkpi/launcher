@@ -108,8 +108,8 @@ class WallpaperPage(Page):
         start_y = 0
         last_height = 0
 
-        files_path = '/home/cpi/launcher/skin/' + \
-            config.SKIN + '/Menu/GameShell/Wallpaper'
+        files_path = config.SKIN + '/Menu/GameShell/Wallpaper'
+
         if(os.path.exists(files_path)):
             content = os.listdir(files_path)
         else:

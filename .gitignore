@@ -6,6 +6,7 @@ retroarch-core-options.cfg
 sys.py/.powerlevel
 sys.py/.buttonslayout
 sys.py/.lang
+sys.py/.wallpaper 
 *.cfg
 **/Jobs/*
 !**/Jobs/.gitkeep
@@ -19,3 +20,4 @@ screenshots/*
 .pcsx
 .pcsx/*
 *.log
+

@@ -29,9 +29,7 @@ PowerLevels["balance_saving"] = [40, 0, 0]
 
 PowerLevel = "balance_saving"
 
-<< << << < HEAD
 Wallpaper = ""
-== == == =
 
 
 def PreparationInAdv():
