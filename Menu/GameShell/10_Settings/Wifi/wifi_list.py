@@ -569,7 +569,10 @@ class WifiList(Page):
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
         else:
-            self.ShowBox(MyLangManager.Tr("Disconnect first"))
+            self._Daemon.SetForcedDisconnect(True)
+            self._Connecting = False
+            self.ConfigWireless(password_inputed)
+            #self.ShowBox(MyLangManager.Tr("Disconnect first"))
         
     def OnReturnBackCb(self):
         pass
