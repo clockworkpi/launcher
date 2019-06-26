@@ -15,6 +15,8 @@ from lang_manager import MyLangManager
 from widget      import Widget
 from skin_manager import MySkinManager
 
+import config
+
 icon_base_path = MySkinManager.GiveIcon("gameshell/footbar_icons/")
 
 class FootBarIcon(MultiIconItem):
@@ -134,7 +136,10 @@ class FootBar(Widget):
         self.Draw()
 
     def SetLabelTexts(self,texts):
-        barr = ["nav","y","x","b","a","select"]
+        if config.ButtonsLayout == "xbox":
+            barr = ["nav","y","x","b","a","select"]
+        else:
+            barr = ["nav","x","y","a","b","select"]
         texts2 = texts + [""] if len(texts) == 5 else texts
 
         for idx,x in enumerate(barr):

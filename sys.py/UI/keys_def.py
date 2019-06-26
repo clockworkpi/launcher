@@ -6,9 +6,8 @@ from sys import exit
 import os
 import sys
 
-
-from config import CurKeySet
-
+import config
+from config import CurKeySet ## read only
 
 def GetButtonsLayoutMode():
     lm = "xbox"
@@ -25,6 +24,7 @@ def SetButtonsLayoutMode(mode):
     SetXYABButtons(mode)
     with open(".buttonslayout", "w") as f:
         f.write(mode)
+    config.ButtonsLayout = mode
 
 def SetXYABButtons(mode):
     if mode == "snes":
