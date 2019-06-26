@@ -19,3 +19,5 @@ screenshots/*
 .pcsx
 .pcsx/*
 *.log
+.DS_Store
+sys.py/.*
