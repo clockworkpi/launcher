@@ -571,6 +571,8 @@ class WifiList(Page):
         else:
             for i in range(0,10):
                 if is_wifi_connected_now() == True:
+                    self.ShowBox(MyLangManager.Tr("Launching"))
+                    self._Daemon.Disconnect()
                     self._Daemon.SetForcedDisconnect(True)
                     self._Connecting = False
                 else:
