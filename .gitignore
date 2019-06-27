@@ -6,6 +6,7 @@ retroarch-core-options.cfg
 sys.py/.powerlevel
 sys.py/.buttonslayout
 sys.py/.lang
+sys.py/gameshell/wallpaper_default
 *.cfg
 **/Jobs/*
 !**/Jobs/.gitkeep

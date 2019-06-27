@@ -173,10 +173,29 @@ class SkinsPage(Page):
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
             
+        skin_flag_path = os.path.expanduser('~') + "/.gameshell_skin"
+        wallpaper_path = os.path.expanduser('~') + "/launcher/sys.py/gameshell/wallpaper"
+        wallpaper_backup_path = wallpaper_path + "_default"
+        wallpaper_skin_path = cur_li._Value + "/wallpaper"
+
         if "../skin/default" in cur_li._Value:
-            os.system("rm %s/.gameshell_skin" % os.path.expanduser('~') )
+            os.remove(skin_flag_path)
+            # restore default wallpaper if it was backed up
+            if os.path.islink(wallpaper_path) and os.path.isdir(wallpaper_backup_path):
+                os.remove(wallpaper_path)
+                os.rename(wallpaper_backup_path, wallpaper_path)
         else:
-            os.system("echo %s > %s/.gameshell_skin" % (cur_li._Value,os.path.expanduser('~') ))
+            os.system("echo %s > %s" % (cur_li._Value,skin_flag_path ))
+            # if the skin support wallpaper, backup and replace the default ones
+            if os.path.exists(wallpaper_skin_path):
+                # backup only for default skin
+                if not os.path.isdir(wallpaper_backup_path):
+                    os.rename(wallpaper_path, wallpaper_backup_path)
+                # delete current symlink if exist
+                if os.path.islink(wallpaper_path):
+                    os.remove(wallpaper_path)
+                # create new theme symlink
+                os.symlink(wallpaper_skin_path, wallpaper_path)
         
         pygame.time.delay(700)
         pygame.event.post( pygame.event.Event(RESTARTUI, message=""))
