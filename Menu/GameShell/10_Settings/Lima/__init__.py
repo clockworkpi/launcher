@@ -76,7 +76,7 @@ class PageListItem(InfoPageListItem):
 class GPUDriverPage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
-    _ListFont = MyLangManager.TrFont("notosanscjk15")
+    _ListFont = MyLangManager.TrFont("notosanscjk12")
     
     _AList = {}
 
@@ -101,8 +101,8 @@ class GPUDriverPage(Page):
         start_y  = 0
         last_height = 0
 
-        drivers = [["fbturbo","Fbturbo"],
-                    ["modesetting","Lima"]]
+        drivers = [["fbturbo","FBTURBO driver (Software Rendering)"],
+                    ["modesetting","LIMA driver (Experimental Hardware Rendering)"]]
                 
         
         for i,u in enumerate( drivers ):            
@@ -284,7 +284,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = GPUDriverPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="GPU driver switch"
+        self._Page._Name ="GPU Driver Switch"
         self._Page.Init()
         
     def API(self,main_screen):
