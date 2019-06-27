@@ -314,7 +314,7 @@ class APIOBJ(object):
         self._UpdatePage = UpdatePage()
 
         self._UpdatePage._Screen = main_screen
-        self._UpdatePage._Name = "Update"
+        self._UpdatePage._Name = "Update Launcher"
         self._UpdatePage.Init()
         
     def API(self,main_screen):
