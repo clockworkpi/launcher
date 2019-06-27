@@ -48,9 +48,9 @@ class PowerOffConfirmPage(ConfirmPage):
 
         if IsKeyStartOrA(event.key):
             if self.CheckBattery() < 20:
-                cmdpath = "feh --bg-center gameshell/wallpaper/gameover.png;"
+                cmdpath = "feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/gameover.png;"
             else:
-                cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
+                cmdpath = "feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/seeyou.png;"
             
             cmdpath += "sleep 3;"
             

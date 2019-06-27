@@ -41,7 +41,7 @@ class CounterScreen(FullScreen):
             print("do the real shutdown")
             
             if config.CurKeySet != "PC":
-                cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
+                cmdpath = "feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/seeyou.png;"
                 cmdpath += "sleep 3;"
                 cmdpath += "sudo halt -p"
                 pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))\
