@@ -17,6 +17,7 @@ from UI.scroller import ListScroller
 from UI.icon_pool import MyIconPool
 from UI.icon_item import IconItem
 from UI.multilabel import MultiLabel
+from UI.lang_manager import MyLangManager
 from UI.skin_manager import MySkinManager
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector import InfoPageSelector
@@ -82,7 +83,7 @@ class PageListItem(InfoPageListItem):
 class WallpaperPage(Page):
     _FootMsg = ["Nav", "", "", "Back", "Select"]
     _MyList = []
-    _ListFont = MySkinManager.GiveFont["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
 
     _AList = {}
 
