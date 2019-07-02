@@ -65,15 +65,15 @@ def PreparationInAdv():
     else:
         ArmSystem("sudo iw wlan0 set power_save off >/dev/null")
 
-     if FileExists(".wallpaper") == False:
+    if FileExists(".wallpaper") == False:
         os.system("touch .wallpaper")
-    
-    with open(".wallpaper","r") as f:
+
+    with open(".wallpaper", "r") as f:
         wallpaper = f.read()
-    
+
     wallpaper = wallpaper.strip()
     if wallpaper != "":
-        config.Wallpaper = wallpaper
+        Wallpaper = wallpaper
 
 
 PreparationInAdv()
