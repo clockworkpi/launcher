@@ -72,7 +72,7 @@ def PreparationInAdv():
         wallpaper = f.read()
 
     wallpaper = wallpaper.strip()
-    if wallpaper != "":
+    if wallpaper != "" and wallpaper != "None":
         Wallpaper = wallpaper
 
 
