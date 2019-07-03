@@ -59,7 +59,7 @@ def PreparationInAdv():
         if ButtonsLayout != "xbox" and ButtonsLayout != "snes":
             ButtonsLayout = "xbox"
 
-   if FileExists(".powerlevel") == False:
+    if FileExists(".powerlevel") == False:
         os.system("touch .powerlevel")
 
     with open(".powerlevel", "r") as f:
