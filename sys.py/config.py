@@ -41,9 +41,6 @@ def PreparationInAdv():
     global PowerLevel
     global Wallpaper
 
-
-<< << << < HEAD
-== == == =
     SKIN = "../skin/default"
 
     if FileExists("%s/.gameshell_skin" % os.path.expanduser('~')) == True:
