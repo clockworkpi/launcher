@@ -247,7 +247,7 @@ class WallpaperPage(Page):
 
         
         for i in self._MyList:
-            if wallpaper in i._Path:
+            if wallpaper == i._Path:
                 i._Active = True
         
         

@@ -4,6 +4,9 @@ import dbus
 import dbus.service
 import sys
 import commands
+import logging
+import errno
+
 from wicd import misc 
 ##misc.to_bool
 ##misc.misc.noneToString
@@ -288,6 +291,8 @@ def RecordKeyDns(thekey,main_screen):
     
     return False
 
+
+
 def release_self_fds():
     fds_flags= ["pipe","socket",".ttf"]
     """List process currently open FDs and their target """
@@ -302,9 +307,8 @@ def release_self_fds():
             path = os.readlink(os.path.join(base, num))
         except OSError as err:
             # Last FD is always the "listdir" one (which may be closed)
-            print(err)
-            # if err.errno != errno.ENOENT:
-            #     raise
+            if err.errno != errno.ENOENT:
+                raise
         ret[int(num)] = path
     
     for key in ret:
@@ -314,7 +318,8 @@ def release_self_fds():
             os.close(key)
             break
     return ret  
-    
+
+  
 def event_process(event,main_screen):
     global sound_patch
     global everytime_keydown 
@@ -350,6 +355,7 @@ def event_process(event,main_screen):
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -375,6 +381,7 @@ def event_process(event,main_screen):
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -578,8 +585,8 @@ def big_loop():
     socket_thread(main_screen)
     
     gobject_loop()
-       
-        
+    
+
 ###MAIN()###
 if __name__ == '__main__':
     
