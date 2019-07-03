@@ -142,9 +142,29 @@ class SkinManager(object):
             return ret
         else:  # if not existed both in default or custom skin ,return where it is
             return orig_file_or_dir
+<<<<<<< HEAD
 
 
 # global MySkinManager Handler
+=======
+            
+    def GiveWallpaper(self,png_name):
+        #first SKIN/wallpapers/xxxx.png
+        #second ../skin/default/wallpapers/xxxx.png
+        #finnal gameshell/wallpaper/xxxx.png
+        #loading.png,seeyou.png,updating.png,gameover.png,desktopbg.png
+        wlp = "/wallpaper/"
+        if FileExists(config.SKIN+wlp+png_name):
+            return config.SKIN+wlp+png_name
+        elif FileExists(self.DefaultSkin+wlp+png_name):
+            return self.DefaultSkin+wlp+png_name
+        else:
+            return "gameshell/wallpaper/"+png_name
+            
+        
+            
+##global MySkinManager Handler
+>>>>>>> 546523359b8c8b33f2dab763001f1afd4f13d6f7
 MySkinManager = None
 
 

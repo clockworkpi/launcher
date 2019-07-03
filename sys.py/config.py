@@ -18,10 +18,17 @@ UPDATE_URL = "https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_
 
 VERSION = "stable 1.25"
 
+<<<<<<< HEAD
 SKIN = "../skin/default"
 
 # three timer values in seconds: dim screen, close screen,PowerOff
 # zero means no action
+=======
+ButtonsLayout="xbox"
+
+## three timer values in seconds: dim screen, close screen,PowerOff
+## zero means no action
+>>>>>>> 546523359b8c8b33f2dab763001f1afd4f13d6f7
 PowerLevels = {}
 PowerLevels["supersaving"] = [10, 30, 120]
 PowerLevels["powersaving"] = [40, 120, 300]
@@ -33,10 +40,31 @@ Wallpaper = ''
 
 
 def PreparationInAdv():
-    global SKIN
+    global SKIN,ButtonsLayout
     global PowerLevel
     global Wallpaper
 
+<<<<<<< HEAD
+=======
+    SKIN= "../skin/default"
+    
+    if FileExists("%s/.gameshell_skin" % os.path.expanduser('~')) == True:
+        with open("%s/.gameshell_skin" % os.path.expanduser('~'),"r") as f:
+          gameshell_skin = f.read()
+        
+        gameshell_skin = gameshell_skin.strip()
+        SKIN= gameshell_skin
+        
+    if FileExists(".buttonslayout") == True:
+        with open(".buttonslayout") as f:
+            btnlayout = f.read()
+        
+        btnlayout = btnlayout.strip()
+        ButtonsLayout = btnlayout
+        if ButtonsLayout != "xbox" and ButtonsLayout != "snes":
+            ButtonsLayout = "xbox"
+        
+>>>>>>> 546523359b8c8b33f2dab763001f1afd4f13d6f7
     if FileExists(".powerlevel") == False:
         os.system("touch .powerlevel")
 

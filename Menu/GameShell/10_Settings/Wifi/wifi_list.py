@@ -569,7 +569,21 @@ class WifiList(Page):
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
         else:
-            self.ShowBox(MyLangManager.Tr("Disconnect first"))
+            for i in range(0,10):
+                if is_wifi_connected_now() == True:
+                    self.ShowBox(MyLangManager.Tr("Launching"))
+                    self._Daemon.Disconnect()
+                    self._Daemon.SetForcedDisconnect(True)
+                    self._Connecting = False
+                else:
+                    break
+                
+                pygame.time.delay(100)
+                
+            if is_wifi_connected_now() == False:
+                self.ConfigWireless(password_inputed)
+            else:
+                self.ShowBox(MyLangManager.Tr("Disconnect first"))
         
     def OnReturnBackCb(self):
         pass

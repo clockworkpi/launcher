@@ -454,7 +454,7 @@ class MainScreen(Widget):
         
         files = os.listdir(_dir)
         for i in sorted(files):
-            if os.path.isdir(_dir+"/"+i): # TOPLEVEL only is dir
+            if os.path.isdir(_dir+"/"+i) and i.startswith(".") == False: # TOPLEVEL only is dir
                 if pglevel == 0:
                     page = Page()
                     page._Name = self.ExtraName(i)
@@ -567,7 +567,7 @@ class MainScreen(Widget):
                         cur_page._Icons.append(iconitem)
                         self.ReadTheDirIntoPages(_dir+"/"+i,pglevel+1,iconitem._LinkPage)
                         
-            elif os.path.isfile(_dir+"/"+i) and pglevel > 0:
+            elif os.path.isfile(_dir+"/"+i) and i.startswith(".") == False and pglevel > 0:
                 if i.lower().endswith(icon_ext):
                     i2 = self.ExtraName(i)
                     
