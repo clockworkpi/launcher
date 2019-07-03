@@ -55,7 +55,7 @@ class ListPage(Page):
         alist = [["", "Airplane", "Airplane Mode"],
                  ["", "PowerOptions", "Power Options"],
                  ["", "Wifi", "Wi-Fi"],
-                 #  ["", "Bluetooth", "Bluetooth"],
+                 ["", "Bluetooth", "Bluetooth"],
                  ["", "Sound", "Sound Volume"],
                  ["", "Brightness", "BackLight Brightness"],
                  ["", "Storage", ""],

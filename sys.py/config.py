@@ -29,25 +29,13 @@ PowerLevels["server"] = [40, 120, 0]
 PowerLevels["balance_saving"] = [40, 0, 0]
 
 PowerLevel = "balance_saving"
-
-Wallpaper = ""
+Wallpaper = ''
 
 
 def PreparationInAdv():
     global SKIN
     global PowerLevel
-
-    if SKIN != None:
-        return
-
-    SKIN = "../skin/default"
-
-    if FileExists("%s/.gameshell_skin" % os.path.expanduser('~')) == True:
-        with open("%s/.gameshell_skin" % os.path.expanduser('~'), "r") as f:
-            gameshell_skin = f.read()
-
-        gameshell_skin = gameshell_skin.strip()
-        SKIN = gameshell_skin
+    global Wallpaper
 
     if FileExists(".powerlevel") == False:
         os.system("touch .powerlevel")
@@ -68,12 +56,23 @@ def PreparationInAdv():
     if FileExists(".wallpaper") == False:
         os.system("touch .wallpaper")
 
-    with open(".wallpaper", "r") as f:
-        wallpaper = f.read()
+    with open(".wallpaper", "r") as w:
+        wallpaper = w.read()
 
-    wallpaper = wallpaper.strip()
-    if wallpaper != "" and wallpaper != "None":
+    if wallpaper != "":
         Wallpaper = wallpaper
+
+    if SKIN != None:
+        return
+
+    SKIN = "../skin/default"
+
+    if FileExists("%s/.gameshell_skin" % os.path.expanduser('~')) == True:
+        with open("%s/.gameshell_skin" % os.path.expanduser('~'), "r") as f:
+            gameshell_skin = f.read()
+
+        gameshell_skin = gameshell_skin.strip()
+        SKIN = gameshell_skin
 
 
 PreparationInAdv()

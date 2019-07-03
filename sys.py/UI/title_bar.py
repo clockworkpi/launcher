@@ -295,7 +295,12 @@ class TitleBar(Widget):
         
     def Draw(self,title):
         self.ClearCanvas()
-        title = MyLangManager.Tr(title)
+        if len(title)>1:
+            title = MyLangManager.Tr(title)
+        else:
+            title= ' '
+
+        
         self._Title = title
         
         cur_time =  datetime.now().strftime("%H:%M")

@@ -23,8 +23,7 @@ from keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from icon_pool import MyIconPool
 from lang_manager import MyLangManager
 from widget import Widget
-import config
-
+import config 
 
 class PageStack:
     def __init__(self):

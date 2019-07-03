@@ -302,8 +302,9 @@ def release_self_fds():
             path = os.readlink(os.path.join(base, num))
         except OSError as err:
             # Last FD is always the "listdir" one (which may be closed)
-            if err.errno != errno.ENOENT:
-                raise
+            print(err)
+            # if err.errno != errno.ENOENT:
+            #     raise
         ret[int(num)] = path
     
     for key in ret:

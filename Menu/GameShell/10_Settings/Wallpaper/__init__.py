@@ -108,7 +108,7 @@ class WallpaperPage(Page):
         start_y = 0
         last_height = 0
 
-        files_path = config.SKIN + '/Menu/GameShell/Wallpaper'
+        files_path = config.SKIN+ '/Menu/GameShell/Wallpaper/'
 
         if(os.path.exists(files_path)):
             content = os.listdir(files_path)
@@ -116,7 +116,7 @@ class WallpaperPage(Page):
             content = []
 
         for i, u in enumerate(content):
-            # print(i,u)
+            print(i,u)
             li = PageListItem()
             li._Parent = self
             li._PosX = start_x
@@ -125,7 +125,7 @@ class WallpaperPage(Page):
             li._Fonts["normal"] = self._ListFont
             li._Active = False
             li._Value = u.decode("utf8")
-            li._Path = files_path + '/'+u
+            li._Path = files_path+ u
             image_name = u.split("_")[1]
             image_name = image_name.split(".")[0]
 
@@ -217,15 +217,15 @@ class WallpaperPage(Page):
         cur_li._Active = True
         print(cur_li._Value)
         with open(".wallpaper","w") as f:
-            f.write(cur_li._Path )
+            f.write(cur_li._Path)
 
-        config.Wallpaper = cur_li._Path 
+        config.wallpapers = cur_li._Path 
        
         
         self._Screen._MsgBox.SetText("Applying")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
-        
+        print("fuckTHis", config.wallpapers,cur_li._Path )
         
         pygame.event.post( pygame.event.Event(RESTARTUI, message="")) ##Restart Launcher
         
@@ -246,9 +246,9 @@ class WallpaperPage(Page):
 
 
         
-        # for i in self._MyList:
-        #     if theimage in i._Value:
-        #         i._Active = True
+        for i in self._MyList:
+            if wallpaper in i._Path:
+                i._Active = True
         
         
     def OnReturnBackCb(self):
