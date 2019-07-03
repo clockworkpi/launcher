@@ -20,9 +20,5 @@ screenshots/*
 .pcsx
 .pcsx/*
 *.log
-<<<<<<< HEAD
-
-=======
 .DS_Store
 sys.py/.*
->>>>>>> 546523359b8c8b33f2dab763001f1afd4f13d6f7

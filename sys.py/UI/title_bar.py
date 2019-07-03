@@ -295,11 +295,6 @@ class TitleBar(Widget):
         
     def Draw(self,title):
         self.ClearCanvas()
-        if len(title)>1:
-            title = MyLangManager.Tr(title)
-        else:
-            title= ' '
-
         
         self._Title = title
         
@@ -308,12 +303,17 @@ class TitleBar(Widget):
         time_text_size = time_text_font.size(cur_time)
         title_text_size = MyLangManager.TrFont("varela16").size(title)
 
-        self._CanvasHWND.blit(MyLangManager.TrFont("varela16").render(title,True,self._SkinManager.GiveColor("Text")),midRect(title_text_size[0]/2+self._LOffset,
-                                                                    title_text_size[1]/2+(self._BarHeight-title_text_size[1])/2,
-                                                                    title_text_size[0],title_text_size[1],Width,Height))
+
+        try:
+            self._CanvasHWND.blit(MyLangManager.TrFont("varela16").render(title,True,self._SkinManager.GiveColor("Text")),midRect(title_text_size[0]/2+self._LOffset,
+                                                                        title_text_size[1]/2+(self._BarHeight-title_text_size[1])/2,
+                                                                        title_text_size[0],title_text_size[1],Width,Height))
+        except IOError:
+            pass
         self._CanvasHWND.blit( time_text_font.render(cur_time,True,self._SkinManager.GiveColor("Text")),midRect(Width-time_text_size[0]/2-self._ROffset,
                                                                         time_text_size[1]/2+(self._BarHeight-time_text_size[1])/2,
                                                                         time_text_size[0],time_text_size[1],Width,Height))
+                        
 
         start_x = Width-time_text_size[0]-self._ROffset-self._icon_width*3 # near by the time_text
         
