@@ -10,7 +10,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
@@ -18,7 +17,7 @@ from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool           import MyIconPool
 from UI.scroller   import ListScroller
 from UI.skin_manager import MySkinManager
-
+from UI.lang_manager import MyLangManager
 from list_item  import ListItem
 
 
@@ -86,7 +85,7 @@ class TimezoneListPage(Page):
     _FootMsg = ["Nav","","","Back","Select"]
     _MyList = []
     _SwapMyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
 
     _Scroller = None
@@ -177,7 +176,7 @@ class TimezoneListPage(Page):
         self.SyncList("/usr/share/zoneinfo/posix")
 
         icon_for_list = MultiIconItem()
-        icon_for_list._ImgSurf = MyIconPool._Icons["sys"]
+        icon_for_list._ImgSurf = MyIconPool.GiveIconSurface("sys")
         icon_for_list._MyType = ICON_TYPES["STAT"]
         icon_for_list._Parent = self
         
@@ -186,10 +185,10 @@ class TimezoneListPage(Page):
 
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["empty"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("empty")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
-        self._BGpng.AddLabel("No timezones found on system!", fonts["varela22"])
+        self._BGpng.AddLabel("No timezones found on system!", MyLangManager.TrFont("varela22"))
         self._BGpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 

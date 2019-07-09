@@ -11,7 +11,6 @@ from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.icon_item import IconItem
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.slider     import Slider
@@ -44,7 +43,7 @@ class SoundSlider(Slider):
         self._Height = self._Parent._Height
         
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["vol"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("vol")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
@@ -54,7 +53,7 @@ class SoundSlider(Slider):
         self._Scale = MultiIconItem()
         self._Scale._MyType = ICON_TYPES["STAT"]
         self._Scale._Parent = self
-        self._Scale._ImgSurf = MyIconPool._Icons["scale"]
+        self._Scale._ImgSurf = MyIconPool.GiveIconSurface("scale")
         self._Scale._IconWidth = 82
         self._Scale._IconHeight = 63
         self._Scale.Adjust(0,0,82,63,0)

@@ -43,7 +43,11 @@ class MultiIconItem(IconItem):
                                                                     self._PosY+self._Parent._PosY,
                                                                     self._Width,self._Height),
                                           (0,self._IconIndex*self._IconHeight,self._IconWidth,self._IconHeight))
-        
+    
+    def DrawRect(self,rect1,rect2):
+        if self._ImgSurf != None:
+            self._Parent._CanvasHWND.blit(self._ImgSurf,rect1,rect2)
+                                                  
     def Draw(self):
         if self._Align==ALIGN["VCenter"]: #default
             if self._Label != None:

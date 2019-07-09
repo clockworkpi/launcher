@@ -1,7 +1,7 @@
 SCREEN=`cat /sys/class/graphics/fb0/modes`
 
 XORG_CONF="~/launcher/.xorg.conf"
-if [ -f ~/.lima ]
+if [ -f /home/cpi/.lima ]
 then
 XORG_CONF="~/launcher/.xorg_lima.conf"
 fi

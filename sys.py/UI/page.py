@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import pygame
 from pygame.locals import *
@@ -6,104 +6,120 @@ from sys import exit
 import os
 import sys
 import math
+import fnmatch
+import random
+
 
 from libs import easing
 
-#import base64
-#from beeprint import pp
+# import base64
+# from beeprint import pp
 
-### local import
-from constants    import ALIGN,icon_width,icon_height,Width,Height,ICON_TYPES
-from util_funcs   import midRect
-from keys_def     import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
-from icon_pool    import MyIconPool
+# local import
+from constants import ALIGN, icon_width, icon_height, Width, Height, ICON_TYPES
+from util_funcs import midRect
+from keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
+from icon_pool import MyIconPool
 from lang_manager import MyLangManager
-from widget       import Widget
+from widget import Widget
+
 
 class PageStack:
     def __init__(self):
         self.stack = list()
 
-    def Push(self,data):
+    def Push(self, data):
         if data not in self.stack:
             self.stack.append(data)
             return True
         return False
 
     def Pop(self):
-        if len(self.stack)<=0:
-            return None,False
-        return self.stack.pop(),True
-    
+        if len(self.stack) <= 0:
+            return None, False
+        return self.stack.pop(), True
+
     def Length(self):
         return len(self.stack)
+
 
 class PageSelector(Widget):
 
     _Parent = None
-    _Alpha  = 0
+    _Alpha = 0
     _OnShow = True
-    _IconSurf = None 
+    _IconSurf = None
+
     def __init__(self):
         pass
 
-    def Init(self,x,y,w,h,alpha):
-        self._PosX   = x
-        self._PosY   = y
-        self._Width   = w
-        self._Height  = h
-        self._Alpha   = alpha
+    def Init(self, x, y, w, h, alpha):
+        self._PosX = x
+        self._PosY = y
+        self._Width = w
+        self._Height = h
+        self._Alpha = alpha
 
-    def Adjust(self,x,y,w,h,alpha):
-        self._PosX   = x
-        self._PosY   = y
-        self._Width   = w
-        self._Height  = h
-        self._Alpha   = alpha
+    def Adjust(self, x, y, w, h, alpha):
+        self._PosX = x
+        self._PosY = y
+        self._Width = w
+        self._Height = h
+        self._Alpha = alpha
 
     def Draw(self):
-        canvas  = self._Parent._CanvasHWND
-        idx     = self._Parent._PsIndex
+        canvas = self._Parent._CanvasHWND
+        idx = self._Parent._PsIndex
         iconidx = self._Parent._IconIndex
 
         if idx < len(self._Parent._Icons):
-            x       = self._Parent._Icons[idx]._PosX+self._Parent._PosX
-            y       = self._Parent._Icons[iconidx]._PosY ## only use current icon's PosY
-        
-            rect    = midRect(x,y,self._Width,self._Height,self._Parent._Width,self._Parent._Height)
-            if rect.width <=0 or rect.height <= 0 :
+            x = self._Parent._Icons[idx]._PosX+self._Parent._PosX
+            # only use current icon's PosY
+            y = self._Parent._Icons[iconidx]._PosY
+
+            rect = midRect(x, y, self._Width, self._Height,
+                           self._Parent._Width, self._Parent._Height)
+            if rect.width <= 0 or rect.height <= 0:
                 return
 
-            #color = (244,197,66,50)
-            #pygame.draw.rect(canvas,color,rect,1)
+            # color = (244,197,66,50)
+            # pygame.draw.rect(canvas,color,rect,1)
             if self._IconSurf != None:
-                self._Parent._CanvasHWND.blit(self._IconSurf,rect)
-            
+                self._Parent._CanvasHWND.blit(self._IconSurf, rect)
+
+
 class Page(Widget):
     _Icons = []
     _Ps = None
     _PsIndex = 0
     _IconNumbers = 0
-    _IconIndex   = 0 ## shows which icon current selected, the Selector can not move here
-    _PrevIconIndex = 0 ## for remember the  Highlighted Icon ,restore it's PosY to average
+    _IconIndex = 0  # shows which icon current selected, the Selector can not move here
+    _PrevIconIndex = 0  # for remember the  Highlighted Icon ,restore it's PosY to average
     _Index = 0
     _Align = ALIGN["SLeft"]
-    _CanvasHWND = None # 
-    _HWND       = None # 
-    _OnShow     = False
-    _Name       = ""
-    _Screen     = None ## Should be the Screen Class
+    _CanvasHWND = None
+    _HWND = None
+    _OnShow = False
+    _Name = ""
+    _Screen = None  # Should be the Screen Class
     _PageIconMargin = 20
-    _FootMsg    = ["Nav","","","","Enter"] ## Default Page Foot info
-
-    _SelectedIconTopOffset=20
-    _EasingDur   = 30
-    _Padding = pygame.Rect(0,0,0,0)# x,y,w,h
-    _Margin  = pygame.Rect(0,0,0,0)
+    _FootMsg = ["Nav", "", "", "", "Enter"]  # Default Page Foot info
+    _Wallpaper = None
+    _SelectedIconTopOffset = 20
+    _EasingDur = 30
+    _Padding = pygame.Rect(0, 0, 0, 0)  # x,y,w,h
+    _Margin = pygame.Rect(0, 0, 0, 0)
     _ScrollStep = 1
-        
+
     def __init__(self):
         self._Icons = []
+        path = '/home/cpi/launcher/skin/default/Menu/GameShell/Wallpaper/'
+
+        if os.path.exists(path):
+            image = os.listdir(path)[0]
+            if image:
+                self._Wallpaper = pygame.transform.scale(pygame.image.load(path+image).convert(), (320,240))  
+        
 
 
     def AdjustHLeftAlign(self): ## adjust coordinator and append the PageSelector
@@ -131,7 +147,7 @@ class Page(Widget):
                 cnt+=1
         
         ps = PageSelector()
-        ps._IconSurf = MyIconPool._Icons["blueselector"]
+        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
         ps._Parent = self
         ps.Init(icon_width/2, TitleBar._BarHeight+icon_height/2,92,92,128)
         self._Ps = ps
@@ -155,7 +171,7 @@ class Page(Widget):
             it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
-        ps._IconSurf = MyIconPool._Icons["blueselector"]
+        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
         ps._Parent = self
         ps.Init(start_x,start_y,92,92,128)
         
@@ -185,7 +201,7 @@ class Page(Widget):
             it._Parent = self
             it._Index = 0
             it.Adjust(start_x,start_y,icon_width,icon_height,0)
-            #it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
+            # it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         elif self._IconNumbers == 2:
             start_x = (self._Width - self._PageIconMargin - self._IconNumbers*icon_width) / 2 + icon_width/2
@@ -196,7 +212,7 @@ class Page(Widget):
                 it._Parent = self
                 it._Index = i
                 it.Adjust(start_x+i*self._PageIconMargin + i*icon_width,start_y, icon_width, icon_height,0)
-                #it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
+                # it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
                 
         elif self._IconNumbers > 2:
             for i in range(0,self._IconNumbers):
@@ -204,10 +220,10 @@ class Page(Widget):
                 it._Parent = self
                 it._Index = i
                 it.Adjust(start_x+i*self._PageIconMargin + i*icon_width,start_y,icon_width,icon_height,0)
-                #it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
+                # it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
-        ps._IconSurf = MyIconPool._Icons["blueselector"]
+        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
         ps._Parent = self
         ps.Init(start_x,start_y,92,92,128)
         
@@ -245,7 +261,7 @@ class Page(Widget):
                 cnt+=1
                 
         ps = PageSelector()
-        ps._IconSurf = MyIconPool._Icons["blueselector"]
+        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
         ps._Parent = self
         ps.Init(icon_width/2,icon_height/2,92,92,128)
         self._Ps = ps
@@ -268,7 +284,7 @@ class Page(Widget):
                 it.Adjust(start_x+i*icon_width,start_y,icon_width,icon_height,0)
 
             ps = PageSelector()
-            ps._IconSurf = MyIconPool._Icons["blueselector"]
+            ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
             ps._Parent = self
             ps.Init(start_x,start_y,92,92,128)
             self._Ps = ps
@@ -287,7 +303,7 @@ class Page(Widget):
 
        
             ps = PageSelector()
-            ps._IconSurf = MyIconPool._Icons["blueselector"]
+            ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
             ps._Parent = self
             ps.Init(start_x,start_y-self._SelectedIconTopOffset,92,92,128)
             
@@ -323,7 +339,7 @@ class Page(Widget):
             
         if self._IconNumbers > 0:
             ps = PageSelector()
-            ps._IconSurf = MyIconPool._Icons["blueselector"]
+            ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
             ps._Parent = self
             ps.Init(start_x,start_y,icon_width+4,icon_height+4,128)
             self._Ps = ps
@@ -477,25 +493,20 @@ class Page(Widget):
             self._Ps.Draw()
             
     def MoveIconIndexPrev(self):
-        
+        self._PrevIconIndex = self._IconIndex
         self._IconIndex-=1
         if self._IconIndex < 0:
-            self._IconIndex = 0
-            self._PrevIconIndex = self._IconIndex
+            self._IconIndex = max(0, self._IconNumbers - 1) # Wrap Icon Index
             return False
-        self._PrevIconIndex = self._IconIndex+1
         return True
     
     def MoveIconIndexNext(self):
-        #True for Moved,False is boundary
+        self._PrevIconIndex = self._IconIndex
         self._IconIndex+=1
         if self._IconIndex > (self._IconNumbers - 1):
-            self._IconIndex = self._IconNumbers -1
-            self._PrevIconIndex = self._IconIndex
+            self._IconIndex = 0 # Wrap Icon Index
             return False
-        self._PrevIconIndex = self._IconIndex-1
         return True
-
     
     def IconClick(self):
         
@@ -517,7 +528,7 @@ class Page(Widget):
                 self._Screen._CurrentPage = child_page
         elif cur_icon._MyType == ICON_TYPES["FUNC"]:
             print("IconClick API: %d"%(cur_icon._Index))
-            #print("%s"% cur_icon._CmdPath)
+            # print("%s"% cur_icon._CmdPath)
             api_cb = getattr(cur_icon._CmdPath,"API",None)
             if api_cb != None:
                 if callable(api_cb):
@@ -528,7 +539,7 @@ class Page(Widget):
     def ReturnToUpLevelPage(self):
         pop_page,ok = self._Screen._MyPageStack.Pop()
         if ok == True:
-            #self._Screen._CurrentPage.ResetPageSelector()
+            # self._Screen._CurrentPage.ResetPageSelector()
             pop_page.Draw()
             self._Screen._CurrentPage = pop_page
             on_return_back_cb = getattr(self._Screen._CurrentPage,"OnReturnBackCb",None)
@@ -543,8 +554,12 @@ class Page(Widget):
                     print("OnTopLevel ",self._Screen._PageIndex)
 
     def ClearCanvas(self):
-        self._CanvasHWND.fill(self._Screen._SkinManager.GiveColor("White")) 
-
+        if self._Wallpaper:
+            self._CanvasHWND.blit(self._Wallpaper,(0,0))
+        else:
+            self._CanvasHWND.fill(self._Screen._SkinManager.GiveColor("White")) 
+        
+       
     def ClearIcons(self):
         for i in range(0,self._IconNumbers):
             self._Icons[i].Clear()
@@ -553,7 +568,7 @@ class Page(Widget):
         for i in range(0,self._IconNumbers):
             self._Icons[i].Draw()
 
-    ##make sure the Class has the _MyList
+    # make sure the Class has the _MyList
     def ScrollDown(self):
         if len(self._MyList) == 0:
             return
@@ -614,25 +629,36 @@ class Page(Widget):
         if event.key == CurKeys["Right"]:
             if self.MoveIconIndexNext() == True:
                 if self._IconIndex == (self._IconNumbers -1) or self._PrevIconIndex == 0:
-                    self.IconSmoothUp(icon_width+ self._PageIconMargin) # only move up selected icon,no horizontal translation
+                    self.IconSmoothUp(icon_width + self._PageIconMargin)
                 else:
                     self.IconsEasingLeft(icon_width + self._PageIconMargin)
+            else:
+                screen_icons = int(math.floor(self._Screen._Width / (icon_width + self._PageIconMargin)))
+                if self._IconNumbers > screen_icons:
+                    self.IconsEasingRight((icon_width + self._PageIconMargin) * (self._IconNumbers - screen_icons))
+                elif self._IconNumbers > 0:
+                    self.IconSmoothUp(icon_width+ self._PageIconMargin)
 
-                self._PsIndex  = self._IconIndex
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-                
+            self._PsIndex  = self._IconIndex
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
             
         if event.key == CurKeys["Left"]:
             if self.MoveIconIndexPrev() == True:
                 if self._IconIndex == 0 or self._PrevIconIndex == (self._IconNumbers -1):
-                    self.IconSmoothUp(icon_width+ self._PageIconMargin)
+                    self.IconSmoothUp(icon_width + self._PageIconMargin)
                 else:
                     self.IconsEasingRight(icon_width + self._PageIconMargin)
+            else:
+                screen_icons = int(math.floor(self._Screen._Width / (icon_width + self._PageIconMargin)))
+                if self._IconNumbers > screen_icons:
+                    self.IconsEasingLeft((icon_width + self._PageIconMargin) * (self._IconNumbers - screen_icons))
+                elif self._IconNumbers > 0:
+                    self.IconSmoothUp(icon_width+ self._PageIconMargin)
 
-                self._PsIndex = self._IconIndex
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
+            self._PsIndex = self._IconIndex
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
                 
         if IsKeyStartOrA(event.key):
             self.IconClick()
@@ -643,5 +669,4 @@ class Page(Widget):
         self.ClearCanvas()
         self.DrawIcons()
         self.DrawPageSelector()
-
 

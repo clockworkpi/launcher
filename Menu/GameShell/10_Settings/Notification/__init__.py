@@ -15,7 +15,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,FileExists,IsExecutable
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -45,7 +44,7 @@ class NotifyJobListItem(InfoPageListItem):
         self._Labels["Text"] = l    
         
         done_icon = IconItem()
-        done_icon._ImgSurf = MyIconPool._Icons["done"]
+        done_icon._ImgSurf = MyIconPool.GiveIconSurface("done")
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         
@@ -126,7 +125,7 @@ class NotificationPage(Page):
                 li._PosY   = start_y + counter*InfoPageListItem._Height
                 li._Width  = Width-10
                 li._Fonts["normal"] = self._ListFontObj
-                li._Fonts["small"] = fonts["varela12"]
+                li._Fonts["small"] = MySkinManager.GiveFont("varela12")
                 
                 if IsExecutable(v):
                     li._ReadOnly = True

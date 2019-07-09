@@ -11,7 +11,6 @@ from UI.constants import ICON_TYPES,Width,Height
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 
 from libs.roundrects import aa_round_rect
@@ -55,11 +54,11 @@ class StoragePage(Page):
         self._Height = self._Screen._Height
         
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["icon_sd"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("icon_sd")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         
-        self._BGpng.AddLabel(self._BGmsg % (self._DskUsg[1]-self._DskUsg[0], self._DskUsg[1]), fonts["varela15"])
+        self._BGpng.AddLabel(self._BGmsg % (self._DskUsg[1]-self._DskUsg[0], self._DskUsg[1]), MySkinManager.GiveFont("varela15"))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
         
@@ -68,12 +67,12 @@ class StoragePage(Page):
 
         usage_percent = (self._DskUsg[0]/self._DskUsg[1] )*100.0
         
-        self._BGlabel.Init("%d%%"% int(usage_percent),fonts["varela25"])
+        self._BGlabel.Init("%d%%"% int(usage_percent),MySkinManager.GiveFont("varela25"))
         self._BGlabel.SetColor( self._HighColor )
         
         self._FreeLabel = Label()
         self._FreeLabel.SetCanvasHWND(self._CanvasHWND)
-        self._FreeLabel.Init("Free",fonts["varela13"])
+        self._FreeLabel.Init("Free",MySkinManager.GiveFont("varela13"))
         self._FreeLabel.SetColor(self._BGlabel._Color)
 
         

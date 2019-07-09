@@ -13,7 +13,6 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
 from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
@@ -59,14 +58,14 @@ class DownloadProcessPage(Page):
         self._PngSize["needwifi_bg"] = (253,132)
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["rom_download"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("rom_download")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._PngSize["bg"][0],self._PngSize["bg"][1],0)
         self._Icons["bg"] = bgpng
 
         needwifi_bg = IconItem()
-        needwifi_bg._ImgSurf = MyIconPool._Icons["needwifi_bg"]
+        needwifi_bg._ImgSurf = MyIconPool.GiveIconSurface("needwifi_bg")
         needwifi_bg._MyType = ICON_TYPES["STAT"]
         needwifi_bg._Parent = self
         needwifi_bg.Adjust(0,0,self._PngSize["needwifi_bg"][0],self._PngSize["needwifi_bg"][1],0)
@@ -76,11 +75,11 @@ class DownloadProcessPage(Page):
         
         self._FileNameLabel = Label()
         self._FileNameLabel.SetCanvasHWND(self._CanvasHWND)
-        self._FileNameLabel.Init("", fonts["varela12"])
+        self._FileNameLabel.Init("", MyLangManager.TrFont("varela12"))
 
         self._SizeLabel = Label()
         self._SizeLabel.SetCanvasHWND(self._CanvasHWND)
-        self._SizeLabel.Init("0/0Kb",fonts["varela12"])
+        self._SizeLabel.Init("0/0Kb",MyLangManager.TrFont("varela12"))
         self._SizeLabel.SetColor( self._URLColor )
 
         

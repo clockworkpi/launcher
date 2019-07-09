@@ -6,15 +6,18 @@ import os
 
 ##local import
 from constants  import Width,Height,ICON_TYPES,ALIGN
-from util_funcs import FileExists,midRect,SkinMap
+from util_funcs import FileExists,midRect
 from icon_item  import IconItem
-from fonts      import fonts
 from multi_icon_item import MultiIconItem
 from icon_pool  import MyIconPool
 from libs.roundrects import aa_round_rect
 from lang_manager import MyLangManager
 from widget      import Widget
-icon_base_path = SkinMap("gameshell/footbar_icons/")
+from skin_manager import MySkinManager
+
+import config
+
+icon_base_path = MySkinManager.GiveIcon("gameshell/footbar_icons/")
 
 class FootBarIcon(MultiIconItem):
 
@@ -93,7 +96,7 @@ class FootBar(Widget):
 
         round_corners._MyType = ICON_TYPES["STAT"]
         round_corners._Parent = self
-        round_corners._ImgSurf = MyIconPool._Icons["roundcorners"]
+        round_corners._ImgSurf = MyIconPool.GiveIconSurface("roundcorners")
         round_corners.Adjust(0,0,10,10,0)
 
         self._Icons["round_corners"] = round_corners
@@ -133,7 +136,10 @@ class FootBar(Widget):
         self.Draw()
 
     def SetLabelTexts(self,texts):
-        barr = ["nav","y","x","b","a","select"]
+        if config.ButtonsLayout == "xbox":
+            barr = ["nav","y","x","b","a","select"]
+        else:
+            barr = ["nav","x","y","a","b","select"]
         texts2 = texts + [""] if len(texts) == 5 else texts
 
         for idx,x in enumerate(barr):

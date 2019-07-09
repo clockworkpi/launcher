@@ -9,7 +9,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,FileExists
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -56,18 +55,19 @@ class ListPage(Page):
                          ["","PowerOptions","Power Options"],
                          ["","Wifi","Wi-Fi"],
                          ["","Bluetooth","Bluetooth"],
-                         ["","Sound","Sound Volume"],
+                         ["","Sound","Sound  Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Time","Timezone"],
                          ["","Languages","Languages"],
                          ["","Notification","Notification"],
-                         ["","Update", ""],
+                         ["","Update", "Update Launcher"],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],
+                         ["","PowerOFF","Power OFF"],
                          ["","ButtonsLayout","Buttons Layout"],
+                         ["","Skins","Theme Manager"],
                          ["","LauncherGo","Switch to LauncherGo"],
-                         ["","Lima","GPU driver switch"],
+                         ["","Lima","GPU Driver Switch"],
                          ["","GateWay","Network gateway switch"]]
 
         start_x  = 0

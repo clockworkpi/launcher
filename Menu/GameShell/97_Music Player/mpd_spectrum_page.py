@@ -15,12 +15,12 @@ from beeprint import pp
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_item import IconItem
 from UI.icon_pool  import MyIconPool
 from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
 
 from threading  import Thread
 
@@ -79,8 +79,8 @@ class MPDSpectrumPage(Page):
     _Selector=None
     _FootMsg = ["Nav","","","Back",""]
     _MyList = []
-    _ListFont = fonts["veramono12"]
-    _SongFont = fonts["notosanscjk12"]
+    _ListFont = MyLangManager.TrFont("veramono12")
+    _SongFont = MyLangManager.TrFont("notosanscjk12")
     _PIFI   =  None
     _FIFO   = None
     _Color  = MySkinManager.GiveColor('Front')
@@ -136,26 +136,26 @@ class MPDSpectrumPage(Page):
         
         """
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["sheep_bg"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("sheep_bg")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
         
         self._SheepHead = IconItem()
-        self._SheepHead._ImgSurf = MyIconPool._Icons["sheep_head"]
+        self._SheepHead._ImgSurf = MyIconPool.GiveIconSurface("sheep_head")
         self._SheepHead._MyType = ICON_TYPES["STAT"]
         self._SheepHead._Parent = self
         self._SheepHead.Adjust(0,0,self._SheepHeadW,self._SheepHeadH,0)
 
         self._SheepBody = IconItem()
-        self._SheepBody._ImgSurf = MyIconPool._Icons["sheep_body"]
+        self._SheepBody._ImgSurf = MyIconPool.GiveIconSurface("sheep_body")
         self._SheepBody._MyType = ICON_TYPES["STAT"]
         self._SheepBody._Parent = self
         self._SheepBody.Adjust(0,0,self._SheepBodyW,self._SheepBodyH,0)
         """
         
         self._cwp_png = IconItem()
-        self._cwp_png._ImgSurf = MyIconPool._Icons["tape"]
+        self._cwp_png._ImgSurf = MyIconPool.GiveIconSurface("tape")
         self._cwp_png._MyType = ICON_TYPES["STAT"]
         self._cwp_png._Parent = self
         self._cwp_png.Adjust(0,0,79,79,0)

@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*- 
-import platform
+
 import dbus
 import dbus.service
 import sys
 import commands
+import logging
+import errno
+
 from wicd import misc 
 ##misc.to_bool
 ##misc.misc.noneToString
@@ -21,7 +24,7 @@ import pygame
 from sys import exit
 import os
 
-from beeprint import pp
+#from beeprint import pp
 ########
 if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
@@ -29,10 +32,10 @@ else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
 
-
+import config
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
-from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
+from UI.constants    import Width,Height,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
+from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse,ArmSystem
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
 from UI.icon_item    import IconItem
@@ -43,10 +46,9 @@ from UI.main_screen  import MainScreen
 from UI.above_all_patch import SoundPatch
 from UI.icon_pool    import MyIconPool
 from UI.createby_screen import CreateByScreen
-
+from UI.skin_manager import MySkinManager
 from libs.DBUS            import setup_dbus
 
-import config
 
 if not pygame.display.get_init():
     pygame.display.init()
@@ -288,7 +290,36 @@ def RecordKeyDns(thekey,main_screen):
         return True
     
     return False
+
+
+
+def release_self_fds():
+    fds_flags= ["pipe","socket",".ttf"]
+    """List process currently open FDs and their target """
+    if sys.platform != 'linux2':
+        raise NotImplementedError('Unsupported platform: %s' % sys.platform)
+
+    ret = {}
+    base = '/proc/self/fd'
+    for num in os.listdir(base):
+        path = None
+        try:
+            path = os.readlink(os.path.join(base, num))
+        except OSError as err:
+            # Last FD is always the "listdir" one (which may be closed)
+            if err.errno != errno.ENOENT:
+                raise
+        ret[int(num)] = path
     
+    for key in ret:
+      if ret[key] != None and isinstance(ret[key], str):
+        for i in fds_flags:
+          if i in ret[key]:
+            os.close(key)
+            break
+    return ret  
+
+  
 def event_process(event,main_screen):
     global sound_patch
     global everytime_keydown 
@@ -312,10 +343,19 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";"
+                
+                endpos = len(event.message)
+                space_break_pos = endpos
+                for i in range(0,endpos):
+                    if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
+                        space_break_pos = i-1
+                        break
+                
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";"
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -330,10 +370,18 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";" 
+                endpos = len(event.message)
+                space_break_pos = endpos
+                for i in range(0,endpos):
+                    if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
+                        space_break_pos = i-1
+                        break
+                                        
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";" 
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -344,6 +392,7 @@ def event_process(event,main_screen):
             os.chdir(GetExePath())
             exec_app_cmd = " sync & cd "+GetExePath()+"; exec python "+myscriptname
             print(exec_app_cmd)
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             os.chdir( GetExePath())
             os.exelp("python","python"," "+myscriptname)
@@ -352,6 +401,7 @@ def event_process(event,main_screen):
             pygame.quit()
             gobject_main_loop.quit()
             exec_app_cmd = event.message +";"
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             sys.exit(-1)
             return
@@ -521,7 +571,7 @@ def big_loop():
     sound_patch.Init()
     #pp(main_screen._Pages[0],True,6)
 
-    screen.fill(bg_color)
+    screen.fill(MySkinManager.GiveColor("White"))
     main_screen.Draw()
     main_screen.SwapAndShow()
 
@@ -537,27 +587,6 @@ def big_loop():
     gobject_loop()
     
 
-def PreparationInAdv():
-    
-    if "arm" not in platform.machine():
-        return
-    
-    if FileExists(".powerlevel") == False:
-        os.system("touch .powerlevel")
-    
-    with open(".powerlevel","r") as f:
-        powerlevel = f.read()
-    
-    powerlevel = powerlevel.strip()
-    if powerlevel != "":
-        config.PowerLevel = powerlevel
-        if powerlevel != "supersaving":
-            os.system("sudo iw wlan0 set power_save off >/dev/null")
-        else:
-            os.system("sudo iw wlan0 set power_save on > /dev/null")
-    else:
-        os.system("sudo iw wlan0 set power_save off >/dev/null")
-        
 ###MAIN()###
 if __name__ == '__main__':
     
@@ -573,8 +602,7 @@ if __name__ == '__main__':
     pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
-
-
+    
     MyIconPool.Init()
     
     setup_dbus()
@@ -590,8 +618,6 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
-    
-    PreparationInAdv()
     
     crt_screen = CreateByScreen()
     crt_screen.Init()

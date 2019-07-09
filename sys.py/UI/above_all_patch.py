@@ -12,12 +12,12 @@ from icon_item   import IconItem
 from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
-from constants   import Width,Height,bg_color
+from constants   import Width,Height
 from util_funcs  import midRect
-from fonts       import fonts
 from keys_def    import CurKeys
 from label       import Label
 from skin_manager import MySkinManager
+from lang_manager import MyLangManager
 from widget      import Widget
 
 
@@ -28,7 +28,7 @@ class AboveAllPatch(Widget):
     _Height=120
     
     _Text  =""
-    _FontObj=fonts["veramono20"]
+    _FontObj=  MyLangManager.TrFont("veramono20")
     _Parent =None
     _Color = MySkinManager.GiveColor('Text')
     _ValColor = MySkinManager.GiveColor('URL')

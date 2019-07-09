@@ -18,7 +18,6 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
@@ -101,7 +100,7 @@ class RomListPage(Page):
     _Selector=None
     _FootMsg = ["Nav","Del","Scan","Back","Run","AddFav"]
     _MyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
     _Emulator = None
     _Parent   = None
@@ -144,7 +143,11 @@ class RomListPage(Page):
                     continue
                 
                 if FileExists(v+"/"+gameshell_bat):
-                    dirmap["gamedir"] = v.decode("utf8")
+                    try:
+                        dirmap["gamedir"] = v.decode("utf8","ignore")
+                    except:
+                        dirmap["gamedir"] = v.decode("ascii","ignore")
+                    
                     ret.append(dirmap)
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
@@ -163,7 +166,11 @@ class RomListPage(Page):
                         pieces  = bname.split(".")
                         if len(pieces) > 1:
                             if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                                dirmap["file"] = v.decode("utf8")
+                                try:
+                                    dirmap["file"] = v.decode("utf8","ignore")
+                                except:
+                                    dirmap["file"] = v.decode("ascii","ignore")
+                                
                                 ret.append(dirmap)
 #            else:
 #                print("not file or dir")
@@ -262,7 +269,7 @@ class RomListPage(Page):
 
 
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["empty"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("empty")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela22"))
@@ -377,7 +384,7 @@ class RomListPage(Page):
             if self._Emulator["ROM_SO"] =="": #empty means No needs for rom so
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
             else:
-                if FileExists(self._Emulator["ROM_SO"]):
+                if FileExists(self._Emulator["ROM_SO"].split(" ")[0]):
                     pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 else:
                     self._Screen.PushPage(self._RomSoConfirmDownloadPage)

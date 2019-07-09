@@ -6,7 +6,6 @@ from UI.constants import Width,Height,ICON_TYPES
 from UI.simple_name_space import SimpleNamespace
 from UI.page  import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.keys_def  import CurKeys, IsKeyMenuOrB
@@ -19,7 +18,7 @@ class TinyCloudPage(Page):
     _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     
-    _ListFontObj = fonts["varela13"]
+    _ListFontObj = MyLangManager.TrFont("varela13")
     
     _AList = {}
     _Labels = {}
@@ -156,7 +155,7 @@ class TinyCloudPage(Page):
         self._PngSize["online"] = (75,122)
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["needwifi_bg"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("needwifi_bg")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._PngSize["bg"][0],self._PngSize["bg"][1],0)
@@ -164,7 +163,7 @@ class TinyCloudPage(Page):
         self._Icons["bg"] = bgpng
         
         onlinepng = IconItem()
-        onlinepng._ImgSurf = MyIconPool._Icons["online"]
+        onlinepng._ImgSurf = MyIconPool.GiveIconSurface("online")
         onlinepng._MyType = ICON_TYPES["STAT"]
         onlinepng._Parent = self
         onlinepng.Adjust(0,0,self._PngSize["online"][0], self._PngSize["online"][1],0)

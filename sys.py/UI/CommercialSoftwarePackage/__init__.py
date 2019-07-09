@@ -27,10 +27,9 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT,RESTARTUI
 #from UI.simple_name_space import SimpleNamespace
 from UI.page  import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
-from UI.keys_def  import CurKeys
+from UI.keys_def  import CurKeys,IsKeyMenuOrB,IsKeyStartOrA
 from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
 from UI.text_bulletinboard import Textbulletinboard,Text
@@ -50,7 +49,7 @@ class NotFoundPage(Page):
         self._CanvasHWND = self._Screen._CanvasHWND
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons[self._BG]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface(self._BG)
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         #print( MyIconPool.Width(self._BG),MyIconPool.Height(self._BG) )
@@ -144,7 +143,7 @@ class HashErrPage(Page):
         self._CanvasHWND = self._Screen._CanvasHWND
         
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons[self._BG]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface(self._BG)
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.Adjust(0,0,MyIconPool.Width(self._BG),MyIconPool.Height(self._BG),0)
@@ -209,13 +208,13 @@ class HashErrPage(Page):
                 self._Board.SetAndBlitText(a.Words()+b.Words())
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             return   
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self._Leader.InstallPackage(self._Screen)
             return
         

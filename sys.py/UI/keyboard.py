@@ -8,7 +8,6 @@ from libs import easing
 from UI.constants  import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_item import IconItem
@@ -108,7 +107,7 @@ class Keyboard(Page):
         self._Width = self._Screen._Width
         self._Height = self._Screen._Height
         
-        fontobj = fonts["veramono24"]
+        fontobj = MySkinManager.GiveFont("veramono24")
         word_margin = 15
 
         start_x = (self._Width - fontobj.size( "".join(self._Secs[0][0]))[0]-len(self._Secs[0][0])*word_margin)/2+word_margin/2
@@ -129,7 +128,7 @@ class Keyboard(Page):
 
                     if val == "_L" or val == "_R":
                         it  = KeyboardIcon()
-                        it._ImgSurf = MyIconPool._Icons[val]
+                        it._ImgSurf = MyIconPool.GiveIconSurface(val)
                         it._Parent = self
                         it._Str = val
                         it.Init(start_x+it._ImgSurf.get_width()/2  ,start_y,it._ImgSurf.get_width(),it._ImgSurf.get_height(),0)
@@ -141,7 +140,7 @@ class Keyboard(Page):
                     else:
                         if val == "_S":
                             val = "Space"
-                            ti._FontObj = fonts["veramono15"]
+                            ti._FontObj = MySkinManager.GiveFont("veramono15")
                             ti._Bold = True
                         
                         cur_alpha_size  = ti._FontObj.size( val)

@@ -19,8 +19,8 @@ from icon_item   import IconItem
 from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
-from constants   import Width,Height,bg_color
-from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable,SkinMap
+from constants   import Width,Height
+from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
 from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
@@ -454,7 +454,7 @@ class MainScreen(Widget):
         
         files = os.listdir(_dir)
         for i in sorted(files):
-            if os.path.isdir(_dir+"/"+i): # TOPLEVEL only is dir
+            if os.path.isdir(_dir+"/"+i) and i.startswith(".") == False: # TOPLEVEL only is dir
                 if pglevel == 0:
                     page = Page()
                     page._Name = self.ExtraName(i)
@@ -469,8 +469,8 @@ class MainScreen(Widget):
                     iconitem.AddLabel(MyLangManager.Tr(i2),self._IconFont)
                     if FileExists( _dir+"/"+i+"/"+i2+".png"): ### 20_Prog/Prog.png , cut 20_ 
                         iconitem._ImageName = _dir+"/"+i+"/"+i2+".png"
-                    elif FileExists( SkinMap(_dir+"/"+i2+".png") ):
-                        iconitem._ImageName = SkinMap(_dir+"/"+i2+".png")
+                    elif FileExists( MySkinManager.GiveIcon(_dir+"/"+i2+".png") ):
+                        iconitem._ImageName = MySkinManager.GiveIcon(_dir+"/"+i2+".png")
                     else:
                         untitled = UntitledIcon()
                         untitled.Init()
@@ -567,7 +567,7 @@ class MainScreen(Widget):
                         cur_page._Icons.append(iconitem)
                         self.ReadTheDirIntoPages(_dir+"/"+i,pglevel+1,iconitem._LinkPage)
                         
-            elif os.path.isfile(_dir+"/"+i) and pglevel > 0:
+            elif os.path.isfile(_dir+"/"+i) and i.startswith(".") == False and pglevel > 0:
                 if i.lower().endswith(icon_ext):
                     i2 = self.ExtraName(i)
                     
@@ -577,8 +577,8 @@ class MainScreen(Widget):
                     iconitem._CmdPath = os.path.realpath(_dir+"/"+i)
                     MakeExecutable(iconitem._CmdPath)
                     iconitem._MyType  = ICON_TYPES["EXE"]
-                    if FileExists( SkinMap( _dir+"/"+ReplaceSuffix(i2,"png"))):
-                        iconitem._ImageName = SkinMap(_dir+"/"+ReplaceSuffix(i2,"png"))
+                    if FileExists( MySkinManager.GiveIcon( _dir+"/"+ReplaceSuffix(i2,"png"))):
+                        iconitem._ImageName = MySkinManager.GiveIcon(_dir+"/"+ReplaceSuffix(i2,"png"))
                     else:
                         untitled = UntitledIcon()
                         untitled.Init()

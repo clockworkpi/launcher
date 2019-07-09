@@ -9,5 +9,5 @@ def InitSoundPage(main_screen):
     myvars.SoundPage = SoundPage()
     
     myvars.SoundPage._Screen = main_screen
-    myvars.SoundPage._Name = "Sound volume"
+    myvars.SoundPage._Name = "Sound  Volume"
     myvars.SoundPage.Init()

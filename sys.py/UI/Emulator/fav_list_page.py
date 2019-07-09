@@ -11,7 +11,6 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
@@ -94,7 +93,7 @@ class FavListPage(Page):
     _Selector=None
     _FootMsg = ["Nav","Remove","Scan","","Run"]
     _MyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
     _Emulator = None
     _Parent   = None
@@ -130,8 +129,11 @@ class FavListPage(Page):
                     stats = os.stat(v)
                     if stats.st_gid != self._Parent._FavGID: ## only favs
                         continue
+                    try:
+                        dirmap["gamedir"] = v.decode("utf8","ignore")
+                    except:
+                        dirmap["gamedir"] = v.decode("ascii","ignore")
                     
-                    dirmap["gamedir"] = v.decode("utf8")
                     ret.append(dirmap)            
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
@@ -142,7 +144,11 @@ class FavListPage(Page):
                     pieces  = bname.split(".")
                     if len(pieces) > 1:
                         if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                            dirmap["file"] = v.decode("utf8")
+                            try:
+                                dirmap["file"] = v.decode("utf8","ignore")
+                            except:
+                                dirmap["file"] = v.decode("ascii","ignore")
+                            
                             ret.append(dirmap)
                 
 #            else:
@@ -228,7 +234,7 @@ class FavListPage(Page):
 
 
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["star"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("star")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.AddLabel(MyLangManager.Tr("MyFavGames"), MyLangManager.TrFont("varela18"))
@@ -336,7 +342,7 @@ class FavListPage(Page):
             if self._Emulator["ROM_SO"] =="": #empty means No needs for rom so
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
             else:
-                if FileExists(self._Emulator["ROM_SO"]):
+                if FileExists(self._Emulator["ROM_SO"].split(" ")[0]):
                     pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 else:
                     self._Screen.PushPage(self._RomSoConfirmDownloadPage)

@@ -12,7 +12,6 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -66,21 +65,21 @@ class AirplanePage(Page):
 
 
         airwire = IconItem()
-        airwire._ImgSurf = MyIconPool._Icons["airwire"]
+        airwire._ImgSurf = MyIconPool.GiveIconSurface("airwire")
         airwire._MyType = ICON_TYPES["STAT"]
         airwire._Parent = self
         airwire.Adjust(0,0,5,43,0)
         self._Icons["airwire"] = airwire
 
         GS = IconItem()
-        GS._ImgSurf = MyIconPool._Icons["GS"]
+        GS._ImgSurf = MyIconPool.GiveIconSurface("GS")
         GS._MyType = ICON_TYPES["STAT"]
         GS._Parent = self
         GS.Adjust(0,0,72,95,0)
         self._Icons["GS"] = GS
 
         DialogBoxs = MultiIconItem()
-        DialogBoxs._ImgSurf = MyIconPool._Icons["DialogBoxs"]
+        DialogBoxs._ImgSurf = MyIconPool.GiveIconSurface("DialogBoxs")
         DialogBoxs._MyType = ICON_TYPES["STAT"]
         DialogBoxs._Parent = self
         DialogBoxs._IconWidth = 134
@@ -91,7 +90,7 @@ class AirplanePage(Page):
         
         """
         bgpng = MultiIconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["about_bg"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("about_bg")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)

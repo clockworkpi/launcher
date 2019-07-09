@@ -10,7 +10,6 @@ from wicd import misc
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,SwapAndShow
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
@@ -94,7 +93,7 @@ class WifiInfoPage(Page):
             li._PosY   = start_y + i*InfoPageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MyLangManager.TrFont("varela12")
             
             if self._AList[v]["label"] != "":
                 li.Init(  self._AList[v]["label"] )
@@ -267,7 +266,7 @@ class WifiList(Page):
     _FootMsg           = ["Nav","Info","Scan","Back","Enter"]
     _EncMethods        = None
     _Scroller          = None
-    _ListFontObj       = fonts["notosanscjk15"]
+    _ListFontObj       = MyLangManager.TrFont("notosanscjk15")
 
     _InfoPage          = None
     _CurBssid          = ""
@@ -569,7 +568,23 @@ class WifiList(Page):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
-            
+        else:
+            for i in range(0,10):
+                if is_wifi_connected_now() == True:
+                    self.ShowBox(MyLangManager.Tr("Launching"))
+                    self._Daemon.Disconnect()
+                    self._Daemon.SetForcedDisconnect(True)
+                    self._Connecting = False
+                else:
+                    break
+                
+                pygame.time.delay(100)
+                
+            if is_wifi_connected_now() == False:
+                self.ConfigWireless(password_inputed)
+            else:
+                self.ShowBox(MyLangManager.Tr("Disconnect first"))
+        
     def OnReturnBackCb(self):
         pass
         
@@ -622,8 +637,8 @@ class WifiList(Page):
                 for i in wicd_wirelss_encrypt_pwd:
                     if "preshared_key" in i:
                         if i["preshared_key"] != None:
-                            if len(i["preshared_key"]) > 0:
-                                thepass = i["preshared_key"]
+                            if len(str(i["preshared_key"])) > 0:
+                                thepass = str(i["preshared_key"])
                                 break
                 
                 myvars.PasswordPage.SetPassword(thepass)

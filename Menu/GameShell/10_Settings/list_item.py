@@ -7,7 +7,6 @@ import pygame
 ## local UI import
 from UI.page   import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.lang_manager import MyLangManager
 # a item for List
 # - - - - - - - - - - - -- 

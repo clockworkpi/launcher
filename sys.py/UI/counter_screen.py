@@ -6,17 +6,18 @@ import commands
 ## local package import
 from constants   import Width,Height,RUNSYS
 from label       import Label
-from fonts       import fonts
+
 from full_screen import FullScreen
 from skin_manager import MySkinManager
+from lang_manager import MyLangManager
 
 import config
 
 class CounterScreen(FullScreen):
 
-    _CounterFont = fonts["varela120"]
-    _TextFont1    = fonts["varela15"]
-    _TextFont2    = fonts["varela12"]
+    _CounterFont = MyLangManager.TrFont("varela120")
+    _TextFont1    = MyLangManager.TrFont("varela15")
+    _TextFont2    = MyLangManager.TrFont("varela12")
     
     _TopLabel = None
     _BottomLabel = None

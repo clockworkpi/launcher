@@ -15,7 +15,6 @@ from libs.roundrects import aa_round_rect
 from UI.confirm_page import ConfirmPage
 from UI.download_process_page import DownloadProcessPage
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
-from UI.fonts  import fonts
 from UI.multilabel import MultiLabel
 from UI.lang_manager import MyLangManager
 
