@@ -2,7 +2,7 @@
 import os
 import pygame
 
-from libs.roundrects import aa_round_rect
+#from libs.roundrects import aa_round_rect
 
 ## local UI import
 from UI.constants import Width,Height,ICON_TYPES
@@ -49,7 +49,7 @@ class MusicLibStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Line')
 
     def __init__(self):
         self._PosX = 0
@@ -72,9 +72,9 @@ class ListPageSelector(PageSelector):
             self._PosY = y
             self._Height = h
             
-            aa_round_rect(self._Parent._CanvasHWND,  
-                          (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
-
+            #aa_round_rect(self._Parent._CanvasHWND,  
+            #              (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width-4,h),0)
 
 
 class MusicLibListPage(Page):
@@ -184,8 +184,8 @@ class MusicLibListPage(Page):
         self._BGpng._ImgSurf = MyIconPool._Icons["empty"]
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
-        self._BGpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela22"))
-        self._BGpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
+        self._BGpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela18"))
+        self._BGpng.SetLableColor(MySkinManager.GiveColor('Text'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
 

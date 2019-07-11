@@ -55,7 +55,7 @@ class ListPage(Page):
                          ["","PowerOptions","Power Options"],
                          ["","Wifi","Wi-Fi"],
                          ["","Bluetooth","Bluetooth"],
-                         ["","Sound","Sound Volume"],
+                         ["","Sound","Sound  Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Time","Timezone"],
@@ -63,11 +63,11 @@ class ListPage(Page):
                          ["","Notification","Notification"],
                          ["","Update", ""],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],
+                         ["","PowerOFF","Power OFF"],
                          ["","ButtonsLayout","Buttons Layout"],
-                         ["","LauncherGo","Switch to LauncherGo"],
-                         ["","Lima","GPU driver switch"],
-                         ["","GateWay","Network gateway switch"]]
+                         #["","LauncherGo","Switch to LauncherGo"],
+                         ["","Lima","GPU Driver Switch"],
+                         ["","GateWay","Network Gateway Switch"]]
 
         start_x  = 0
         start_y  = 0

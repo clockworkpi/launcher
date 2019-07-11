@@ -24,7 +24,7 @@ class CounterScreen(FullScreen):
     _NumberLabel = None
     
     _BGColor = MySkinManager.GiveColor('Black')
-    _FGColor = MySkinManager.GiveColor('White')
+    _FGColor = MySkinManager.GiveColor('Text')
     
     _Counting = False
     _Number = 10

@@ -110,7 +110,7 @@ class MessageBox(Label):
             #self._HWND.blit(self._CanvasHWND,rect)
 
         if withborder == True:
-            pygame.draw.rect(self._HWND,MySkinManager.GiveColor('Black'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
+            pygame.draw.rect(self._HWND,MySkinManager.GiveColor('Text'),(x_-padding,y_-padding, self._Width+padding*2,self._Height+padding*2),1)
         
     def Draw(self):        
         x = (self._Parent._Width)/2
@@ -138,7 +138,7 @@ class MainScreen(Widget):
     _TitleBar    = None
     _FootBar     = None
     _MsgBox      = None
-    _MsgBoxFont  = MyLangManager.TrFont("veramono20")
+    _MsgBoxFont  = MyLangManager.TrFont("varela20")
     _IconFont    = MyLangManager.TrFont("varela15")
     _SkinManager = None
 

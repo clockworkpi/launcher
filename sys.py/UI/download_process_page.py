@@ -75,11 +75,11 @@ class DownloadProcessPage(Page):
         
         self._FileNameLabel = Label()
         self._FileNameLabel.SetCanvasHWND(self._CanvasHWND)
-        self._FileNameLabel.Init("", fonts["varela12"])
+        self._FileNameLabel.Init("", MyLangManager.TrFont("varela12"))
 
         self._SizeLabel = Label()
         self._SizeLabel.SetCanvasHWND(self._CanvasHWND)
-        self._SizeLabel.Init("0/0Kb",fonts["varela12"])
+        self._SizeLabel.Init("0/0Kb",MyLangManager.TrFont("varela12"))
         self._SizeLabel.SetColor( self._URLColor )
 
         

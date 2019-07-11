@@ -73,8 +73,8 @@ class IconItem(Widget):
         if self._ImgSurf == None and self._ImageName != "":
 #            print(self._ImageName)
             self._ImgSurf = pygame.image.load( self._ImageName ).convert_alpha() 
-            if self._ImgSurf.get_width() > icon_width or self._ImgSurf.get_height() > icon_height:
-                self._ImgSurf = pygame.transform.scale(self._ImgSurf,(icon_width,icon_height))
+            #if self._ImgSurf.get_width() > icon_width or self._ImgSurf.get_height() > icon_height:
+            #    self._ImgSurf = pygame.transform.scale(self._ImgSurf,(icon_width,icon_height))
    
     def ChangeImgSurfColor(self,color):
         color_surface(self._ImgSurf,color)

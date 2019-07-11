@@ -3,7 +3,7 @@ import os
 import pygame
 import gobject
 
-from libs.roundrects import aa_round_rect
+#from libs.roundrects import aa_round_rect
 
 ## local UI import
 from UI.constants import Width,Height,ICON_TYPES
@@ -23,7 +23,7 @@ from list_item  import ListItem
 import myvars
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Line')
 
     def __init__(self):
         self._PosX = 0
@@ -51,9 +51,9 @@ class ListPageSelector(PageSelector):
         self._PosY = y
         self._Height = h
 
-        aa_round_rect(self._Parent._CanvasHWND,  
-                      (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
-        
+        #aa_round_rect(self._Parent._CanvasHWND,  
+        #              (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+        pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width-4,h),0)
 
 
 class PlayListPage(Page):
@@ -184,7 +184,7 @@ class PlayListPage(Page):
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
         self._BGpng.AddLabel(MyLangManager.Tr("my favorite music"), MyLangManager.TrFont("varela18"))
-        self._BGpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
+        self._BGpng.SetLableColor(MySkinManager.GiveColor('Text'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
         self._Scroller = ListScroller()

@@ -76,7 +76,7 @@ class Textarea(Widget):
         cursor_row = 0
 
         for i, v in enumerate(self._MyWords):
-            t = self._FontObj.render(v, True, (8, 135, 174))
+            t = self._FontObj.render(v, True, MySkinManager.GiveColor("Text"))
             t_width = t.get_width()
             w += t_width
             del(t)
@@ -122,7 +122,7 @@ class Textarea(Widget):
         linenumber = 0
         self._TextFull = len(self._MyWords) > self._TextLimit
         for i, v in enumerate(self._BlitWords):
-            t = self._FontObj.render(v,True,(8,135,174))
+            t = self._FontObj.render(v,True,MySkinManager.GiveColor("Text"))
             w += t.get_width()
 
             if w >= self._Width-endmargin and linenumber == 0:
@@ -142,7 +142,7 @@ class Textarea(Widget):
         y = self._PosY
         linenumber = 0
         for i,v in enumerate(self._BlitWords[:self._BlitIndex]):
-            t = self._FontObj.render(v,True,(8,135,174))
+            t = self._FontObj.render(v,True,MySkinManager.GiveColor("Text"))
             w += t.get_width()
 
             if w >= self._Width-endmargin and linenumber == 0:
@@ -156,7 +156,7 @@ class Textarea(Widget):
                 break
             x += t.get_width()
             
-        self._CanvasHWND.blit(self._FontObj.render("_",True,(0,0,0)),(x+1,y-2))
+        self._CanvasHWND.blit(self._FontObj.render("_",True,MySkinManager.GiveColor("Text")),(x+1,y-2))
     
     def Draw(self):
         #aa_round_rect(self._CanvasHWND, (4,24.5+6,312,60),self._BackgroundColor,4,0,self._BackgroundColor)

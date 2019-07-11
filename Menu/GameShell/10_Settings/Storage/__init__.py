@@ -67,7 +67,7 @@ class StoragePage(Page):
         
         self._FreeLabel = Label()
         self._FreeLabel.SetCanvasHWND(self._CanvasHWND)
-        self._FreeLabel.Init("FREE",MySkinManager.GiveFont("Eurostile12"))
+        self._FreeLabel.Init("FREE",MySkinManager.GiveFont("varela12"))
         self._FreeLabel.SetColor(self._PctLabel._Color)
 
         

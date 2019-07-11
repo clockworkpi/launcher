@@ -11,7 +11,7 @@ import validators
 #from pySmartDL import SmartDL
 import time
 
-from libs.roundrects import aa_round_rect
+#from libs.roundrects import aa_round_rect
 
 ## local UI import
 from UI.constants import Width,Height,ICON_TYPES,RUNEVT
@@ -59,7 +59,7 @@ class RomStack:
         return len(self.stack)
 
 class ListPageSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Line')
 
     def __init__(self):
         self._PosX = 0
@@ -89,8 +89,9 @@ class ListPageSelector(PageSelector):
         self._PosY = y
         self._Height = h
 
-        aa_round_rect(self._Parent._CanvasHWND,  
-                    (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+#        aa_round_rect(self._Parent._CanvasHWND,  
+#                    (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+        pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width-4,h),0)
 
 
 
@@ -143,7 +144,11 @@ class RomListPage(Page):
                     continue
                 
                 if FileExists(v+"/"+gameshell_bat):
-                    dirmap["gamedir"] = v.decode("utf8")
+                    try:
+                        dirmap["gamedir"] = v.decode("utf8","ignore")
+                    except:
+                        dirmap["gamedir"] = v.decode("ascii","ignore")
+                    
                     ret.append(dirmap)
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
@@ -162,7 +167,11 @@ class RomListPage(Page):
                         pieces  = bname.split(".")
                         if len(pieces) > 1:
                             if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                                dirmap["file"] = v.decode("utf8")
+                                try:
+                                    dirmap["file"] = v.decode("utf8","ignore")
+                                except:
+                                    dirmap["file"] = v.decode("ascii","ignore")
+                                
                                 ret.append(dirmap)
 #            else:
 #                print("not file or dir")
@@ -264,8 +273,8 @@ class RomListPage(Page):
         bgpng._ImgSurf = MyIconPool._Icons["empty"]
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
-        bgpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela22"))
-        bgpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
+        bgpng.AddLabel(MyLangManager.Tr("Please upload data over Wi-Fi"), MyLangManager.TrFont("varela18"))
+        bgpng.SetLableColor(MySkinManager.GiveColor('Text'))
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
         self._Icons["bg"] = bgpng

@@ -202,7 +202,7 @@ class WifiInfoPage(Page):
         
     
 class WifiListSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Front')
+    _BackgroundColor = MySkinManager.GiveColor('Line')
 
     def __init__(self):
         pass
@@ -222,9 +222,9 @@ class WifiListSelector(PageSelector):
             self._PosY = y
             self._Height = h
 
-            aa_round_rect(self._Parent._CanvasHWND,  
-                          (x,y,self._Width,h),self._BackgroundColor,4,0,self._BackgroundColor)
-
+            #aa_round_rect(self._Parent._CanvasHWND,  
+            #              (x,y,self._Width,h),self._BackgroundColor,4,0,self._BackgroundColor)
+            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width,h),0)
 
 class WifiListMessageBox(Label):
     _Parent = None
@@ -238,7 +238,7 @@ class WifiListMessageBox(Label):
         padding = 10 
         pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))        
 
-        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
 
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 
@@ -621,8 +621,8 @@ class WifiList(Page):
                 for i in wicd_wirelss_encrypt_pwd:
                     if "preshared_key" in i:
                         if i["preshared_key"] != None:
-                            if len(i["preshared_key"]) > 0:
-                                thepass = i["preshared_key"]
+                            if len(str(i["preshared_key"])) > 0:
+                                thepass = str(i["preshared_key"])
                                 break
                 
                 myvars.PasswordPage.SetPassword(thepass)
