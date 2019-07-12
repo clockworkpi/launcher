@@ -76,7 +76,7 @@ class APIOBJ(object):
         self._Page = PowerOffConfirmPage()
 
         self._Page._Screen = main_screen
-        self._Page._Name ="Power OFF"
+        self._Page._Name ="SHUTDOWN"
         self._Page.Init()
         
         

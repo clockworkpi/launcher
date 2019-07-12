@@ -157,7 +157,7 @@ class TinyCloudPage(Page):
         self._Height = self._Screen._Height
 
         self._PngSize["bg"] = (253,114)
-        self._PngSize["online"] = (75,122)
+        #self._PngSize["online"] = (75,122)
         
         bgpng = IconItem()
         bgpng._ImgSurf = MyIconPool._Icons["needwifi_bg"]
@@ -167,6 +167,7 @@ class TinyCloudPage(Page):
 
         self._Icons["bg"] = bgpng
         
+        """
         onlinepng = IconItem()
         onlinepng._ImgSurf = MyIconPool._Icons["online"]
         onlinepng._MyType = ICON_TYPES["STAT"]
@@ -174,7 +175,7 @@ class TinyCloudPage(Page):
         onlinepng.Adjust(0,0,self._PngSize["online"][0], self._PngSize["online"][1],0)
 
         self._Icons["online"] = onlinepng
-
+        """
         self.SetLabels()
 
     def KeyDown(self,event):
@@ -189,8 +190,8 @@ class TinyCloudPage(Page):
 
             if is_wifi_connected_now():
                 
-                self._Icons["online"].NewCoord(self._Coords["online"].x, self._Coords["online"].y)
-                self._Icons["online"].Draw()
+                #self._Icons["online"].NewCoord(self._Coords["online"].x, self._Coords["online"].y)
+                #self._Icons["online"].Draw()
 
                 self.SetLabels()
                 
@@ -229,7 +230,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = TinyCloudPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="Tiny cloud"
+        self._Page._Name ="CONNECT"
         self._Page.Init()
         
     def API(self,main_screen):
