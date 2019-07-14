@@ -17,12 +17,12 @@ from libs import easing
 
 # local import
 from constants import ALIGN, icon_width, icon_height, Width, Height, ICON_TYPES
-from util_funcs import midRect
+from util_funcs import midRect,FileExists
 from keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from icon_pool import MyIconPool
 from lang_manager import MyLangManager
 from widget import Widget
-
+import config
 
 class PageStack:
     def __init__(self):
@@ -113,15 +113,13 @@ class Page(Widget):
 
     def __init__(self):
         self._Icons = []
-        path = '/home/cpi/launcher/skin/default/Menu/GameShell/Wallpaper/'
+        ## so every theme can have a background.png for displaying as the background of the launcher,except the topbar and footbar
+        ## https://forum.clockworkpi.com/t/give-your-gs-a-custom-wallpaper/3724
+        bg_img_path = config.SKIN+"/background.png"
 
-        if os.path.exists(path):
-            image = os.listdir(path)[0]
-            if image:
-                self._Wallpaper = pygame.transform.scale(pygame.image.load(path+image).convert(), (320,240))  
+        if FileExists(bg_img_path):
+            self._Wallpaper = pygame.transform.scale(pygame.image.load(bg_img_path).convert(), (320,240))  
         
-
-
     def AdjustHLeftAlign(self): ## adjust coordinator and append the PageSelector
         self._PosX = self._Index*self._Screen._Width
         self._Width = self._Screen._Width
