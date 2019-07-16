@@ -1,8 +1,0 @@
-{
-"GameDir":"/home/cpi/games/PICO-8/",
-"InstallDir":"pico-8",
-"NotFoundMsg":["Please purchase the PICO-8 \n|None|varela16",
-"and copy it to the \"~/games/PICO-8\"|None|varela16"],
-"MD5":{"pico-8_0.1.11g_raspi.zip":"a3f2995cf117499f880bd964d6a0e1f2","pico-8_0.1.11g_amd64.zip":"6726141c784afd4a41be6b7414c1b932","pico-8_0.1.12_raspi.zip":"08eda95570e63089a2b9f5531503431e","pico-8_0.1.12c_raspi.zip":"1a62b0d7d4e4be65f89f23ec9757cb66","pico-8.zip":"whatever it takes"},
-"Post-Up":"bash Post-Up.sh" 
-}
