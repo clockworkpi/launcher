@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*- 
 import pygame
 import validators
+import  commands
 
 from UI.constants import Width,Height,ICON_TYPES
 from UI.simple_name_space import SimpleNamespace
@@ -116,6 +117,10 @@ class TinyCloudPage(Page):
         else:
             self._IP = "xxx.xxx.xxx.xxx"
         
+        hostname = commands.getstatusoutput("hostname")[1]
+        if hostname == "":
+            hostname = "clockworkpi"
+                    
         labels = \
         [["forssh","For ssh and scp:",self._ListFontObj,self._TextColor],
          ["ssh_addr","ssh cpi@%s" % self._IP, self._ListFontObj,self._URLColor],
@@ -126,7 +131,7 @@ class TinyCloudPage(Page):
          ["forKey",     "Key:",                    self._ListFontObj, self._TextColor],
          ["key_and_pass", "cpi",                   self._ListFontObj, self._URLColor],
          ["for_airplay", "Airplay:",               self._ListFontObj, self._TextColor],
-         ["airplay_name","clockworkpi",            self._ListFontObj, self._URLColor],
+         ["airplay_name",hostname,            self._ListFontObj, self._URLColor],
          ["for-usb-eth","USB-Ethernet:",            self._ListFontObj, self._TextColor],
          ["usb-eth-addr","192.168.10.1",            self._ListFontObj, self._URLColor]]
 
