@@ -221,10 +221,9 @@ class WifiListSelector(PageSelector):
             self._PosX = x
             self._PosY = y
             self._Height = h
-
-            #aa_round_rect(self._Parent._CanvasHWND,  
-            #              (x,y,self._Width,h),self._BackgroundColor,4,0,self._BackgroundColor)
+            
             pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width,h),0)
+
 
 class WifiListMessageBox(Label):
     _Parent = None
@@ -568,7 +567,23 @@ class WifiList(Page):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
-            
+        else:
+            for i in range(0,10):
+                if is_wifi_connected_now() == True:
+                    self.ShowBox(MyLangManager.Tr("Launching"))
+                    self._Daemon.Disconnect()
+                    self._Daemon.SetForcedDisconnect(True)
+                    self._Connecting = False
+                else:
+                    break
+                
+                pygame.time.delay(100)
+                
+            if is_wifi_connected_now() == False:
+                self.ConfigWireless(password_inputed)
+            else:
+                self.ShowBox(MyLangManager.Tr("Disconnect first"))
+        
     def OnReturnBackCb(self):
         pass
         
