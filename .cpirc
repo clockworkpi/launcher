@@ -1,9 +1,9 @@
 SCREEN=`cat /sys/class/graphics/fb0/modes`
 
-XORG_CONF="/home/cpi/launcher/.xorg.conf"
+XORG_CONF="~/launcher/.xorg.conf"
 if [ -f /home/cpi/.lima ]
 then
-XORG_CONF="/home/cpi/launcher/.xorg_lima.conf"
+XORG_CONF="~/launcher/.xorg_lima.conf"
 fi
 
 if [ -f /tmp/autologin ]
