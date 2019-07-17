@@ -11,7 +11,7 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect,FileExists
+from UI.util_funcs import midRect,FileExists,ArmSystem
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
@@ -37,10 +37,9 @@ class ListPageSelector(InfoPageSelector):
             self._PosY = y
             self._Height = h
             
-            #aa_round_rect(self._Parent._CanvasHWND,  
-            #              (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
-            
-            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width-4,h) ,0)
+            aa_round_rect(self._Parent._CanvasHWND,  
+                          (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
+
 
 class PageListItem(InfoPageListItem):
     _PosX = 0
@@ -77,7 +76,7 @@ class PageListItem(InfoPageListItem):
 class GPUDriverPage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
-    _ListFont = MyLangManager.TrFont("notosanscjk15")
+    _ListFont = MyLangManager.TrFont("notosanscjk12")
     
     _AList = {}
 
@@ -102,8 +101,8 @@ class GPUDriverPage(Page):
         start_y  = 0
         last_height = 0
 
-        drivers = [["fbturbo","Fbturbo"],
-                    ["modesetting","Lima"]]
+        drivers = [["fbturbo","FBTURBO driver (Software Rendering)"],
+                    ["modesetting","LIMA driver (Experimental Hardware Rendering)"]]
                 
         
         for i,u in enumerate( drivers ):            
@@ -133,7 +132,7 @@ class GPUDriverPage(Page):
         self._Height = self._Screen._Height
 
         done = IconItem()
-        done._ImgSurf = MyIconPool._Icons["done"]
+        done._ImgSurf = MyIconPool.GiveIconSurface("done")
         done._MyType = ICON_TYPES["STAT"]
         done._Parent = self
         self._Icons["done"] = done
@@ -171,10 +170,16 @@ class GPUDriverPage(Page):
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
             
-            if "modesetting" in cur_li._Value:
+            if "modesetting" in cur_li._Value: ## enable lima
                 os.system("touch %s/.lima" % os.path.expanduser('~') )
-            else:
+                ArmSystem("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima  /usr/lib/xorg/modules/drivers/modesetting_drv.so")
+                ArmSystem("sudo sed -i '/^#.*lima/s/^#//' /etc/ld.so.conf.d/00-arm-linux-gnueabihf.conf")
+                ArmSystem("sudo ldconfig")
+            else: #disable lima
                 os.system("rm %s/.lima" % os.path.expanduser('~') )
+                ArmSystem("sudo mv /usr/lib/xorg/modules/drivers/modesetting_drv.so /usr/lib/xorg/modules/drivers/modesetting_drv.so.lima")
+                ArmSystem("sudo sed -i 's/^[^#]*lima/#&/' /etc/ld.so.conf.d/00-arm-linux-gnueabihf.conf")
+                ArmSystem("sudo ldconfig")
             
             pygame.time.delay(800)
             os.system("sudo reboot")
@@ -266,7 +271,7 @@ class GPUDriverPage(Page):
                     i.Draw()                
 
         if self._HWND != None:
-            self._HWND.fill((255,255,255))
+            self._HWND.fill(MySkinManager.GiveColor("White"))
             
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             
@@ -279,7 +284,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = GPUDriverPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="GPU driver switch"
+        self._Page._Name ="GPU Driver Switch"
         self._Page.Init()
         
     def API(self,main_screen):
