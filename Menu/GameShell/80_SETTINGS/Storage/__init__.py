@@ -74,20 +74,6 @@ class StoragePage(Page):
     def OnLoadCb(self):
         pass
     
-    def DrawCross(self,topleft,top):
-      start_x = topleft
-      start_y = top
-      width = 2
-      height = 10 
-      padding = 4
-      
-      rect1 = pygame.Rect(start_x+padding,start_y,width,height)
-      rect2 = pygame.Rect(start_x,start_y+padding,height,width)
-      
-      pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),rect1, 0)   
-      pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),rect2, 0)   
-
-      
     def Draw(self):
         self.ClearCanvas()
         

@@ -18,6 +18,7 @@ from util_funcs   import midRect
 from keys_def     import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from icon_pool    import MyIconPool
 from lang_manager import MyLangManager
+from skin_manager import MySkinManager
 from widget       import Widget
 
 class PageStack:
@@ -644,6 +645,20 @@ class Page(Widget):
             self.IconClick()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
+
+    ##for gcores
+    def DrawCross(self,topleft,top):
+      start_x = topleft
+      start_y = top
+      width = 2
+      height = 10 
+      padding = 4
+
+      rect1 = pygame.Rect(start_x+padding,start_y,width,height)
+      rect2 = pygame.Rect(start_x,start_y+padding,height,width)
+
+      pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),rect1, 0)   
+      pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),rect2, 0)  
 
     def Draw(self):
         self.ClearCanvas()
