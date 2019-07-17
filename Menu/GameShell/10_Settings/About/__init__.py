@@ -266,7 +266,7 @@ class AboutPage(Page):
 
             li.SetSmallText( self._AList[u]["value"] )
             
-            last_height += li._Height
+            last_height += li._Height + 2 ## fix offset for long line text covered on the right background png
             
             self._MyList.append(li)
             
