@@ -202,7 +202,7 @@ class WifiInfoPage(Page):
         
     
 class WifiListSelector(PageSelector):
-    _BackgroundColor = MySkinManager.GiveColor('Line')
+    _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
         pass
@@ -222,9 +222,9 @@ class WifiListSelector(PageSelector):
             self._PosY = y
             self._Height = h
 
-            #aa_round_rect(self._Parent._CanvasHWND,  
-            #              (x,y,self._Width,h),self._BackgroundColor,4,0,self._BackgroundColor)
-            pygame.draw.rect(self._Parent._CanvasHWND,self._BackgroundColor,(x,y,self._Width,h),0)
+            aa_round_rect(self._Parent._CanvasHWND,  
+                          (x,y,self._Width,h),self._BackgroundColor,4,0,self._BackgroundColor)
+
 
 class WifiListMessageBox(Label):
     _Parent = None
@@ -238,7 +238,7 @@ class WifiListMessageBox(Label):
         padding = 10 
         pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('White'),(x-padding,y-padding, w+padding*2,h+padding*2))        
 
-        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Text'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
+        pygame.draw.rect(self._CanvasHWND,MySkinManager.GiveColor('Black'),(x-padding,y-padding, w+padding*2,h+padding*2),1)
 
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 
@@ -568,7 +568,23 @@ class WifiList(Page):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
-            
+        else:
+            for i in range(0,10):
+                if is_wifi_connected_now() == True:
+                    self.ShowBox(MyLangManager.Tr("Launching"))
+                    self._Daemon.Disconnect()
+                    self._Daemon.SetForcedDisconnect(True)
+                    self._Connecting = False
+                else:
+                    break
+                
+                pygame.time.delay(100)
+                
+            if is_wifi_connected_now() == False:
+                self.ConfigWireless(password_inputed)
+            else:
+                self.ShowBox(MyLangManager.Tr("Disconnect first"))
+        
     def OnReturnBackCb(self):
         pass
         
