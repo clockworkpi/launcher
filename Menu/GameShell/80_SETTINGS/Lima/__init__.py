@@ -102,7 +102,7 @@ class GPUDriverPage(Page):
         last_height = 0
 
         drivers = [["fbturbo","FBTURBO driver (Software Rendering)"],
-                    ["modesetting","LIMA driver (Experimental Hardware Rendering)"]]
+                    ["modesetting","LIMA driver (Experimental GPU Rendering)"]]
                 
         
         for i,u in enumerate( drivers ):            
