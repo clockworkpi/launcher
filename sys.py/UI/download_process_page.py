@@ -155,6 +155,20 @@ class DownloadProcessPage(Page):
         else:
             return False
     
+    def DownloadPostJob(self):
+        cur_dir = os.getcwd()
+        
+        arr = self._URL.rsplit('/', 1)
+        if len(arr) > 1:
+          downloaded_filename = arr[1]
+          try:
+            os.chdir(os.path.join(cur_dir,"patches",downloaded_filename)
+            os.system("/bin/sh Run.sh")
+          except:
+            pass
+          
+        os.chdir(cur_dir)
+        
     def StartDownload(self,url,dst_dir):
         if is_wifi_connected_now() == False:
             return
