@@ -604,7 +604,12 @@ class Page(Widget):
             for i in range(0, len(self._MyList)):
                 self._MyList[i]._PosY += self._MyList[i]._Height*dy
         
-
+    def RefreshPsIndex(self):
+        if len(self._MyList) == 0:
+            self._PsIndex = 0
+        if self._PsIndex > (len(self._MyList) -1):
+            self._PsIndex = len(self._MyList) -1
+        
     def FScrollDown(self,Step=1):
         if len(self._MyList) == 0:
             return

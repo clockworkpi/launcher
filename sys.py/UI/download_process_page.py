@@ -84,7 +84,7 @@ class DownloadProcessPage(Page):
 
         
     def OnExitCb(self,event):
-        print("DownloadProcessPage OnExitCb")
+        #print("DownloadProcessPage OnExitCb")
         if self._Downloader == None:
             return        
         try:
@@ -97,7 +97,7 @@ class DownloadProcessPage(Page):
         if self._Screen.CurPage() == self:
             if self._Downloader.isFinished():
                 if self._Downloader.isSuccessful():
-                    print("Success!")
+                    print("Download Success!")
                     # Do something with obj.get_dest()
                     filename = os.path.basename(self._Downloader.get_dest())
                     cur_dir = os.getcwd()
@@ -115,7 +115,8 @@ class DownloadProcessPage(Page):
                         os.system( "tar xf " + filename)
                         os.system( "rm -rf " + filename)
                     
-                    os.chdir(cur_dir)    
+                    os.chdir(cur_dir)
+                    self.DownloadPostJob()    
                     self.ReturnToUpLevelPage()
                     self._Screen.Draw()
                     self._Screen.SwapAndShow()
@@ -155,6 +156,20 @@ class DownloadProcessPage(Page):
         else:
             return False
     
+    def DownloadPostJob(self):
+        cur_dir = os.getcwd()
+        
+        arr = self._URL.rsplit('/', 1)
+        if len(arr) > 1:
+            downloaded_filename = arr[1]
+            try:
+                os.chdir(os.path.join(cur_dir,"patches",downloaded_filename))
+                os.system("/bin/sh Run.sh")
+            except:
+              pass
+          
+        os.chdir(cur_dir)
+        
     def StartDownload(self,url,dst_dir):
         if is_wifi_connected_now() == False:
             return

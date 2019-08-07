@@ -62,6 +62,7 @@ class ListPage(Page):
                          ["","Languages","Languages"],
                          ["","Notification","Notification"],
                          ["","Update", "Update Launcher"],
+                         ["","Cores", "Cores Manager"],
                          ["","About",  "About"],
                          ["","PowerOFF","Power OFF"],
                          ["","ButtonsLayout","Buttons Layout"],
