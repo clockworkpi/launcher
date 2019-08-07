@@ -234,7 +234,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = CoresPage()
         self._Page._Screen = main_screen
-        self._Page._Name ="Cores Manager"
+        self._Page._Name ="Retroarch cores manager"
         self._Page.Init()
         
     def API(self,main_screen):
