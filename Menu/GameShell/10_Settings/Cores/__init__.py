@@ -76,6 +76,7 @@ class CoresPage(Page):
 
     _Config =None
     _AllowedExts = [".so",".bin"]
+    _HiddenSos   = ["chailove_libretro.so","nxengine_libretro.so"]
     
     def __init__(self):
         Page.__init__(self)
@@ -94,7 +95,11 @@ class CoresPage(Page):
         start_y  = 0
         counter = 0 
         for i,v in enumerate( files_path):
+            if os.path.basename(v) in self._HiddenSos:
+                continue
+            
             filename, file_extension = os.path.splitext(v)
+
             alias_file = filename+file_extension + ".alias"
             
             if file_extension in self._AllowedExts:
