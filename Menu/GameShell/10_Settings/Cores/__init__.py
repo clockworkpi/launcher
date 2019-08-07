@@ -15,7 +15,7 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect,FileExists,IsExecutable,ArmSystem
+from UI.util_funcs import midRect,FileExists,IsExecutable,ArmSystem,CmdClean
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
@@ -165,7 +165,7 @@ class CoresPage(Page):
             
         cur_li = self._MyList[self._PsIndex]
         
-        os.system("rm %s" % cur_li._Flag)
+        os.system("rm %s" % CmdClean(cur_li._Flag))
         self.GenList()
         self.RefreshPsIndex()
         
