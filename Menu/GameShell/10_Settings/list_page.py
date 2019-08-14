@@ -49,13 +49,13 @@ class ListPage(Page):
         ps._PosX = 2
         self._Ps = ps
         self._PsIndex = 0
-        
+
         #                ""   pkgname, label
         alist         = [["","Airplane","Airplane Mode"],
                          ["","PowerOptions","Power Options"],
                          ["","Wifi","Wi-Fi"],
                          ["","Bluetooth","Bluetooth"],
-                         ["","Sound","Sound  Volume"],
+                         ["","Sound","Sound Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Time","Timezone"],
