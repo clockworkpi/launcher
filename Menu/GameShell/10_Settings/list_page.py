@@ -55,7 +55,7 @@ class ListPage(Page):
                          ["","PowerOptions","Power Options"],
                          ["","Wifi","Wi-Fi"],
                          ["","Bluetooth","Bluetooth"],
-                         ["","Sound","Sound Volume"],
+                         ["","Sound","Sound  Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Time","Timezone"],
