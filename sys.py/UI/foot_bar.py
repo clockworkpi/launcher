@@ -136,10 +136,7 @@ class FootBar(Widget):
         self.Draw()
 
     def SetLabelTexts(self,texts):
-        if config.ButtonsLayout == "xbox":
-            barr = ["nav","y","x","b","a","select"]
-        else:
-            barr = ["nav","x","y","a","b","select"]
+        barr = ["nav","y","x","b","a","select"]
         texts2 = texts + [""] if len(texts) == 5 else texts
 
         for idx,x in enumerate(barr):
