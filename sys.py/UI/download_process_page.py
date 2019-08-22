@@ -104,7 +104,7 @@ class DownloadProcessPage(Page):
                     
                     if filename.endswith(".zip"):
                         os.chdir(self._DST_DIR)
-                        os.system( "unzip " + filename )
+                        os.system( "unzip -o " + filename )
                     
                     elif filename.endswith(".zsync"):
                         os.chdir(self._DST_DIR)
