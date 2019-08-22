@@ -73,8 +73,8 @@ class ListItem(object):
 
         label_text = os.path.basename(text)
         alias_file = os.path.splitext(text)[0] + ".alias"
-        if os.path.isfile(alias_file):
-            fp = open(alias_file, "r")
+        if os.path.isfile(alias_file.encode("utf8")):
+            fp = open(alias_file.encode("utf8"), "r")
             alias = fp.read()
             fp.close()
             label_text = alias.decode("utf8")
