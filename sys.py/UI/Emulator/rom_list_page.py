@@ -385,7 +385,7 @@ class RomListPage(Page):
             if self._Emulator["ROM_SO"] =="": #empty means No needs for rom so
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
             else:
-                if FileExists(self._Emulator["ROM_SO"]):
+                if FileExists(self._Emulator["ROM_SO"].split(" ")[0]):
                     pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 else:
                     self._Screen.PushPage(self._RomSoConfirmDownloadPage)
