@@ -18,7 +18,7 @@ class InfoPageSelector(PageSelector):
 
     def Draw(self):
         idx = self._Parent._PsIndex
-        if idx < len(self._Parent._MyList):
+        if idx >= 0 and idx < len(self._Parent._MyList):
             y = self._Parent._MyList[idx]._PosY+1
             h = self._Parent._MyList[idx]._Height -3
             
