@@ -213,9 +213,9 @@ class CoresPage(Page):
 
     def Draw(self):
         self.ClearCanvas()
-        self._Ps.Draw()
 
         if len(self._MyList) > 0:
+            self._Ps.Draw()
             for i in self._MyList:
                 i.Draw()
         
