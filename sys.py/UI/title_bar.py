@@ -67,7 +67,7 @@ class TitleBar(Widget):
                 self.SyncSoundVolume()
                 self.CheckBluetooth()
                 self.UpdateWifiStrength()
-                
+                SwapAndShow() 
                 self._InLowBackLight = 0
         
         return True
