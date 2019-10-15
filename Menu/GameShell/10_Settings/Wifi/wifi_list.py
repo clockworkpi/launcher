@@ -2,7 +2,6 @@
 
 import pygame
 
-from beeprint import pp
 from libs.roundrects import aa_round_rect
 import gobject
 from wicd import misc 
@@ -692,7 +691,10 @@ class WifiList(Page):
         
         self._MsgBox = msgbox 
 
-        self._EncMethods = misc.LoadEncryptionMethods() # load predefined templates from /etc/wicd/...
+        try:
+            self._EncMethods = misc.LoadEncryptionMethods() # load predefined templates from /etc/wicd/...
+        except IOError:
+            pass
 
         """
   {

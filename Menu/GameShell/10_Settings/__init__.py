@@ -9,7 +9,6 @@ import sys
 from datetime import datetime
 
 import base64
-from beeprint import pp
 
 
 ## local UI import

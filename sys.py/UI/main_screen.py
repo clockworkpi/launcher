@@ -11,8 +11,6 @@ from operator import itemgetter
 from libs import easing
 from datetime import datetime
 
-from beeprint import pp
-
 ## local package import
 from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,RUNEVT
 from icon_item   import IconItem
