@@ -49,6 +49,13 @@ sudo apt-get -y install python-pip
 sudo pip install validators numpy requests python-mpd2
 ```
 
+### With pip install and virtualenv
+
+```
+mkvirtualenv launcher
+pip install -r requirements.txt
+```
+
 # Create “.mpd_cpi.conf” config
 
 vim ~/.mpd_cpi.conf
@@ -83,3 +90,5 @@ audio_output {
 
 filesystem_charset    "UTF-8"
 ```
+
+
