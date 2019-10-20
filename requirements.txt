@@ -1,0 +1,10 @@
+pycurl
+pygame
+#gobject
+xlib
+pyalsaaudio
+dbus-python
+#wicd - not pip installable yet
+#beeprint - causes bugs
+validators
+python-mpd
