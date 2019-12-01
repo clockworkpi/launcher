@@ -22,7 +22,33 @@ from UI.lang_manager import MyLangManager
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
 
+
 import config
+
+class RPCStack:
+    def __init__(self):
+        self.stack = list()
+
+    def Push(self,data):
+        if data not in self.stack:
+            self.stack.append(data)
+            return True
+        return False
+
+    def Pop(self):
+        if len(self.stack)<=0:
+            return None,False
+        return self.stack.pop(),True
+
+    def Last(self):
+        idx = len(self.stack) -1
+        if idx < 0:
+            return None
+        else:
+            return self.stack[ idx ]
+    
+    def Length(self):
+        return len(self.stack)
 
 class GameStorePage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
@@ -39,12 +65,19 @@ class GameStorePage(Page):
     _DrawOnce = False
     _Scroller = None
     _InfoPage = None
-    
+    _Downloading = None
+
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
+	self._MyStack = RPCStack()
+	#title path type
+        repos = [
+        ["github.com/cuu/gamestore","https://raw.githubusercontent.com/cuu/gamestore/master/index.json","dir"]
+        ]
+	self._MyStack.Push(repos)
 
-    def GenList(self):
+    def SyncList(self):
         
         self._MyList = []
         
@@ -52,10 +85,8 @@ class GameStorePage(Page):
         start_y  = 0
         last_height = 0
 
-        repos = [
-        ["https://raw.githubusercontent.com/cuu/gamestore/master/index.json","github.com/cuu/gamestore"]
-        ]
-        
+        repos = self._MyStack.Last()
+
         for i,u in enumerate( repos ):            
             #print(i,u)
             li = InfoPageListItem()
@@ -65,13 +96,16 @@ class GameStorePage(Page):
             li._Width  = Width
             li._Fonts["normal"] = self._ListFont
             li._Active = False
-            li._Value = u[0]
-            li.Init( u[1] )
+            li._Value = u[1]
+	    li._Type  = u[2]
+            li.Init( u[0] )
             
             last_height += li._Height
             
             self._MyList.append(li)
-                
+
+        self._MyStack.Push(repos)
+        
     def Init(self):
         if self._Screen != None:
             if self._Screen._CanvasHWND != None and self._CanvasHWND == None:
@@ -93,7 +127,7 @@ class GameStorePage(Page):
         self._Ps = ps
         self._PsIndex = 0
 
-        self.GenList()
+        self.SyncList()
 
         self._Scroller = ListScroller()
         self._Scroller._Parent = self
@@ -111,12 +145,27 @@ class GameStorePage(Page):
             return
 
         print(cur_li._Value)
-
+	
+	if cur_li._Type == "dir":
+	    menu_file = cur_li._Value.split("master")[1]
+	    local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
+            if FileExists( local_menu_file ) == False:
+		if config.RPC.urlDownloading(cur_li._Value) == False:
+	            config.RPC.addUri(cur_li._Value, options={"out": menu_file})
+		    self._Downloading = cur_li._Value
+	    else:
+                #read the local_menu_file, push into stack,display menu
+		self._Downloading = None
+		
+		
+	else:
+	    #download the game probably
+            
     def OnLoadCb(self):
         self._Scrolled = 0
         self._PosY = 0
         self._DrawOnce = False
-        
+        #sync  
         
     def OnReturnBackCb(self):
         pass
