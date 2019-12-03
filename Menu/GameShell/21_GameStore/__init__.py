@@ -4,6 +4,9 @@ import pygame
 import platform
 #import commands
 import glob
+import json
+import gobject
+
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
 
@@ -50,6 +53,130 @@ class RPCStack:
     def Length(self):
         return len(self.stack)
 
+class GameConfirmInstallPopupUpPage(Page):
+    pass
+
+class Aria2DownloadProcessPage(Page):
+    _FootMsg = ["Nav.","","Pause","Back","Cancel"]
+    _DownloaderTimer = -1
+    _Value = 0
+    _GID = None
+
+    _PngSize = {}
+
+    _FileNameLabel = None
+    _SizeLabel     = None
+
+    _URLColor  = MySkinManager.GiveColor('URL')
+    _TextColor = MySkinManager.GiveColor('Text')
+    
+    def __init__(self):
+        Page.__init__(self)        
+        self._Icons = {}
+        self._CanvasHWND = None
+        
+    def Init(self):
+        self._PosX = self._Index * self._Screen._Width
+        self._Width = self._Screen._Width
+        self._Height = self._Screen._Height
+
+        self._CanvasHWND = self._Screen._CanvasHWND
+
+        bgpng = IconItem()
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("rom_download")
+        bgpng._MyType = ICON_TYPES["STAT"]
+        bgpng._Parent = self
+        bgpng.Adjust(0,0,self._PngSize["bg"][0],self._PngSize["bg"][1],0)
+        self._Icons["bg"] = bgpng
+
+        
+        self._FileNameLabel = Label()
+        self._FileNameLabel.SetCanvasHWND(self._CanvasHWND)
+        self._FileNameLabel.Init("", MyLangManager.TrFont("varela12"))
+
+        self._SizeLabel = Label()
+        self._SizeLabel.SetCanvasHWND(self._CanvasHWND)
+        self._SizeLabel.Init("0/0Kb",MyLangManager.TrFont("varela12"))
+        self._SizeLabel.SetColor( self._URLColor )
+ 
+    def GObjectUpdateProcessInterval(self):
+        if self._Screen.CurPage() == self and self._GID is not None:
+                self._Value =  config.RPC.tellStatus(self._GID)
+	        
+                downloaded = 0
+                total = 0
+	
+		if self._Value["status"] == "waiting":
+                    self._FileNameLabel.SetText( "waiting to download..." )
+                if self._Value["status"] == "paused":
+                    self._FileNameLabel.SetText( "download paused..." )
+                if self._Value["status"] == "error":
+                    self._FileNameLabel.SetText("download errors,cancel it please")
+                
+                if self._Value["status"] == "active":
+                    downloaded = self._Value["completedLength"]
+                    total      = self._Value["totalLength"]
+
+                    downloaded = downloaded/1000.0/1000.0
+                    total      = total/1000.0/1000.0
+                
+                self._SizeLabel.SetText( "%.2f" % downloaded+"/"+ "%.2f" % total +"Mb")
+                
+                print("Progress: %d%%" % (self._Value))
+                self._Screen.Draw()
+                self._Screen.SwapAndShow()
+                return True
+        else:
+            return False
+    
+    def CheckDownload(self,aria2_gid):
+        self._GID = aria2_gid 
+        self._DownloaderTimer = gobject.timeout_add(123, self.GObjectUpdateProcessInterval)
+        
+    def KeyDown(self,event):
+        if IsKeyMenuOrB(event.key):
+            gobject.source_remove(self._DownloaderTimer)
+            self._DownloaderTimer = -1
+            
+            #if self._Downloader != None:
+            #    try:
+            #        self._Downloader.stop()
+            #    except:
+            #        print("user canceled ")
+            
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            
+    def Draw(self):
+        self.ClearCanvas()
+
+        self._Icons["bg"].NewCoord(self._Width/2,self._Height/2-20)
+        self._Icons["bg"].Draw()
+        
+        percent = self._Value
+        if percent < 10:
+            percent = 10
+
+        
+        rect_ = midRect(self._Width/2,self._Height/2+33,170,17, Width,Height)
+        aa_round_rect(self._CanvasHWND,rect_,MySkinManager.GiveColor('TitleBg'),5,0,MySkinManager.GiveColor('TitleBg'))
+        
+        rect2 = midRect(self._Width/2,self._Height/2+33,int(170*(percent/100.0)),17, Width,Height)
+        rect2.left = rect_.left
+        rect2.top  = rect_.top
+        aa_round_rect(self._CanvasHWND,rect2,MySkinManager.GiveColor('Front'),5,0,MySkinManager.GiveColor('Front'))
+
+        rect3 = midRect(self._Width/2,self._Height/2+53,self._FileNameLabel._Width, self._FileNameLabel._Height,Width,Height)
+
+        rect4 = midRect(self._Width/2,self._Height/2+70,self._SizeLabel._Width, self._SizeLabel._Height,Width,Height)
+
+        self._FileNameLabel.NewCoord(rect3.left,rect3.top)
+        self._SizeLabel.NewCoord(rect4.left, rect4.top)
+
+        self._FileNameLabel.Draw()
+        self._SizeLabel.Draw()
+
 class GameStorePage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
@@ -73,7 +200,7 @@ class GameStorePage(Page):
 	self._MyStack = RPCStack()
 	#title path type
         repos = [
-        ["github.com/cuu/gamestore","https://raw.githubusercontent.com/cuu/gamestore/master/index.json","dir"]
+        {"title":"github.com/cuu/gamestore","file":"https://raw.githubusercontent.com/cuu/gamestore/master/index.json","type":"dir"}
         ]
 	self._MyStack.Push(repos)
 
@@ -96,9 +223,8 @@ class GameStorePage(Page):
             li._Width  = Width
             li._Fonts["normal"] = self._ListFont
             li._Active = False
-            li._Value = u[1]
-	    li._Type  = u[2]
-            li.Init( u[0] )
+            li._Value = u
+            li.Init( u["title"] )
             
             last_height += li._Height
             
@@ -146,20 +272,31 @@ class GameStorePage(Page):
 
         print(cur_li._Value)
 	
-	if cur_li._Type == "dir":
-	    menu_file = cur_li._Value.split("master")[1]
+	if cur_li._Value["type"] == "dir":
+	    remote_file_url = cur_li._Value["file"]
+	    menu_file = remote_file_url.split("master")[1] #assume master branch
 	    local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
             if FileExists( local_menu_file ) == False:
-		if config.RPC.urlDownloading(cur_li._Value) == False:
-	            config.RPC.addUri(cur_li._Value, options={"out": menu_file})
-		    self._Downloading = cur_li._Value
+		if config.RPC.urlDownloading(remote_file_url) == False:
+	            config.RPC.addUri( remote_file_url, options={"out": menu_file})
+		    self._Downloading = remote_file_url
 	    else:
                 #read the local_menu_file, push into stack,display menu
 		self._Downloading = None
+		local_menu_json = json.load(local_menu_file)
+		with open(local_menu_file) as json_file:
+		    local_menu_json = json.load(json_file)
+ 		    self._MyStack.Push(local_menu_json["lists"])
 		
+		    self.SyncList()
 		
 	else:
 	    #download the game probably
+	    remote_file_url = cur_li._Value["file"]
+            menu_file = remote_file_url.split("master")[1]
+            local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
+             
+            print cur_li._Value["type"]
             
     def OnLoadCb(self):
         self._Scrolled = 0
