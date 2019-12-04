@@ -6,7 +6,7 @@ import platform
 import glob
 import json
 import gobject
-
+import sqlite3
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
 
@@ -177,6 +177,13 @@ class Aria2DownloadProcessPage(Page):
         self._FileNameLabel.Draw()
         self._SizeLabel.Draw()
 
+
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
 class GameStorePage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
@@ -203,6 +210,19 @@ class GameStorePage(Page):
         {"title":"github.com/cuu/gamestore","file":"https://raw.githubusercontent.com/cuu/gamestore/master/index.json","type":"dir"}
         ]
 	self._MyStack.Push(repos)
+    
+    def SyncSqlite(self):
+        try:
+            conn = sqlite3.connect("aria2tasks.db")
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            ret = c.execute("SELECT * FROM tasks").fetchall()
+            conn.close()
+            return ret
+        except Exception as ex:
+            print(ex)
+            return None
+        return None
 
     def SyncList(self):
         
@@ -213,6 +233,12 @@ class GameStorePage(Page):
         last_height = 0
 
         repos = self._MyStack.Last()
+
+        if self._MyStack.Length() == 1: # on top
+            sqlite3_menu= self.SyncSqlite()
+            if sqlite3_menu != None and len(sqlite3_menu) > 0:
+                print(sqlite3_menu)
+                repos.extend(sqlite3_menu )
 
         for i,u in enumerate( repos ):            
             #print(i,u)
@@ -277,33 +303,64 @@ class GameStorePage(Page):
 	    menu_file = remote_file_url.split("master")[1] #assume master branch
 	    local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
             if FileExists( local_menu_file ) == False:
-		if config.RPC.urlDownloading(remote_file_url) == False:
-	            config.RPC.addUri( remote_file_url, options={"out": menu_file})
+                print(local_menu_file, "non-existed")
+                gid,ret = config.RPC.urlDownloading(remote_file_url)
+		if  ret == False:
+	            gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
 		    self._Downloading = remote_file_url
+
+                    self._Screen._MsgBox.SetText("Loading")
+                    self._Screen._MsgBox.Draw()
+                    self._Screen.SwapAndShow()
+                else:
+                    print(gid," url is downloading")
+                    self._Screen._MsgBox.SetText("Loading")
+                    self._Screen._MsgBox.Draw() 
+                    self._Screen.SwapAndShow()
+
 	    else:
                 #read the local_menu_file, push into stack,display menu
 		self._Downloading = None
-		local_menu_json = json.load(local_menu_file)
 		with open(local_menu_file) as json_file:
 		    local_menu_json = json.load(json_file)
  		    self._MyStack.Push(local_menu_json["lists"])
 		
 		    self.SyncList()
+                    self._Screen.Draw()
+                    self._Screen.SwapAndShow()                    
 		
 	else:
 	    #download the game probably
+
 	    remote_file_url = cur_li._Value["file"]
             menu_file = remote_file_url.split("master")[1]
             local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
-             
-            print cur_li._Value["type"]
+
+            if config.RPC.urlDownloading(remote_file_url) == False:
+                gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
+		self._Downloading = remote_file_url
+
+                try:
+                    conn = sqlite3.connect("aria2tasks.db")
+                    c = conn.cursor()
+                    c.execute("INSERT INTO tasks VALUES ('"+gid+"','"+cur_li._Value["title"]+"','"+cur_li._Value["file"]+"','"+cur_li._Value["type"]+"','active')")
+
+                    conn.commit()
+                    conn.close()
+                except Exception as ex:
+                    print(ex)
+
+            self._Screen._MsgBox.SetText("Getting the game now")
+            self._Screen._MsgBox.Draw() 
+            seff._Screen.SwapAndShow()
             
     def OnLoadCb(self):
         self._Scrolled = 0
         self._PosY = 0
         self._DrawOnce = False
         #sync  
-        
+        self.SyncList()
+ 
     def OnReturnBackCb(self):
         pass
         """

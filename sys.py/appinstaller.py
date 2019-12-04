@@ -6,6 +6,7 @@ from wicd import misc
 import libs.websocket as websocket
 
 aria2_ws = "ws://localhost:6800/jsonrpc"
+aria2_db = "aria2tasks.db"
 
 @misc.threaded
 def game_install_thread():
@@ -14,6 +15,12 @@ def game_install_thread():
 def on_message(ws, message):
     print("got message")
     print(message)
+    #decode json
+    #lookup in the sqlite db ,update the status[error,complete],
+    #uncompress the game into destnation folder in the game_install_thread
+    aria2_noti = json.loads(message)
+     
+    
 
 def on_error(ws, error):
     print(error)
@@ -50,9 +57,13 @@ def init_sqlite3():
     sql_create_tasks_table = """ CREATE TABLE IF NOT EXISTS tasks (
                                         id integer PRIMARY KEY,
                                         gid text NOT NULL,
+                                        title text NOT NULL,
+                                        file  text NOT NULL,
+                                        type  text NOT NULL,
                                         status text,
                                         totalLength text,
-                                        completedLength text
+                                        completedLength text,
+                                        fav text
                                     ); """
   
     conn = create_connection(database)

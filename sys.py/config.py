@@ -2,7 +2,7 @@
 import os
 import platform
 from UI.util_funcs   import FileExists,ArmSystem
-from pyaria2 import Xmlrpc
+from pyaria2_rpc.pyaria2 import Xmlrpc
 
 CurKeySet = "GameShell" ## >>>    PC or GameShell   <<<
 
@@ -35,7 +35,7 @@ PowerLevel = "balance_saving"
 def PreparationInAdv():
     global SKIN,ButtonsLayout
     global PowerLevel
-    
+    global RPC 
     if SKIN != None:
         return
 
@@ -73,7 +73,7 @@ def PreparationInAdv():
     else:
         ArmSystem("sudo iw wlan0 set power_save off >/dev/null")
     
-   RPC = Xmlrpc('localhost', 6800) 
+    RPC = Xmlrpc('localhost', 6800) 
 PreparationInAdv()
 ##sys.py/.powerlevel
 

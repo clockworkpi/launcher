@@ -2,6 +2,7 @@ session=${1:-gameshell}
 
 case $session in
 hdmi )
+	exec ~/launcher/aria2c --conf-path=~/launcher/aria2.conf
 	feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/desktopbg.jpg
         cd ~/launcher/sys.py/ ; python appinstaller.py& cd ~/
 	exec ~/launcher/load.sh &
@@ -9,7 +10,8 @@ hdmi )
 	#exec /usr/bin/twm -f ~/launcher/.twmrc
 	exec ~/launcher/dwm-mod
 	;;
-gameshell ) 
+gameshell )
+	exec ~/launcher/aria2c --conf-path=~/launcher/aria2.conf 
 	feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/loading.png
         cd ~/launcher/sys.py/ ; python appinstaller.py& cd ~/
 	exec ~/launcher/load.sh &
