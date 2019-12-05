@@ -152,7 +152,7 @@ class GPUDriverPage(Page):
         self._Scroller.SetCanvasHWND(self._HWND)
 
     def Click(self):
-        if len(self._MyList) == 0:
+        if self._PsIndex > len(self._MyList) -1:
             return
         
         cur_li = self._MyList[self._PsIndex]

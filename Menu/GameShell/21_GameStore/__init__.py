@@ -185,7 +185,7 @@ def dict_factory(cursor, row):
     return d
 
 class GameStorePage(Page):
-    _FootMsg =  ["Nav","","","Back","Select"]
+    _FootMsg =  ["Nav","","Up","Back","Select"]
     _MyList = []
     _ListFont = MyLangManager.TrFont("notosanscjk12")
     
@@ -214,7 +214,7 @@ class GameStorePage(Page):
     def SyncSqlite(self):
         try:
             conn = sqlite3.connect("aria2tasks.db")
-            conn.row_factory = sqlite3.Row
+            conn.row_factory = dict_factory
             c = conn.cursor()
             ret = c.execute("SELECT * FROM tasks").fetchall()
             conn.close()
@@ -232,13 +232,16 @@ class GameStorePage(Page):
         start_y  = 0
         last_height = 0
 
-        repos = self._MyStack.Last()
-
+        repos = []
+        stk = self._MyStack.Last()
+        repos.extend(stk)
         if self._MyStack.Length() == 1: # on top
             sqlite3_menu= self.SyncSqlite()
             if sqlite3_menu != None and len(sqlite3_menu) > 0:
                 print(sqlite3_menu)
                 repos.extend(sqlite3_menu )
+
+        print(repos)
 
         for i,u in enumerate( repos ):            
             #print(i,u)
@@ -289,7 +292,7 @@ class GameStorePage(Page):
         self._Scroller.SetCanvasHWND(self._HWND)   
         
     def Click(self):
-        if len(self._MyList) == 0:
+        if self._PsIndex > len(self._MyList) -1:
             return
         
         cur_li = self._MyList[self._PsIndex]
@@ -301,7 +304,8 @@ class GameStorePage(Page):
 	if cur_li._Value["type"] == "dir":
 	    remote_file_url = cur_li._Value["file"]
 	    menu_file = remote_file_url.split("master")[1] #assume master branch
-	    local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
+	    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+            print(local_menu_file)
             if FileExists( local_menu_file ) == False:
                 print(local_menu_file, "non-existed")
                 gid,ret = config.RPC.urlDownloading(remote_file_url)
@@ -323,7 +327,8 @@ class GameStorePage(Page):
 		self._Downloading = None
 		with open(local_menu_file) as json_file:
 		    local_menu_json = json.load(json_file)
- 		    self._MyStack.Push(local_menu_json["lists"])
+                    print(local_menu_json)
+ 		    self._MyStack.Push(local_menu_json["list"])
 		
 		    self.SyncList()
                     self._Screen.Draw()
@@ -331,28 +336,32 @@ class GameStorePage(Page):
 		
 	else:
 	    #download the game probably
-
 	    remote_file_url = cur_li._Value["file"]
             menu_file = remote_file_url.split("master")[1]
-            local_menu_file = "%s/aria2Download%s" % (os.path.expanduser('~'),menu_file )
+            local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+            
+	    if FileExists( local_menu_file ) == False:
+                gid,ret = config.RPC.urlDownloading(remote_file_url)
+                if ret == False:
+                    gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
+		    self._Downloading = remote_file_url
+                    try:
+                        conn = sqlite3.connect("aria2tasks.db")
+                        c = conn.cursor()
+                        c.execute("INSERT INTO tasks(gid,title,file,type,status,fav) VALUES ('"+gid+"','"+cur_li._Value["title"]+"','"+cur_li._Value["file"]+"','"+cur_li._Value["type"]+"','active','0')")
 
-            if config.RPC.urlDownloading(remote_file_url) == False:
-                gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
-		self._Downloading = remote_file_url
+                        conn.commit()
+                        conn.close()
+                    except Exception as ex:
+                        print("SQLITE3 ",ex)
 
-                try:
-                    conn = sqlite3.connect("aria2tasks.db")
-                    c = conn.cursor()
-                    c.execute("INSERT INTO tasks VALUES ('"+gid+"','"+cur_li._Value["title"]+"','"+cur_li._Value["file"]+"','"+cur_li._Value["type"]+"','active')")
+                self._Screen._MsgBox.SetText("Getting the game now")
+                self._Screen._MsgBox.Draw() 
+                self._Screen.SwapAndShow()
 
-                    conn.commit()
-                    conn.close()
-                except Exception as ex:
-                    print(ex)
-
-            self._Screen._MsgBox.SetText("Getting the game now")
-            self._Screen._MsgBox.Draw() 
-            seff._Screen.SwapAndShow()
+            else:
+                print("file downloaded")# maybe check it if is installed,then execute it
+            
             
     def OnLoadCb(self):
         self._Scrolled = 0
@@ -376,7 +385,14 @@ class GameStorePage(Page):
 
         if IsKeyStartOrA(event.key):
             self.Click()
-            
+
+        if event.key == CurKeys["X"]:
+            if self._MyStack.Length() > 1:
+               self._MyStack.Pop()
+               self.SyncList()
+               self._Screen.Draw()
+               self._Screen.SwapAndShow()
+
         if event.key == CurKeys["Up"]:
             self.ScrollUp()
             self._Screen.Draw()
