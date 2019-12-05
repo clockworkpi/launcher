@@ -2,25 +2,37 @@ import sqlite3
 import json
 
 from wicd import misc 
+from pyaria2_rpc.pyaria2 import Wsrpc
 
 import libs.websocket as websocket
 
 aria2_ws = "ws://localhost:6800/jsonrpc"
 aria2_db = "aria2tasks.db"
 
+rpc = Wsrpc('localhost',6800)
+
 @misc.threaded
 def game_install_thread():
     pass
 
 def on_message(ws, message):
+    global rpc
     print("got message")
     print(message)
     #decode json
     #lookup in the sqlite db ,update the status[error,complete],
     #uncompress the game into destnation folder in the game_install_thread
     aria2_noti = json.loads(message)
-     
-    
+    if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadError":
+         gid = aria2_noti["params"][0]["gid"]
+         msg = rpc.tellStatus(gid)
+         ws.send(msg)
+
+    if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadComplete":
+         gid = aria2_noti["params"][0]["gid"]
+         msg = rpc.tellStatus(gid)
+         ws.send(msg)
+
 
 def on_error(ws, error):
     print(error)

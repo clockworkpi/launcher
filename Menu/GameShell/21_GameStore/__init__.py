@@ -187,8 +187,9 @@ def dict_factory(cursor, row):
 class GameStorePage(Page):
     _FootMsg =  ["Nav","","Up","Back","Select"]
     _MyList = []
-    _ListFont = MyLangManager.TrFont("notosanscjk12")
-    
+    _ListFont12 = MyLangManager.TrFont("notosanscjk12")
+    _ListFont15 = MyLangManager.TrFont("varela15")
+   
     _AList = {}
 
     _Scrolled = 0
@@ -238,7 +239,7 @@ class GameStorePage(Page):
         if self._MyStack.Length() == 1: # on top
             sqlite3_menu= self.SyncSqlite()
             if sqlite3_menu != None and len(sqlite3_menu) > 0:
-                print(sqlite3_menu)
+                #print(sqlite3_menu)
                 repos.extend(sqlite3_menu )
 
         print(repos)
@@ -250,7 +251,7 @@ class GameStorePage(Page):
             li._PosX   = start_x
             li._PosY   = start_y + last_height
             li._Width  = Width
-            li._Fonts["normal"] = self._ListFont
+            li._Fonts["normal"] = self._ListFont15
             li._Active = False
             li._Value = u
             li.Init( u["title"] )
@@ -259,7 +260,6 @@ class GameStorePage(Page):
             
             self._MyList.append(li)
 
-        self._MyStack.Push(repos)
         
     def Init(self):
         if self._Screen != None:
@@ -296,10 +296,10 @@ class GameStorePage(Page):
             return
         
         cur_li = self._MyList[self._PsIndex]
-        if cur_li._Active == True:
-            return
+        #if cur_li._Active == True:
+        #    return
 
-        print(cur_li._Value)
+        print("cur_li._Value",cur_li._Value)
 	
 	if cur_li._Value["type"] == "dir":
 	    remote_file_url = cur_li._Value["file"]
@@ -345,15 +345,19 @@ class GameStorePage(Page):
                 if ret == False:
                     gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
 		    self._Downloading = remote_file_url
-                    try:
-                        conn = sqlite3.connect("aria2tasks.db")
-                        c = conn.cursor()
-                        c.execute("INSERT INTO tasks(gid,title,file,type,status,fav) VALUES ('"+gid+"','"+cur_li._Value["title"]+"','"+cur_li._Value["file"]+"','"+cur_li._Value["type"]+"','active','0')")
+                    print("stack length ",self._MyStack.Length())
+                    if self._MyStack.Length() > 1:## not on the top list page
+                        try:
+                            conn = sqlite3.connect("aria2tasks.db")
+                            c = conn.cursor()
+                            c.execute("INSERT INTO tasks(gid,title,file,type,status,fav) VALUES ('"+gid+"','"+cur_li._Value["title"]+"','"+cur_li._Value["file"]+"','"+cur_li._Value["type"]+"','active','0')")
 
-                        conn.commit()
-                        conn.close()
-                    except Exception as ex:
-                        print("SQLITE3 ",ex)
+                            conn.commit()
+                            conn.close()
+                        except Exception as ex:
+                            print("SQLITE3 ",ex)
+                else:
+                    print(config.RPC.tellStatus(gid,["status","totalLength","completedLength"]))
 
                 self._Screen._MsgBox.SetText("Getting the game now")
                 self._Screen._MsgBox.Draw() 
@@ -367,7 +371,8 @@ class GameStorePage(Page):
         self._Scrolled = 0
         self._PosY = 0
         self._DrawOnce = False
-        #sync  
+        #sync 
+        print("OnLoadCb") 
         self.SyncList()
  
     def OnReturnBackCb(self):
@@ -387,6 +392,7 @@ class GameStorePage(Page):
             self.Click()
 
         if event.key == CurKeys["X"]:
+            print(self._MyStack.Length() )
             if self._MyStack.Length() > 1:
                self._MyStack.Pop()
                self.SyncList()
