@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import dbus
 import dbus.service
 import sys
-import commands
+import subprocess
 import logging
 import errno
 
-from wicd import misc 
+from wicd import misc
 ##misc.to_bool
 ##misc.misc.noneToString
 ##misc.to_unicode
@@ -75,8 +75,8 @@ crt_screen = None
 
 def gobject_loop():
     """
-    here to receive dbus signal 
-    """ 
+    here to receive dbus signal
+    """
     try:
         gobject_main_loop.run()
     except KeyboardInterrupt:
@@ -85,7 +85,7 @@ def gobject_loop():
 
 def GobjectFlashLed1(main_screen):
     global gobject_flash_led1_counter
-    
+
     if main_screen._Closed == False:
         if gobject_flash_led1_counter > 0:
             try:
@@ -102,7 +102,7 @@ def GobjectFlashLed1(main_screen):
 
             gobject_flash_led1_counter = 0
         return True
-    
+
     gobject_flash_led1_counter+=1
 
     if gobject_flash_led1_counter == 3:
@@ -117,7 +117,7 @@ def GobjectFlashLed1(main_screen):
                 f.write("1")
                 f.truncate()
                 f.close()
-    
+
 
     elif gobject_flash_led1_counter == 5:
         try:
@@ -131,21 +131,21 @@ def GobjectFlashLed1(main_screen):
                 f.write("0")
                 f.truncate()
                 f.close()
-    
+
     if gobject_flash_led1_counter == 11:
         gobject_flash_led1_counter = 1
-    
+
     return True
 
-    
+
 def RestoreLastBackLightBrightness(main_screen):
     global last_brt,passout_time_stage,gobject_flash_led1
 
     passout_time_stage = 0
     main_screen._TitleBar._InLowBackLight = -1
     main_screen._Closed = False
-    
-    
+
+
     if last_brt == -1:
         return True
 
@@ -158,14 +158,14 @@ def RestoreLastBackLightBrightness(main_screen):
         with f:
             content = f.readlines()
             content = [x.strip() for x in content]
-            brt=int(content[0])        
+            brt=int(content[0])
             if brt < last_brt:
                 f.seek(0)
                 f.write(str( last_brt ))
                 f.truncate()
                 f.close()
                 last_brt = -1
-            else:                
+            else:
                 f.close()
 
     try:
@@ -179,23 +179,23 @@ def RestoreLastBackLightBrightness(main_screen):
             f.write("0")
             f.truncate()
             f.close()
-    
+
     if main_screen._CounterScreen._Counting==True:
         main_screen._CounterScreen.StopCounter()
         main_screen.Draw()
         main_screen.SwapAndShow()
         return False
-        
+
     return True
 
 def InspectionTeam(main_screen):
     global everytime_keydown,last_brt,passout_time_stage,gobject_flash_led1
-    
+
     cur_time = time.time()
     time_1 = config.PowerLevels[config.PowerLevel][0]
     time_2 = config.PowerLevels[config.PowerLevel][1]
     time_3 = config.PowerLevels[config.PowerLevel][2]
-    
+
     if cur_time - everytime_keydown > time_1 and passout_time_stage == 0:
         print("timeout, dim screen %d" % int(cur_time - everytime_keydown))
 
@@ -221,12 +221,12 @@ def InspectionTeam(main_screen):
         main_screen._TitleBar._InLowBackLight = 0
 
         if time_2 != 0:
-            passout_time_stage = 1 # next 
+            passout_time_stage = 1 # next
         everytime_keydown = cur_time
-    
+
     elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
         print("timeout, close screen %d" % int(cur_time - everytime_keydown))
-        
+
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -239,17 +239,17 @@ def InspectionTeam(main_screen):
                 f.truncate()
                 f.close()
 
-        
+
         main_screen._TitleBar._InLowBackLight = 0
         main_screen._Closed = True
         if time_3 != 0:
             passout_time_stage = 2 # next
-        
+
         everytime_keydown = cur_time
-        
+
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
         print("Power Off counting down")
-                
+
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -261,26 +261,26 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
-            
+
             main_screen._CounterScreen.Draw()
             main_screen._CounterScreen.SwapAndShow()
             main_screen._CounterScreen.StartCounter()
-        
+
         main_screen._TitleBar._InLowBackLight = 0
 
         passout_time_stage = 4
-        
+
     return True
 
 def RecordKeyDns(thekey,main_screen):
     global Keys,crt_screen
-    
+
     if len(Keys) < 10:
         Keys.append(thekey)
     else:
         Keys = []
         Keys.append(thekey)
-    
+
     keys = ''.join(map(str,Keys))
     #print(keys)
     if keys == "273273274274276276275275106107":##uuddllrrab
@@ -288,7 +288,7 @@ def RecordKeyDns(thekey,main_screen):
         crt_screen.SwapAndShow()
         main_screen._TitleBar._InLowBackLight = 0 ##pause titlebar drawing
         return True
-    
+
     return False
 
 
@@ -310,19 +310,19 @@ def release_self_fds():
             if err.errno != errno.ENOENT:
                 raise
         ret[int(num)] = path
-    
+
     for key in ret:
       if ret[key] != None and isinstance(ret[key], str):
         for i in fds_flags:
           if i in ret[key]:
             os.close(key)
             break
-    return ret  
+    return ret
 
-  
+
 def event_process(event,main_screen):
     global sound_patch
-    global everytime_keydown 
+    global everytime_keydown
     if event != None:
         pygame.event.clear()
         if event.type == pygame.ACTIVEEVENT:
@@ -330,7 +330,7 @@ def event_process(event,main_screen):
             return
         if event.type == pygame.QUIT:
             exit()
-        if event.type == RUNEVT:            
+        if event.type == RUNEVT:
             if config.DontLeave==True:
                 os.chdir(GetExePath())
                 os.system( "/bin/sh -c "+event.message)
@@ -339,18 +339,18 @@ def event_process(event,main_screen):
                 if on_exit_cb != None:
                     if callable( on_exit_cb ):
                         main_screen.OnExitCb(event)
-                
+
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                
+
                 endpos = len(event.message)
                 space_break_pos = endpos
                 for i in range(0,endpos):
                     if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
                         space_break_pos = i-1
                         break
-                
+
                 exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";"
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
@@ -376,8 +376,8 @@ def event_process(event,main_screen):
                     if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
                         space_break_pos = i-1
                         break
-                                        
-                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";" 
+
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";"
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
@@ -407,10 +407,10 @@ def event_process(event,main_screen):
             return
         if event.type == POWEROPT:
             everytime_keydown = time.time()
-            
+
             return
         if event.type == pygame.KEYUP:
-            
+
             pygame.event.clear(pygame.KEYDOWN)
             return
         if event.type == pygame.KEYDOWN:
@@ -423,7 +423,7 @@ def event_process(event,main_screen):
                 if on_exit_cb != None:
                     if callable( on_exit_cb ):
                         main_screen.OnExitCb(event)
-                
+
                 gobject_main_loop.quit()
                 exit()
 
@@ -432,25 +432,25 @@ def event_process(event,main_screen):
                     main_screen.Draw()
                     sound_patch.VolumeUp()
                     sound_patch.Draw()
-                    
+
                     main_screen.SwapAndShow()
                     #pygame.time.delay(200)
                     #main_screen.Draw()
                     #main_screen.SwapAndShow()
-                
+
             if event.key == pygame.K_KP_MINUS:
                 if main_screen._CurrentPage._Name != "Sound volume":
                     main_screen.Draw()
-                    
+
                     sound_patch.VolumeDown()
                     sound_patch.Draw()
-                    
+
                     main_screen.SwapAndShow()
                     #pygame.time.delay(200)
                     #main_screen.Draw()
                     #main_screen.SwapAndShow()
-                    
-            
+
+
             ###########################################################
             if event.key == pygame.K_ESCAPE:
                 pygame.event.clear()
@@ -460,27 +460,27 @@ def event_process(event,main_screen):
                 if key_down_cb != None:
                     if callable( key_down_cb ):
                         main_screen.KeyDown(event)
-            
+
             main_screen._LastKeyDown = everytime_keydown
             return
-                    
+
 def gobject_pygame_event_poll_timer(main_screen):
-    
+
     event = pygame.event.poll()
 
     event_process(event,main_screen)
 
     InspectionTeam(main_screen)
-    
-    return True 
+
+    return True
 
 def gobject_pygame_event_timer(main_screen):
     global sound_patch
-    
+
     for event in pygame.event.get():
         event_process(event,main_screen)
-    
-    return True 
+
+    return True
 
 
 @misc.threaded
@@ -506,17 +506,17 @@ def socket_thread(main_screen):
                 if current_page_key_down_cb != None:
                     if callable( current_page_key_down_cb ):
                         main_screen._CurrentPage.KeyDown(escevent)
-                
+
             if tokens[0].lower() == "quit": #eg: echo "quit" | socat - UNIX-CONNECT:/tmp/gameshell
                 conn.close()
                 on_exit_cb = getattr(main_screen,"OnExitCb",None)
                 if on_exit_cb != None:
                     if callable( on_exit_cb ):
                         main_screen.OnExitCb(None)
-                
+
                 gobject_main_loop.quit()
                 exit()
-            
+
             if tokens[0].lower() == "keydown": ## simulate keydown event
                 everytime_keydown = time.time()
                 if RestoreLastBackLightBrightness(main_screen) == False:
@@ -529,10 +529,10 @@ def socket_thread(main_screen):
                     if current_page_key_down_cb != None:
                         if callable( current_page_key_down_cb ):
                             main_screen._CurrentPage.KeyDown(escevent)
-                    
-                    if main_screen._MyPageStack.Length() == 0: ## on Top Level 
+
+                    if main_screen._MyPageStack.Length() == 0: ## on Top Level
                         break
-                
+
                 if main_screen._CurrentPage._Name == "GameShell":
                     for i in main_screen._CurrentPage._Icons:
                         if i._MyType == ICON_TYPES["FUNC"]:
@@ -540,11 +540,11 @@ def socket_thread(main_screen):
                                 api_cb = getattr(i._CmdPath,"API",None)
                                 if api_cb != None:
                                     if callable(api_cb):
-                                        i._CmdPath.API(main_screen)   
-                
+                                        i._CmdPath.API(main_screen)
+
 def big_loop():
     global sound_patch,gobject_flash_led1
-    
+
     title_bar = TitleBar()
     title_bar.Init(screen)
     foot_bar  = FootBar()
@@ -552,20 +552,20 @@ def big_loop():
 
     main_screen = MainScreen()
     main_screen._HWND = screen
-    main_screen._TitleBar = title_bar 
+    main_screen._TitleBar = title_bar
     main_screen._FootBar  = foot_bar
     main_screen.Init()
-    
+
     main_screen.ReadTheDirIntoPages("../Menu",0,None)
-    main_screen.ReadTheDirIntoPages("/home/cpi/apps/Menu",1,main_screen._Pages[ len(main_screen._Pages) -1])
+    main_screen.ReadTheDirIntoPages("/home/arthur/local/clockworkpi/Menu",1,main_screen._Pages[ len(main_screen._Pages) -1])
     main_screen.ReunionPagesIcons()
-    
+
     main_screen.FartherPages()
 
-    
+
     title_bar._SkinManager = main_screen._SkinManager
     foot_bar._SkinManager  = main_screen._SkinManager
-    
+
     sound_patch = SoundPatch()
     sound_patch._Parent = main_screen
     sound_patch.Init()
@@ -577,51 +577,51 @@ def big_loop():
 
     #gobject.timeout_add(DT,gobject_pygame_event_timer,main_screen)
     gobject_flash_led1 = gobject.timeout_add(200,GobjectFlashLed1,main_screen)
-    
+
     gobject.timeout_add(DT,gobject_pygame_event_poll_timer,main_screen)
     gobject.timeout_add(3000,title_bar.GObjectRoundRobin)
 
 
     socket_thread(main_screen)
-    
+
     gobject_loop()
-    
+
 
 ###MAIN()###
 if __name__ == '__main__':
-    
+
     os.environ['SDL_VIDEO_CENTERED'] = '1'
     X_center_mouse()
-    
+
     os.chdir( os.path.dirname(os.path.realpath(__file__)) )
-    
+
     SCREEN_SIZE = (Width,Height)
     screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
 
-    pygame.event.set_allowed(None) 
+    pygame.event.set_allowed(None)
     pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
-    
+
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
-    
+
     MyIconPool.Init()
-    
+
     setup_dbus()
 
     gobject.threads_init()
-    
+
     gobject_main_loop = gobject.MainLoop()
 
 #    if pygame.display.get_active() == True:
 #        print("I am actived")
-    
+
     if pygame.image.get_extended() == False:
         print("This pygame does not support PNG")
         exit()
 
-    
+
     crt_screen = CreateByScreen()
     crt_screen.Init()
-    crt_screen._HWND = screen 
-    
+    crt_screen._HWND = screen
+
     big_loop()
-    
+

@@ -48,12 +48,12 @@ class UntitledIcon(object):
             self._Words[1] = TwoWords[1].lower()
 
         self._Text = self._FontObj.render("".join(self._Words),True,self._Color)
-        
+
     def Draw(self):
         if self._BG != None:
             w_ = self._Text.get_width()
             h_ = self._Text.get_height()
-            
+
             self._BG.blit(self._Text,midRect(self._Width/2,self._Height/2,w_,h_,self._Width,self._Height))
 
     def Surface(self):
@@ -61,4 +61,4 @@ class UntitledIcon(object):
 
         return self._BG
 
-    
+
