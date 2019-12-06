@@ -24,7 +24,7 @@ from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
-
+from UI.yes_cancel_confirm_page import YesCancelConfirmPage
 
 import config
 
@@ -201,7 +201,7 @@ class GameStorePage(Page):
     _Scroller = None
     _InfoPage = None
     _Downloading = None
-
+    _aria2_db = "aria2tasks.db"
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
@@ -214,7 +214,7 @@ class GameStorePage(Page):
     
     def SyncSqlite(self):
         try:
-            conn = sqlite3.connect("aria2tasks.db")
+            conn = sqlite3.connect(self._aria2_db)
             conn.row_factory = dict_factory
             c = conn.cursor()
             ret = c.execute("SELECT * FROM tasks").fetchall()
@@ -289,8 +289,36 @@ class GameStorePage(Page):
         self._Scroller._PosX = self._Width - 10
         self._Scroller._PosY = 2
         self._Scroller.Init()
-        self._Scroller.SetCanvasHWND(self._HWND)   
+        self._Scroller.SetCanvasHWND(self._HWND)
+ 
+        self._remove_page = YesCancelConfirmPage()
+        self._remove_page._Screen = self._Screen
+        self._remove_page._StartOrA_Event = self.RemoveGame
+
+        self._remove_page._Name ="Are you sure?"
+        self._remove_page.Init()
+
+    def RemoveGame(self):
+        if self._PsIndex > len(self._MyList) -1:
+            return
+
+        cur_li = self._MyList[self._PsIndex]
+        #if cur_li._Active == True:
+        #    return
+        print("Remove cur_li._Value",cur_li._Value)
         
+        if "gid" in cur_li._Value:
+            try:
+                conn = sqlite3.connect(self._aria2_db)
+                conn.row_factory = dict_factory
+                c = conn.cursor()
+                c.execute("DELETE FROM tasks WHERE gid = '%s'" % cur_li._Value["gid"])
+                conn.commit()
+                conn.close()
+            except Exception as ex:
+                print(ex)
+        
+      
     def Click(self):
         if self._PsIndex > len(self._MyList) -1:
             return
@@ -372,11 +400,25 @@ class GameStorePage(Page):
         self._PosY = 0
         self._DrawOnce = False
         #sync 
-        print("OnLoadCb") 
+        print("OnLoadCb")
+        if self._MyStack.Length() == 1:
+            self._FootMsg[2] = "Remove"
+        else:
+            self._FootMsg[2] = "Up"
+
         self.SyncList()
  
     def OnReturnBackCb(self):
-        pass
+
+        if self._MyStack.Length() == 1:
+            self._FootMsg[2] = "Remove"
+        else:
+            self._FootMsg[2] = "Up"
+
+        self.SyncList()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+       
         """
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
@@ -391,13 +433,35 @@ class GameStorePage(Page):
         if IsKeyStartOrA(event.key):
             self.Click()
 
+            if self._MyStack.Length() == 1:
+                self._FootMsg[2] = "Remove"
+            else:
+                self._FootMsg[2] = "Up"
+
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+
+
         if event.key == CurKeys["X"]:
-            print(self._MyStack.Length() )
+            #print(self._MyStack.Length() )
+            if self._MyStack.Length() == 1 and self._PsIndex > 0:
+                self._Screen.PushPage(self._remove_page)
+                self._remove_page._StartOrA_Event = self.RemoveGame
+                self._Screen.Draw()
+                self._Screen.SwapAndShow()
+                return 
+
             if self._MyStack.Length() > 1:
                self._MyStack.Pop()
-               self.SyncList()
-               self._Screen.Draw()
-               self._Screen.SwapAndShow()
+               if self._MyStack.Length() == 1:
+                   self._FootMsg[2] = "Remove"
+               else:
+                   self._FootMsg[2] = "Up"
+
+
+            self.SyncList()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
 
         if event.key == CurKeys["Up"]:
             self.ScrollUp()

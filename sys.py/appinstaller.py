@@ -1,3 +1,5 @@
+import os
+import platform
 import sqlite3
 import json
 
@@ -11,14 +13,51 @@ aria2_db = "aria2tasks.db"
 
 rpc = Wsrpc('localhost',6800)
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
 @misc.threaded
-def game_install_thread():
-    pass
+def game_install_thread(gid):
+    try:
+        conn = sqlite3.connect(aria2_db)
+        conn.row_factory = dict_factory
+        c = conn.cursor()
+        ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
+        print(ret)
+        remote_file_url = ret["file"]
+        menu_file = remote_file_url.split("master")[1]
+        local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+        
+        if os.path.exists(local_menu_file) == True and "arm" not in platform.machine():
+           gametype = ret["type"]
+           if gametype == "launcher":
+               #tar zxvf 
+               _cmd = "tar zxvf '%s' -C %s" % (local_menu_file, "~/apps/Menu/21_Indie\ Games/")
+               print(_cmd)
+               os.system(_cmd)
+           if gametype == "pico8":
+               _cmd="cp -rf '%s' ~/.lexaloffle/pico-8/carts/" % local_menu_file
+               print(_cmd)
+               os.system(_cmd)
+           if gametype == "tic80":
+               _cmd = "cp -rf '%s' ~/games/TIC-80/" % local_menu_file
+               print(_cmd)
+               os.system(_cmd)
+
+        conn.close()
+
+    except Exception as ex:
+        print("Sqlite3 error: ",ex)
+         
+        
+        
 
 def on_message(ws, message):
     global rpc
-    print("got message")
-    print(message)
+    print("got message ",message)
     #decode json
     #lookup in the sqlite db ,update the status[error,complete],
     #uncompress the game into destnation folder in the game_install_thread
@@ -32,7 +71,7 @@ def on_message(ws, message):
          gid = aria2_noti["params"][0]["gid"]
          msg = rpc.tellStatus(gid)
          ws.send(msg)
-
+         game_install_thread(gid)
 
 def on_error(ws, error):
     print(error)

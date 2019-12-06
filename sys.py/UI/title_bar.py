@@ -20,7 +20,7 @@ from lang_manager import MyLangManager
 from util_funcs  import midRect,SwapAndShow
 from skin_manager import MySkinManager
 from widget      import Widget
-from config import Battery
+from config import Battery,RPC
 
 from libs.roundrects import aa_round_rect
 
