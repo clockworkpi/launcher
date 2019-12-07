@@ -340,10 +340,11 @@ class GameStorePage(Page):
 		if  ret == False:
 	            gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
 		    self._Downloading = remote_file_url
-
+                    
                     self._Screen._MsgBox.SetText("Loading")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
+
                 else:
                     print(gid," url is downloading")
                     self._Screen._MsgBox.SetText("Loading")
@@ -391,6 +392,10 @@ class GameStorePage(Page):
                 self._Screen._MsgBox.Draw() 
                 self._Screen.SwapAndShow()
 
+                pygame.time.delay(800)
+                self._Screen._TitleBar.Redraw()
+
+               
             else:
                 print("file downloaded")# maybe check it if is installed,then execute it
             

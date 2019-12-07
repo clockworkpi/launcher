@@ -540,8 +540,17 @@ def socket_thread(main_screen):
                                 api_cb = getattr(i._CmdPath,"API",None)
                                 if api_cb != None:
                                     if callable(api_cb):
-                                        i._CmdPath.API(main_screen)   
-                
+                                        i._CmdPath.API(main_screen)
+
+            if tokens[0].lower() == "redraw": #echo "redraw titlebar" | socat - UNIX-CONNECT:/tmp/gameshell
+                if len(tokens) > 1:
+                    area = tokens[1].lower()
+                    if area == "titlebar":
+                        if hasattr(main_screen._TitleBar,'Redraw'):
+                             if main_screen._TitleBar.Redraw != None and callable(main_screen._TitleBar.Redraw):
+                                  main_screen._TitleBar.Redraw()
+                    
+
 def big_loop():
     global sound_patch,gobject_flash_led1
     

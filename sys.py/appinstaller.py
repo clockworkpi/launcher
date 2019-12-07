@@ -26,7 +26,9 @@ def game_install_thread(gid):
         conn.row_factory = dict_factory
         c = conn.cursor()
         ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
-        print(ret)
+        if ret == None:
+            return
+ 
         remote_file_url = ret["file"]
         menu_file = remote_file_url.split("master")[1]
         local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
@@ -69,10 +71,22 @@ def on_message(ws, message):
 
     if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadComplete":
          gid = aria2_noti["params"][0]["gid"]
-         msg = rpc.tellStatus(gid)
-         ws.send(msg)
+         #msg = rpc.tellStatus(gid)
+         #ws.send(msg)
          game_install_thread(gid)
+    
+    if "method" not in aria2_noti and "result" in aria2_noti:
+        if "status" in aria2_noti:
+             if aria2_noti["status"] == "error":
+                 try:
+                     print(aria2_noti["errorMessage"])
+                     for x in aria2_noti["files"]:
+                         os.remove(x["path"])
+                         os.remove(x["path"]+".aria2")
+                 except Exception as ex:
+                     print(ex)
 
+       
 def on_error(ws, error):
     print(error)
 
