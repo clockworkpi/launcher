@@ -27,13 +27,18 @@ def game_install_thread(gid):
         c = conn.cursor()
         ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
         if ret == None:
+            conn.close()
             return
- 
+
+        c.execute("UPDATE tasks SET status='complete' WHERE gid='%s'" % gid)
+        conn.commit()
+        conn.close()
+
         remote_file_url = ret["file"]
         menu_file = remote_file_url.split("master")[1]
         local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
         
-        if os.path.exists(local_menu_file) == True and "arm" not in platform.machine():
+        if os.path.exists(local_menu_file) == True and "arm" in platform.machine():
            gametype = ret["type"]
            if gametype == "launcher":
                #tar zxvf 
@@ -49,7 +54,6 @@ def game_install_thread(gid):
                print(_cmd)
                os.system(_cmd)
 
-        conn.close()
 
     except Exception as ex:
         print("Sqlite3 error: ",ex)
@@ -81,8 +85,11 @@ def on_message(ws, message):
                  try:
                      print(aria2_noti["errorMessage"])
                      for x in aria2_noti["files"]:
-                         os.remove(x["path"])
-                         os.remove(x["path"]+".aria2")
+                         if os.path.exists(x["path"]):
+                             os.remove(x["path"])
+                         if os.path.exists(x["path"]+".aria2"):
+                             os.remove(x["path"]+".aria2")
+
                  except Exception as ex:
                      print(ex)
 

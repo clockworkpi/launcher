@@ -14,7 +14,7 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect,FileExists,ArmSystem
+from UI.util_funcs import midRect,FileExists,ArmSystem,reconstruct_broken_string
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
@@ -185,7 +185,7 @@ def dict_factory(cursor, row):
     return d
 
 class GameStorePage(Page):
-    _FootMsg =  ["Nav","","Up","Back","Select"]
+    _FootMsg =  ["Nav","Update store","Up","Back","Select"]
     _MyList = []
     _ListFont12 = MyLangManager.TrFont("notosanscjk12")
     _ListFont15 = MyLangManager.TrFont("varela15")
@@ -235,8 +235,9 @@ class GameStorePage(Page):
 
         repos = []
         stk = self._MyStack.Last()
+        stk_lev = self._MyStack.Length()
         repos.extend(stk)
-        if self._MyStack.Length() == 1: # on top
+        if stk_lev == 1: # on top
             sqlite3_menu= self.SyncSqlite()
             if sqlite3_menu != None and len(sqlite3_menu) > 0:
                 #print(sqlite3_menu)
@@ -253,9 +254,19 @@ class GameStorePage(Page):
             li._Width  = Width
             li._Fonts["normal"] = self._ListFont15
             li._Active = False
+            li._ReadOnly = True
             li._Value = u
             li.Init( u["title"] )
-            
+
+            if stk_lev >1:
+                li._ReadOnly = False
+            elif stk_lev == 1:
+                if "status" in u:
+                    if u["status"] == "complete":
+                        li._ReadOnly = False
+                if i == 0:
+                    li._ReadOnly = False
+
             last_height += li._Height
             
             self._MyList.append(li)
@@ -309,10 +320,25 @@ class GameStorePage(Page):
         
         if "gid" in cur_li._Value:
             try:
+                gid = cur_li._Value["gid"]
                 conn = sqlite3.connect(self._aria2_db)
                 conn.row_factory = dict_factory
                 c = conn.cursor()
-                c.execute("DELETE FROM tasks WHERE gid = '%s'" % cur_li._Value["gid"])
+                ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
+                if ret != None:
+                    remote_file_url = ret["file"]
+                    menu_file = remote_file_url.split("master")[1]
+                    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+                    try:
+                        if os.path.exists(local_menu_file):
+                            os.remove(local_menu_file)
+                        if os.path.exists(local_menu_file+".aria2"):
+                            os.remove(local_menu_file+".aria2")
+                    except Exception as ex:
+                        print(ex)
+
+
+                c.execute("DELETE FROM tasks WHERE gid = '%s'" % gid )
                 conn.commit()
                 conn.close()
             except Exception as ex:
@@ -398,7 +424,12 @@ class GameStorePage(Page):
                
             else:
                 print("file downloaded")# maybe check it if is installed,then execute it
-            
+                if cur_li._Value["type"]=="launcher" and cur_li._ReadOnly == False:
+                    game_sh = os.path.join( "%s/apps/Menu/21_Indie Games/" % os.path.expanduser('~'),cur_li._Value["title"],cur_li._Value["title"]+".sh")
+                    #game_sh = reconstruct_broken_string( game_sh)
+                    print("run game: ",game_sh, os.path.exists(  game_sh))
+                    self._Screen.RunEXE(game_sh)
+                
             
     def OnLoadCb(self):
         self._Scrolled = 0
@@ -408,8 +439,10 @@ class GameStorePage(Page):
         print("OnLoadCb")
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
+            self._FootMsg[1] = "Update store"
         else:
             self._FootMsg[2] = "Up"
+            self._FootMsg[1] = ""
 
         self.SyncList()
  
@@ -417,8 +450,10 @@ class GameStorePage(Page):
 
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
+            self._FootMsg[1] = "Update store"
         else:
             self._FootMsg[2] = "Up"
+            self._FootMsg[1] = ""
 
         self.SyncList()
         self._Screen.Draw()
@@ -440,8 +475,10 @@ class GameStorePage(Page):
 
             if self._MyStack.Length() == 1:
                 self._FootMsg[2] = "Remove"
+                self._FootMsg[1] = "Update store"
             else:
                 self._FootMsg[2] = "Up"
+                self._FootMsg[1] = ""
 
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -460,14 +497,22 @@ class GameStorePage(Page):
                self._MyStack.Pop()
                if self._MyStack.Length() == 1:
                    self._FootMsg[2] = "Remove"
+                   self._FootMsg[1] = "Update store"
                else:
                    self._FootMsg[2] = "Up"
-
+                   self._FootMsg[1] = ""
 
             self.SyncList()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
+        if event.key == CurKeys["Y"]:
+            if self._MyStack.Length() == 1:
+                self._Screen._MsgBox.SetText("Done")
+                self._Screen._MsgBox.Draw()
+                self._Screen.SwapAndShow()
+            
+ 
         if event.key == CurKeys["Up"]:
             self.ScrollUp()
             self._Screen.Draw()
