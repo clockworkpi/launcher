@@ -14,7 +14,7 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect,FileExists,ArmSystem,reconstruct_broken_string
+from UI.util_funcs import midRect,FileExists,ArmSystem
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
@@ -429,8 +429,20 @@ class GameStorePage(Page):
                     #game_sh = reconstruct_broken_string( game_sh)
                     print("run game: ",game_sh, os.path.exists(  game_sh))
                     self._Screen.RunEXE(game_sh)
-                
-            
+
+                if cur_li._Value["type"]=="pico8" and cur_li._ReadOnly == False:
+                    if os.path.exists("/home/cpi/games/PICO-8/pico-8/pico8") == True:
+                        game_sh = "/home/cpi/launcher/Menu/GameShell/50_PICO-8/PICO-8.sh"
+                        self._Screen.RunEXE(game_sh)
+                    else:
+                        self._Screen._MsgBox.SetText("Purchase pico8")
+                        self._Screen._MsgBox.Draw()
+                        self._Screen.SwapAndShow()
+                  
+                if cur_li._Value["type"]=="tic80" and cur_li._ReadOnly == False:
+                    game_sh = "/home/cpi/apps/Menu/51_TIC-80/TIC-80.sh"
+                    self._Screen.RunEXE(game_sh)
+
     def OnLoadCb(self):
         self._Scrolled = 0
         self._PosY = 0
