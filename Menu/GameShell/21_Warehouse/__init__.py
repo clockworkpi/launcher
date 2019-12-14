@@ -184,6 +184,103 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+class GameStoreListItem(InfoPageListItem):
+    _Type = None #source,dir,launcher,pico8 
+    _CanvasHWND = None 
+    def Init(self,text):
+
+        #self._Fonts["normal"] = fonts["veramono12"]
+        
+        l = Label()
+        l._PosX = 10
+        l.SetCanvasHWND(self._Parent._CanvasHWND)
+
+        l.Init(text,self._Fonts["normal"])
+        self._Labels["Text"] = l
+        
+        add_icon = IconItem()
+        add_icon._ImgSurf = MyIconPool.GiveIconSurface("add")
+        add_icon._CanvasHWND = self._CanvasHWND
+        add_icon._Parent = self
+        add_icon.Init(0,0,MyIconPool.Width("add"),MyIconPool.Height("add"),0)
+ 
+        ware_icon = IconItem()
+        ware_icon._ImgSurf = MyIconPool.GiveIconSurface("ware")
+        ware_icon._CanvasHWND = self._CanvasHWND
+        ware_icon._Parent = self
+        ware_icon.Init(0,0,MyIconPool.Width("ware"),MyIconPool.Height("ware"),0)
+
+        app_icon = IconItem()
+        app_icon._ImgSurf = MyIconPool.GiveIconSurface("app")
+        app_icon._CanvasHWND = self._CanvasHWND
+        app_icon._Parent = self
+        app_icon.Init(0,0,MyIconPool.Width("app"),MyIconPool.Height("app"),0)
+
+        appdling_icon = IconItem()
+        appdling_icon._ImgSurf = MyIconPool.GiveIconSurface("appdling")
+        appdling_icon._CanvasHWND = self._CanvasHWND
+        appdling_icon._Parent = self
+        app_icon.Init(0,0,MyIconPool.Width("appdling"),MyIconPool.Height("appdling"),0)
+
+        blackheart_icon = IconItem()
+        blackheart_icon._ImgSurf = MyIconPool.GiveIconSurface("blackheart")
+        blackheart_icon._Width = MyIconPool.Width("blackheart")
+        blackheart_icon._Height = MyIconPool.Height("blackheart")
+        blackheart_icon._CanvasHWND = self._CanvasHWND
+        blackheart_icon._Parent = self
+
+        self._Icons["add"] = add_icon
+        self._Icons["ware"] = ware_icon
+        self._Icons["app"]  = app_icon
+        self._Icons["appdling"] = appdling_icon
+        self._Icons["blackheart"] = blackheart_icon
+
+    
+    def Draw(self):
+        if self._ReadOnly == True:
+            self._Labels["Text"].SetColor(MySkinManager.GiveColor("ReadOnlyText"))
+        else:
+            self._Labels["Text"].SetColor(MySkinManager.GiveColor("Text"))
+
+        padding = 17
+
+        if self._Type == None:
+            padding = 0
+         
+        
+        if self._Type == "source" or self._Type == "dir":
+            self._Icons["ware"].NewCoord( 4, (self._Height - self._Icons["ware"]._Height)/2 )
+            print(self._Height,self._Icons["ware"]._Height)
+            self._Icons["ware"].DrawTopLeft()
+        
+        if self._Type == "launcher" or self._Type == "pico8":
+            _icon = "app"
+            if self._ReadOnly == True:
+                _icon = "appdling"
+            
+            self._Icons[_icon].NewCoord( 4, (self._Height - self._Icons[_icon]._Height)/2)
+            self._Icons[_icon].DrawTopLeft()
+           
+        if self._Type == "add_house":
+            self._Icons["add"].NewCoord( 4, (self._Height - self._Icons["add"]._Height)/2)
+            self._Icons["add"].DrawTopLeft()
+
+
+        self._Labels["Text"]._PosX = self._Labels["Text"]._PosX + self._PosX + padding
+        self._Labels["Text"]._PosY = self._PosY + (self._Height - self._Labels["Text"]._Height)/2
+        self._Labels["Text"].Draw()
+        self._Labels["Text"]._PosX = self._Labels["Text"]._PosX - self._PosX - padding
+
+        if "Small" in self._Labels:
+            self._Labels["Small"]._PosX = self._Width - self._Labels["Small"]._Width-5
+            
+            self._Labels["Small"]._PosY = self._PosY + (self._Height - self._Labels["Small"]._Height)/2
+            self._Labels["Small"].Draw()
+        
+
+        #pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+ 
+
 class GameStorePage(Page):
     _FootMsg =  ["Nav","Update store","Up","Back","Select"]
     _MyList = []
@@ -202,16 +299,22 @@ class GameStorePage(Page):
     _InfoPage = None
     _Downloading = None
     _aria2_db = "aria2tasks.db"
+    _warehouse_db = "warehouse.db"
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
 	self._MyStack = RPCStack()
-	#title path type
-        repos = [
-        {"title":"github.com/cuu/gamestore","file":"https://raw.githubusercontent.com/cuu/gamestore/master/index.json","type":"dir"}
-        ]
-	self._MyStack.Push(repos)
-    
+	#title path type 
+        try:
+            conn = sqlite3.connect(self._warehouse_db)
+            conn.row_factory = dict_factory
+            c = conn.cursor()
+            repos = c.execute("SELECT * FROM warehouse").fetchall()
+            conn.close()
+            self._MyStack.Push(repos)
+        except Exception as ex:
+            print(ex)
+        
     def SyncSqlite(self):
         try:
             conn = sqlite3.connect(self._aria2_db)
@@ -237,17 +340,23 @@ class GameStorePage(Page):
         stk = self._MyStack.Last()
         stk_lev = self._MyStack.Length()
         repos.extend(stk)
+        add_new_house = [
+            {"title":"Add new warehouse...","file":"master/index.json","type":"add_house","status":"complete"}
+        ]
+
         if stk_lev == 1: # on top
             sqlite3_menu= self.SyncSqlite()
             if sqlite3_menu != None and len(sqlite3_menu) > 0:
                 #print(sqlite3_menu)
                 repos.extend(sqlite3_menu )
 
-        print(repos)
+        #print(repos)
+        repos.extend(add_new_house)
 
         for i,u in enumerate( repos ):            
             #print(i,u)
-            li = InfoPageListItem()
+            li = GameStoreListItem()
+            li._CanvasHWND = self._CanvasHWND
             li._Parent = self
             li._PosX   = start_x
             li._PosY   = start_y + last_height
@@ -256,6 +365,7 @@ class GameStorePage(Page):
             li._Active = False
             li._ReadOnly = True
             li._Value = u
+            li._Type = u["type"]
             li.Init( u["title"] )
 
             if stk_lev >1:
@@ -355,7 +465,7 @@ class GameStorePage(Page):
 
         print("cur_li._Value",cur_li._Value)
 	
-	if cur_li._Value["type"] == "dir":
+	if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
 	    remote_file_url = cur_li._Value["file"]
 	    menu_file = remote_file_url.split("master")[1] #assume master branch
 	    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
@@ -389,7 +499,10 @@ class GameStorePage(Page):
                     self._Screen.Draw()
                     self._Screen.SwapAndShow()                    
 		
-	else:
+	elif cur_li._Value["type"] == "add_house":
+            print("show keyboard to add ware house")
+            
+        else:
 	    #download the game probably
 	    remote_file_url = cur_li._Value["file"]
             menu_file = remote_file_url.split("master")[1]
@@ -545,6 +658,7 @@ class GameStorePage(Page):
             if len(self._MyList) * self._MyList[0]._Height > self._Height:
                 self._Ps._Width = self._Width - 11
                 self._Ps.Draw()
+                print("len self._MyList", len(self._MyList))
                 for i in self._MyList:
                     if i._PosY > self._Height + self._Height/2:
                         break
@@ -557,6 +671,7 @@ class GameStorePage(Page):
             else:
                 self._Ps._Width = self._Width
                 self._Ps.Draw()
+                print("len self._MyList", len(self._MyList))
                 for i in self._MyList:
                     if i._PosY > self._Height + self._Height/2:
                         break
@@ -577,7 +692,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = GameStorePage()
         self._Page._Screen = main_screen
-        self._Page._Name ="Download games"
+        self._Page._Name ="Warehouse list"
         self._Page.Init()
         
     def API(self,main_screen):

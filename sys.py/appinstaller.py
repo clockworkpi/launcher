@@ -10,6 +10,7 @@ import libs.websocket as websocket
 
 aria2_ws = "ws://localhost:6800/jsonrpc"
 aria2_db = "aria2tasks.db"
+warehouse_db = "warehouse.db"
 
 rpc = Wsrpc('localhost',6800)
 
@@ -124,7 +125,10 @@ def create_table(conn, create_table_sql):
 
 
 def init_sqlite3():
-    database = r"aria2tasks.db"
+    global aria2_db
+    global warehouse_db
+
+    database = aria2_db
  
     sql_create_tasks_table = """ CREATE TABLE IF NOT EXISTS tasks (
                                         id integer PRIMARY KEY,
@@ -137,14 +141,46 @@ def init_sqlite3():
                                         completedLength text,
                                         fav text
                                     ); """
-  
+
+    sql_create_warehouse_table = """ CREATE TABLE IF NOT EXISTS warehouse (
+                                        id integer PRIMARY KEY,
+                                        title text NOT NULL,
+                                        file  text NOT NULL,
+                                        type  text NOT NULL
+                                        ); """
+ 
     conn = create_connection(database)
  
     if conn is not None:
         create_table(conn, sql_create_tasks_table)
+        conn.close()
     else:
         print("Error! cannot create the database connection.")
         exit()
+
+    database = warehouse_db
+    conn = create_connection(database)
+ 
+    if conn is not None:
+        create_table(conn, sql_create_warehouse_table)
+        c = conn.cursor()
+        
+        ret = c.execute("SELECT count() FROM warehouse;" ).fetchone()
+
+        if int(ret[0]) == 0:
+            insert_bootrap = """ INSERT INTO warehouse(title,file,type) VALUES(
+                            'github.com/cuu/gamestore',
+                            'https://raw.githubusercontent.com/cuu/gamestore/master/index.json',
+                            'source');"""
+            c.execute(insert_bootrap)
+            conn.commit()
+
+        conn.close()
+    else:
+        print("Error! cannot create the database connection.")
+        exit()
+
+
 
 if __name__ == "__main__":
     init_sqlite3()
