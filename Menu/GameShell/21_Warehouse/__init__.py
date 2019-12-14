@@ -25,6 +25,7 @@ from UI.lang_manager import MyLangManager
 from UI.info_page_list_item import InfoPageListItem
 from UI.info_page_selector  import InfoPageSelector
 from UI.yes_cancel_confirm_page import YesCancelConfirmPage
+from UI.keyboard import Keyboard
 
 import config
 
@@ -314,7 +315,8 @@ class GameStorePage(Page):
             self._MyStack.Push(repos)
         except Exception as ex:
             print(ex)
-        
+       
+ 
     def SyncSqlite(self):
         try:
             conn = sqlite3.connect(self._aria2_db)
@@ -351,7 +353,7 @@ class GameStorePage(Page):
                 repos.extend(sqlite3_menu )
 
         #print(repos)
-        repos.extend(add_new_house)
+            repos.extend(add_new_house)
 
         for i,u in enumerate( repos ):            
             #print(i,u)
@@ -374,7 +376,8 @@ class GameStorePage(Page):
                 if "status" in u:
                     if u["status"] == "complete":
                         li._ReadOnly = False
-                if i == 0:
+
+                if u["type"]=="source":
                     li._ReadOnly = False
 
             last_height += li._Height
@@ -418,6 +421,14 @@ class GameStorePage(Page):
 
         self._remove_page._Name ="Are you sure?"
         self._remove_page.Init()
+
+
+        self._Keyboard = Keyboard()
+        self._Keyboard._Name = "Enter warehouse addr"
+        self._Keyboard._Screen = self._Screen
+        self._Keyboard.Init()
+        self._Keyboard.SetPassword("github.com/clockworkpi/warehouse")
+        self._Keyboard._Caller = self
 
     def RemoveGame(self):
         if self._PsIndex > len(self._MyList) -1:
@@ -501,7 +512,9 @@ class GameStorePage(Page):
 		
 	elif cur_li._Value["type"] == "add_house":
             print("show keyboard to add ware house")
-            
+            self._Screen.PushCurPage()
+            self._Screen.SetCurPage( self._Keyboard )
+ 
         else:
 	    #download the game probably
 	    remote_file_url = cur_li._Value["file"]
@@ -555,7 +568,54 @@ class GameStorePage(Page):
                 if cur_li._Value["type"]=="tic80" and cur_li._ReadOnly == False:
                     game_sh = "/home/cpi/apps/Menu/51_TIC-80/TIC-80.sh"
                     self._Screen.RunEXE(game_sh)
+    
+    def raw_github_com(self,_url):
+        if _url.startswith("github.com")== False:
+            return False
+        parts = _url.split("/")
+        if len(parts) != 3:
+            return False
+        return "/".join(["https://raw.githubusercontent.com",parts[1],parts[2],"master/index.json"])
 
+    def OnKbdReturnBackCb(self):
+        inputed = "".join(self._Keyboard._Textarea._MyWords).strip()
+        inputed = inputed.replace("http://","")
+        inputed = inputed.replace("https://","")
+        
+        if inputed.endswith(".git"):
+             inputed = inputed[:len(inputed)-4]
+        if inputed.endswith("/"):
+             inputed = inputed[:len(inputed)-1]
+        
+        print("last: ",inputed)
+        try:
+            conn = sqlite3.connect(self._warehouse_db)
+            conn.row_factory = dict_factory
+            c = conn.cursor()
+            ret = c.execute("SELECT * FROM warehouse WHERE title='%s'" % inputed ).fetchone()
+            if ret != None:
+                self._Screen._MsgBox.SetText("Warehouse existed!")
+                self._Screen._MsgBox.Draw()
+                self._Screen.SwapAndShow()
+            else:
+                valid_url= self.raw_github_com(inputed)
+                
+                if valid_url == False:
+                    self._Screen._MsgBox.SetText("Warehouse existed!")
+                    self._Screen._MsgBox.Draw()
+                    self._Screen.SwapAndShow()
+                else:
+                    sql_insert = """ INSERT INTO warehouse(title,file,type) VALUES(
+                                     '%s',
+                                     '%s',
+                                     'source');""" % (inputed,valid_url)
+
+                    c.execute(sql_insert)
+                    conn.commit()
+            conn.close()
+        except Exception as ex:
+            print(ex)
+     
     def OnLoadCb(self):
         self._Scrolled = 0
         self._PosY = 0
