@@ -305,19 +305,28 @@ class GameStorePage(Page):
         Page.__init__(self)
         self._Icons = {}
 	self._MyStack = RPCStack()
-	#title path type 
+	#title path type
+
+        repos = [
+            {"title":"github.com/cuu/gamestore","file":"https://raw.githubusercontent.com/cuu/gamestore/master/index.json","type":"source"}
+        ]
+	self._MyStack.Push(repos)
+ 
+
+    def SyncWarehouse(self):
         try:
             conn = sqlite3.connect(self._warehouse_db)
             conn.row_factory = dict_factory
             c = conn.cursor()
-            repos = c.execute("SELECT * FROM warehouse").fetchall()
+            ret = c.execute("SELECT * FROM warehouse").fetchall()
             conn.close()
-            self._MyStack.Push(repos)
+            return ret
         except Exception as ex:
             print(ex)
-       
- 
-    def SyncSqlite(self):
+            return None
+        return None
+
+    def SyncTasks(self):
         try:
             conn = sqlite3.connect(self._aria2_db)
             conn.row_factory = dict_factory
@@ -347,12 +356,17 @@ class GameStorePage(Page):
         ]
 
         if stk_lev == 1: # on top
-            sqlite3_menu= self.SyncSqlite()
-            if sqlite3_menu != None and len(sqlite3_menu) > 0:
-                #print(sqlite3_menu)
-                repos.extend(sqlite3_menu )
+            ware_menu= self.SyncWarehouse()
+            if ware_menu != None and len(ware_menu) > 0:
+                #print(ware_menu)
+                repos.extend(ware_menu )
 
-        #print(repos)
+            tasks_menu= self.SyncTasks()
+            if tasks_menu != None and len(tasks_menu) > 0:
+                #print(tasks_menu)
+                repos.extend(tasks_menu )
+            
+            #print(repos)
             repos.extend(add_new_house)
 
         for i,u in enumerate( repos ):            
@@ -439,7 +453,18 @@ class GameStorePage(Page):
         #    return
         print("Remove cur_li._Value",cur_li._Value)
         
-        if "gid" in cur_li._Value:
+        if cur_li._Value["type"] == "source":
+            print("remove a source")
+            try:
+                conn = sqlite3.connect(self._warehouse_db)
+                conn.row_factory = dict_factory
+                c = conn.cursor()
+                c.execute("DELETE FROM warehouse WHERE file = '%s'" % cur_li._Value["file"] )
+                conn.commit()
+                conn.close()
+            except Exception as ex:
+                print(ex)
+        elif "gid" in cur_li._Value:
             try:
                 gid = cur_li._Value["gid"]
                 conn = sqlite3.connect(self._aria2_db)
@@ -718,7 +743,6 @@ class GameStorePage(Page):
             if len(self._MyList) * self._MyList[0]._Height > self._Height:
                 self._Ps._Width = self._Width - 11
                 self._Ps.Draw()
-                print("len self._MyList", len(self._MyList))
                 for i in self._MyList:
                     if i._PosY > self._Height + self._Height/2:
                         break
@@ -731,7 +755,6 @@ class GameStorePage(Page):
             else:
                 self._Ps._Width = self._Width
                 self._Ps.Draw()
-                print("len self._MyList", len(self._MyList))
                 for i in self._MyList:
                     if i._PosY > self._Height + self._Height/2:
                         break

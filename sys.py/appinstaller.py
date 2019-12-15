@@ -163,18 +163,6 @@ def init_sqlite3():
  
     if conn is not None:
         create_table(conn, sql_create_warehouse_table)
-        c = conn.cursor()
-        
-        ret = c.execute("SELECT count() FROM warehouse;" ).fetchone()
-
-        if int(ret[0]) == 0:
-            insert_bootrap = """ INSERT INTO warehouse(title,file,type) VALUES(
-                            'github.com/cuu/gamestore',
-                            'https://raw.githubusercontent.com/cuu/gamestore/master/index.json',
-                            'source');"""
-            c.execute(insert_bootrap)
-            conn.commit()
-
         conn.close()
     else:
         print("Error! cannot create the database connection.")
