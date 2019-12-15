@@ -27,6 +27,8 @@ from UI.info_page_selector  import InfoPageSelector
 from UI.yes_cancel_confirm_page import YesCancelConfirmPage
 from UI.keyboard import Keyboard
 
+from UI.download   import Download
+
 import config
 
 class RPCStack:
@@ -54,8 +56,82 @@ class RPCStack:
     def Length(self):
         return len(self.stack)
 
-class GameConfirmInstallPopupUpPage(Page):
-    pass
+class ImageDownloadProcessPage(Page):
+    _FootMsg = ["Nav.","","","Back","Cancel"]
+    _DownloaderTimer = -1
+    _Value = 0
+    _URL = None
+
+    _URLColor  = MySkinManager.GiveColor('URL')
+    _TextColor = MySkinManager.GiveColor('Text')
+    _img = None 
+ 
+    def __init__(self):
+        Page.__init__(self)        
+        self._Icons = {}
+        self._CanvasHWND = None
+        
+    def Init(self):
+        self._PosX = self._Index * self._Screen._Width
+        self._Width = self._Screen._Width
+        self._Height = self._Screen._Height
+
+        self._CanvasHWND = self._Screen._CanvasHWND
+    
+    def OnLoadCb(self):
+        if self._URL is None:
+            return
+        self.ClearCanvas()
+ 
+        print(self._URL ) 
+        self._Downloader = Download(self._URL,"/tmp",None)
+        self._Downloader.start()
+        self._DownloaderTimer = gobject.timeout_add(300, self.GObjectUpdateProcessInterval)
+       
+
+    def GObjectUpdateProcessInterval(self):
+        if self._Screen.CurPage() == self:
+                if self._Downloader._stop == True:
+                    return False
+ 
+                filename = self._Downloader.get_dest()
+                #print("dest ",filename)
+                if FileExists(filename):
+                    try:
+                        self._img = pygame.image.load(filename).convert_alpha()
+                        self._Screen.Draw()
+                        self._Screen.SwapAndShow()
+                    except Exception as ex:
+                        print(ex)
+
+                return True
+        else:
+            return False
+    
+        
+    def KeyDown(self,event):
+        if IsKeyMenuOrB(event.key):
+            gobject.source_remove(self._DownloaderTimer)
+            self._DownloaderTimer = -1
+            
+            if self._Downloader != None:
+                try:
+                    self._Downloader.stop()
+                except:
+                    print("user canceled ")
+            
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+            self._URL = None
+
+    def Draw(self):
+        self.ClearCanvas()
+        if self._img is not None:
+            self._CanvasHWND.blit(self._img,midRect(160,
+                                       120,
+                                       pygame.Surface.get_width(self._img),pygame.Surface.get_height(self._img),Width,Height))
+
 
 class Aria2DownloadProcessPage(Page):
     _FootMsg = ["Nav.","","Pause","Back","Cancel"]
@@ -251,7 +327,6 @@ class GameStoreListItem(InfoPageListItem):
         
         if self._Type == "source" or self._Type == "dir":
             self._Icons["ware"].NewCoord( 4, (self._Height - self._Icons["ware"]._Height)/2 )
-            print(self._Height,self._Icons["ware"]._Height)
             self._Icons["ware"].DrawTopLeft()
         
         if self._Type == "launcher" or self._Type == "pico8":
@@ -283,7 +358,7 @@ class GameStoreListItem(InfoPageListItem):
  
 
 class GameStorePage(Page):
-    _FootMsg =  ["Nav","Update store","Up","Back","Select"]
+    _FootMsg =  ["Nav","UpdateWare","Up","Back","Select"]
     _MyList = []
     _ListFont12 = MyLangManager.TrFont("notosanscjk12")
     _ListFont15 = MyLangManager.TrFont("varela15")
@@ -444,6 +519,45 @@ class GameStorePage(Page):
         self._Keyboard.SetPassword("github.com/clockworkpi/warehouse")
         self._Keyboard._Caller = self
 
+        self._PreviewPage = ImageDownloadProcessPage()
+        self._PreviewPage._Screen = self._Screen
+        self._PreviewPage._Name = "preview"
+        self._PreviewPage.Init()
+
+
+    def ResetHouse(self):
+        if self._PsIndex > len(self._MyList) -1:
+            return
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._Value["type"] == "source":
+            remote_file_url = cur_li._Value["file"]
+            menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
+            local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+            print(local_menu_file)
+            try:
+                if os.path.exists(local_menu_file):
+                    os.remove(local_menu_file)
+                if os.path.exists(local_menu_file+".aria2"):
+                    os.remove(local_menu_file+".aria2")
+            except Exception as ex:
+                print(ex)
+
+            self._Screen._MsgBox.SetText("Done")
+            self._Screen._MsgBox.Draw()
+            self._Screen.SwapAndShow()
+
+    def PreviewGame(self):
+        if self._PsIndex > len(self._MyList) -1:
+            return
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._Value["type"] == "launcher" or cur_li._Value["type"] == "pico8" or cur_li._Value["type"] == "tic80":
+            print(cur_li._Value["shots"])
+            self._PreviewPage._URL = cur_li._Value["shots"]
+            self._Screen.PushPage(self._PreviewPage)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+
+
     def RemoveGame(self):
         if self._PsIndex > len(self._MyList) -1:
             return
@@ -473,7 +587,7 @@ class GameStorePage(Page):
                 ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
                 if ret != None:
                     remote_file_url = ret["file"]
-                    menu_file = remote_file_url.split("master")[1]
+                    menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
                     local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
                     try:
                         if os.path.exists(local_menu_file):
@@ -503,7 +617,7 @@ class GameStorePage(Page):
 	
 	if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
 	    remote_file_url = cur_li._Value["file"]
-	    menu_file = remote_file_url.split("master")[1] #assume master branch
+	    menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
 	    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
             print(local_menu_file)
             if FileExists( local_menu_file ) == False:
@@ -516,12 +630,13 @@ class GameStorePage(Page):
                     self._Screen._MsgBox.SetText("Loading")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
-
+                    pygame.time.delay(800)
                 else:
                     print(gid," url is downloading")
                     self._Screen._MsgBox.SetText("Loading")
                     self._Screen._MsgBox.Draw() 
                     self._Screen.SwapAndShow()
+                    pygame.time.delay(400)
 
 	    else:
                 #read the local_menu_file, push into stack,display menu
@@ -533,7 +648,7 @@ class GameStorePage(Page):
 		
 		    self.SyncList()
                     self._Screen.Draw()
-                    self._Screen.SwapAndShow()                    
+                    self._Screen.SwapAndShow() 
 		
 	elif cur_li._Value["type"] == "add_house":
             print("show keyboard to add ware house")
@@ -543,7 +658,7 @@ class GameStorePage(Page):
         else:
 	    #download the game probably
 	    remote_file_url = cur_li._Value["file"]
-            menu_file = remote_file_url.split("master")[1]
+            menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
             local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
             
 	    if FileExists( local_menu_file ) == False:
@@ -554,7 +669,7 @@ class GameStorePage(Page):
                     print("stack length ",self._MyStack.Length())
                     if self._MyStack.Length() > 1:## not on the top list page
                         try:
-                            conn = sqlite3.connect("aria2tasks.db")
+                            conn = sqlite3.connect(self._aria2_db)
                             c = conn.cursor()
                             c.execute("INSERT INTO tasks(gid,title,file,type,status,fav) VALUES ('"+gid+"','"+cur_li._Value["title"]+"','"+cur_li._Value["file"]+"','"+cur_li._Value["type"]+"','active','0')")
 
@@ -594,7 +709,7 @@ class GameStorePage(Page):
                     game_sh = "/home/cpi/apps/Menu/51_TIC-80/TIC-80.sh"
                     self._Screen.RunEXE(game_sh)
     
-    def raw_github_com(self,_url):
+    def raw_github_com(self,_url):#eg: github.com/clockworkpi/warehouse
         if _url.startswith("github.com")== False:
             return False
         parts = _url.split("/")
@@ -637,6 +752,7 @@ class GameStorePage(Page):
 
                     c.execute(sql_insert)
                     conn.commit()
+                    self.SyncList()
             conn.close()
         except Exception as ex:
             print(ex)
@@ -649,7 +765,7 @@ class GameStorePage(Page):
         print("OnLoadCb")
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
-            self._FootMsg[1] = "Update store"
+            self._FootMsg[1] = "UpdateWare"
         else:
             self._FootMsg[2] = "Up"
             self._FootMsg[1] = ""
@@ -660,7 +776,7 @@ class GameStorePage(Page):
 
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
-            self._FootMsg[1] = "Update store"
+            self._FootMsg[1] = "UpdateWare"
         else:
             self._FootMsg[2] = "Up"
             self._FootMsg[1] = ""
@@ -685,10 +801,10 @@ class GameStorePage(Page):
 
             if self._MyStack.Length() == 1:
                 self._FootMsg[2] = "Remove"
-                self._FootMsg[1] = "Update store"
+                self._FootMsg[1] = "UpdateWare"
             else:
                 self._FootMsg[2] = "Up"
-                self._FootMsg[1] = ""
+                self._FootMsg[1] = "Preview"
 
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -707,10 +823,10 @@ class GameStorePage(Page):
                self._MyStack.Pop()
                if self._MyStack.Length() == 1:
                    self._FootMsg[2] = "Remove"
-                   self._FootMsg[1] = "Update store"
+                   self._FootMsg[1] = "UpdateWare"
                else:
                    self._FootMsg[2] = "Up"
-                   self._FootMsg[1] = ""
+                   self._FootMsg[1] = "Preview"
 
             self.SyncList()
             self._Screen.Draw()
@@ -718,10 +834,9 @@ class GameStorePage(Page):
 
         if event.key == CurKeys["Y"]:
             if self._MyStack.Length() == 1:
-                self._Screen._MsgBox.SetText("Done")
-                self._Screen._MsgBox.Draw()
-                self._Screen.SwapAndShow()
-            
+                self.ResetHouse()
+            else:
+                self.PreviewGame()
  
         if event.key == CurKeys["Up"]:
             self.ScrollUp()
@@ -775,7 +890,7 @@ class APIOBJ(object):
     def Init(self,main_screen):
         self._Page = GameStorePage()
         self._Page._Screen = main_screen
-        self._Page._Name ="Warehouse list"
+        self._Page._Name ="Warehouse"
         self._Page.Init()
         
     def API(self,main_screen):

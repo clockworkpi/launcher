@@ -6,6 +6,7 @@ import urllib2
 import hashlib
 
 from threading import Thread
+from StringIO import StringIO
 
 class Download(Thread):
     _dst_path = ""
@@ -24,7 +25,7 @@ class Download(Thread):
         self.downloaded = 0
         
         self.progress = { 'downloaded': 0, 'total': 0, 'percent': 0,'stopped':False }
-        self.stop = False
+        self._stop = False
         self.filename = ""
     
     def isFinished(self):
@@ -40,14 +41,15 @@ class Download(Thread):
         return self._errors
 
     def run(self):
-        
         c = pycurl.Curl()
         c.setopt(pycurl.URL, self.url)
-        c.setopt(pycurl.FOLLOWLOCATION, 1)
-        c.setopt(pycurl.MAXREDIRS, 5)
-        c.setopt(pycurl.NOBODY, 1)
+        c.setopt(pycurl.FOLLOWLOCATION, True)
+        c.setopt(pycurl.MAXREDIRS, 4)
+        #c.setopt(pycurl.NOBODY, 1)
 
-        c.setopt(pycurl.CONNECTTIMEOUT, 10)
+        c.setopt(c.VERBOSE, True)
+
+        #c.setopt(pycurl.CONNECTTIMEOUT, 20)
         
         if self.useragent:
             c.setopt(pycurl.USERAGENT, self.useragent)
@@ -55,39 +57,39 @@ class Download(Thread):
         # add cookies, if available
         if self.cookies:
             c.setopt(pycurl.COOKIE, self.cookies)
-        c.perform()
-        realurl = c.getinfo(pycurl.EFFECTIVE_URL)
         
+        #realurl = c.getinfo(pycurl.EFFECTIVE_URL)
+        realurl = self.url
+        print("realurl",realurl)
         self.filename = realurl.split("/")[-1].strip()
-        
-        c = pycurl.Curl()
-        c.setopt(pycurl.CONNECTTIMEOUT, 10)
         c.setopt(pycurl.URL, realurl)
-        c.setopt(pycurl.FOLLOWLOCATION, 0)
+        c.setopt(pycurl.FOLLOWLOCATION, True)
         c.setopt(pycurl.NOPROGRESS, False)
         c.setopt(pycurl.XFERINFOFUNCTION, self.getProgress)
-        if self.useragent:
-            c.setopt(pycurl.USERAGENT, self.useragent)
+        
+        c.setopt(pycurl.SSL_VERIFYPEER, False)
+        c.setopt(pycurl.SSL_VERIFYHOST, False)
         
         # configure pycurl output file
         if self.path == False:
             self.path = os.getcwd()
         filepath = os.path.join(self.path, self.filename)
-            
+        
+         
         if os.path.exists(filepath):## remove old file,restart download 
             os.system("rm -rf " + filepath)
-            f = open(filepath, "wb")
-        else:
-            f = open(filepath, "wb")
         
-        c.setopt(pycurl.WRITEDATA, f)
+        buffer = StringIO() 
+        c.setopt(pycurl.WRITEDATA, buffer)
         
         self._dst_path = filepath
 
         # add cookies, if available
         if self.cookies:
             c.setopt(pycurl.COOKIE, self.cookies)
-    
+        
+        self._stop = False
+        self.progress["stopped"] = False 
         # download file
         try:
             c.perform()
@@ -95,14 +97,18 @@ class Download(Thread):
             errno,errstr = error
             print("curl error: %s" % errstr)
             self._errors.append(errstr)
-            self.stop = True
+            self._stop = True
             self.progress["stopped"] = True
+            self.stop()
         finally:
 
             code = c.getinfo( c.RESPONSE_CODE )
             c.close()            
             self._is_finished = True
-        
+
+            with open(filepath, mode='w') as f:
+                f.write(buffer.getvalue())
+
             if self.progress["percent"] < 100:
                 self._is_successful = False
             else:
@@ -127,7 +133,7 @@ class Download(Thread):
             self.progress['total'] = download_t + self.downloaded 
             self.progress['percent'] = ( float(self.progress['downloaded']) / float(self.progress['total'])) * 100.0
             self.progress["stopped"] = False            
-        if self.stop:
+        if self._stop:
             self.progress["stopped"] = True
             return 1
     
@@ -151,11 +157,11 @@ class Download(Thread):
         return self.progress["percent"]
     
     def stop(self):
-        self.stop = True
+        self._stop = True
  
     def cancel(self):
         # sets the boolean to stop the thread.
-        self.stop = True
+        self._stop = True
         
 def main():
     from optparse import OptionParser

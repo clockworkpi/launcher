@@ -36,7 +36,7 @@ def game_install_thread(gid):
         conn.close()
 
         remote_file_url = ret["file"]
-        menu_file = remote_file_url.split("master")[1]
+        menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
         local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
         
         if os.path.exists(local_menu_file) == True and "arm" in platform.machine():
