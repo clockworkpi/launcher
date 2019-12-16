@@ -183,11 +183,11 @@ class TitleBar(Widget):
                     self._Icons["battery_charging"]._IconIndex = cap_ge
                     self._Icons["battery"] = self._Icons["battery_charging"]
             
-                    print("Charging %d" % cap_ge)
+                    #print("Charging %d" % cap_ge)
                 else:
                     self._Icons["battery_discharging"]._IconIndex = cap_ge
                     self._Icons["battery"] = self._Icons["battery_discharging"]
-                    print("Discharging %d" % cap_ge)
+                    #print("Discharging %d" % cap_ge)
                     
                 
         return True

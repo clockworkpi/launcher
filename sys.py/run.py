@@ -163,11 +163,9 @@ def RestoreLastBackLightBrightness(main_screen):
                 f.seek(0)
                 f.write(str( last_brt ))
                 f.truncate()
-                f.close()
-                last_brt = -1
-            else:                
-                f.close()
 
+            f.close() 
+            last_brt = -1
     try:
         f = open("/proc/driver/led1","w")
     except IOError:
@@ -198,7 +196,6 @@ def InspectionTeam(main_screen):
     
     if cur_time - everytime_keydown > time_1 and passout_time_stage == 0:
         print("timeout, dim screen %d" % int(cur_time - everytime_keydown))
-
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -226,7 +223,6 @@ def InspectionTeam(main_screen):
     
     elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
         print("timeout, close screen %d" % int(cur_time - everytime_keydown))
-        
         try:
             f = open(config.BackLight,"r+")
         except IOError:

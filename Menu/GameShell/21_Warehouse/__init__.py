@@ -817,7 +817,7 @@ class GameStorePage(Page):
             self._FootMsg[2] = "Remove"
             self._FootMsg[1] = "UpdateWare"
         else:
-            self._FootMsg[2] = "Up"
+            self._FootMsg[2] = ""
             self._FootMsg[1] = ""
 
         self.SyncList()
@@ -831,9 +831,24 @@ class GameStorePage(Page):
         """
     def KeyDown(self,event):
         if IsKeyMenuOrB(event.key):
-            self.ReturnToUpLevelPage()
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
+
+            if self._MyStack.Length() > 1:
+               self._MyStack.Pop()
+               if self._MyStack.Length() == 1:
+                   self._FootMsg[2] = "Remove"
+                   self._FootMsg[1] = "UpdateWare"
+               else:
+                   self._FootMsg[2] = ""
+                   self._FootMsg[1] = "Preview"
+
+               self.SyncList()
+               self._Screen.Draw()
+               self._Screen.SwapAndShow()
+
+            elif self._MyStack.Length() == 1:
+                self.ReturnToUpLevelPage()
+                self._Screen.Draw()
+                self._Screen.SwapAndShow()
 
         if IsKeyStartOrA(event.key):
             self.Click()
@@ -842,7 +857,7 @@ class GameStorePage(Page):
                 self._FootMsg[2] = "Remove"
                 self._FootMsg[1] = "UpdateWare"
             else:
-                self._FootMsg[2] = "Up"
+                self._FootMsg[2] = ""
                 self._FootMsg[1] = "Preview"
 
             self._Screen.Draw()
@@ -858,6 +873,7 @@ class GameStorePage(Page):
                 self._Screen.SwapAndShow()
                 return 
 
+            """
             if self._MyStack.Length() > 1:
                self._MyStack.Pop()
                if self._MyStack.Length() == 1:
@@ -866,6 +882,7 @@ class GameStorePage(Page):
                else:
                    self._FootMsg[2] = "Up"
                    self._FootMsg[1] = "Preview"
+            """
 
             self.SyncList()
             self._Screen.Draw()
