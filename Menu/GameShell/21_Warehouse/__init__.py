@@ -9,6 +9,7 @@ import gobject
 import sqlite3
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
+from shutil import copyfile
 
 ## local UI import
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
@@ -61,10 +62,11 @@ class ImageDownloadProcessPage(Page):
     _DownloaderTimer = -1
     _Value = 0
     _URL = None
-
+    _ListFontObj = MyLangManager.TrFont("varela13")
     _URLColor  = MySkinManager.GiveColor('URL')
     _TextColor = MySkinManager.GiveColor('Text')
     _img = None 
+    _Downloader=None
  
     def __init__(self):
         Page.__init__(self)        
@@ -77,34 +79,68 @@ class ImageDownloadProcessPage(Page):
         self._Height = self._Screen._Height
 
         self._CanvasHWND = self._Screen._CanvasHWND
-    
+        self._LoadingLabel = Label()
+        self._LoadingLabel.SetCanvasHWND(self._CanvasHWND)
+        self._LoadingLabel.Init("Loading",self._ListFontObj)
+        self._LoadingLabel.SetColor(self._TextColor )
+ 
     def OnLoadCb(self):
         if self._URL is None:
             return
+        self._img = None
         self.ClearCanvas()
- 
-        print(self._URL ) 
-        self._Downloader = Download(self._URL,"/tmp",None)
-        self._Downloader.start()
-        self._DownloaderTimer = gobject.timeout_add(300, self.GObjectUpdateProcessInterval)
-       
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        
+        filename = self._URL.split("/")[-1].strip()
+        local_dir = self._URL.split("raw.githubusercontent.com")
 
+        if len(local_dir) >1:
+            menu_file = local_dir[1]
+            local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+        
+            if FileExists(local_menu_file):
+                self._img = pygame.image.load(local_menu_file).convert_alpha()
+                self._Screen.Draw()
+                self._Screen.SwapAndShow()
+            else:
+                self._Downloader = Download(self._URL,"/tmp",None)
+                self._Downloader.start()
+                self._DownloaderTimer = gobject.timeout_add(300, self.GObjectUpdateProcessInterval)
+
+     
     def GObjectUpdateProcessInterval(self):
+        ret = True
         if self._Screen.CurPage() == self:
                 if self._Downloader._stop == True:
-                    return False
+                    ret = False
  
-                filename = self._Downloader.get_dest()
-                #print("dest ",filename)
-                if FileExists(filename):
+                dst_filename = self._Downloader.get_dest()
+                if self._Downloader.isFinished():
+                    if self._Downloader.isSuccessful():
+                        filename = self._URL.split("/")[-1].strip()
+                        local_dir = self._URL.split("raw.githubusercontent.com")
+                        menu_file = local_dir[1]
+                        local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+                        
+                        dl_file = os.path.join("/tmp",filename)
+                        if not os.path.exists(os.path.dirname(local_menu_file)):
+                            os.makedirs(os.path.dirname(local_menu_file))
+
+                        copyfile(dl_file, local_menu_file)
+                        ret = False
+ 
+                #print("dest ",dst_filename)
+                if FileExists(dst_filename):
                     try:
-                        self._img = pygame.image.load(filename).convert_alpha()
+                        #print("load and draw")
+                        self._img = pygame.image.load(dst_filename).convert_alpha()
                         self._Screen.Draw()
                         self._Screen.SwapAndShow()
                     except Exception as ex:
                         print(ex)
 
-                return True
+                return ret
         else:
             return False
     
@@ -127,10 +163,13 @@ class ImageDownloadProcessPage(Page):
 
     def Draw(self):
         self.ClearCanvas()
+        self._LoadingLabel.NewCoord( (Width-self._LoadingLabel._Width)/2,(Height-44)/2)
+        self._LoadingLabel.Draw()
+
         if self._img is not None:
-            self._CanvasHWND.blit(self._img,midRect(160,
-                                       120,
-                                       pygame.Surface.get_width(self._img),pygame.Surface.get_height(self._img),Width,Height))
+            self._CanvasHWND.blit(self._img,midRect(Width/2,
+                                       (Height-44)/2,
+                                       pygame.Surface.get_width(self._img),pygame.Surface.get_height(self._img),Width,Height-44))
 
 
 class Aria2DownloadProcessPage(Page):
