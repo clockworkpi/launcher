@@ -57,6 +57,131 @@ class RPCStack:
     def Length(self):
         return len(self.stack)
 
+class LoadHousePage(Page):
+    _FootMsg = ["Nav.","","","Back","Cancel"]
+    _DownloaderTimer = -1
+    _Value = 0
+    _URL = None
+    _ListFontObj = MyLangManager.TrFont("varela18")
+    _URLColor  = MySkinManager.GiveColor('URL')
+    _TextColor = MySkinManager.GiveColor('Text')
+    _Caller=None
+    _img = None 
+    _Downloader=None
+    _DownloaderTimer=-1
+    def __init__(self):
+        Page.__init__(self)        
+        self._Icons = {}
+        self._CanvasHWND = None
+        
+    def Init(self):
+        self._PosX = self._Index * self._Screen._Width
+        self._Width = self._Screen._Width
+        self._Height = self._Screen._Height
+
+        self._CanvasHWND = self._Screen._CanvasHWND
+        self._LoadingLabel = Label()
+        self._LoadingLabel.SetCanvasHWND(self._CanvasHWND)
+        self._LoadingLabel.Init("Loading",self._ListFontObj)
+        self._LoadingLabel.SetColor(self._TextColor )
+ 
+    def OnLoadCb(self):
+        if self._URL is None:
+            return
+        self._img = None
+        self.ClearCanvas()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        
+        filename = self._URL.split("/")[-1].strip()
+        local_dir = self._URL.split("raw.githubusercontent.com")
+
+        if len(local_dir) >1:
+            menu_file = local_dir[1]
+            local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+        
+            if FileExists(local_menu_file):
+                #load json
+                with open(local_menu_file) as json_file:
+                    try:
+                        local_menu_json = json.load(json_file)
+                        self._Caller._MyStack.Push(local_menu_json["list"])
+                    except:
+                        pass
+
+                    self.Leave()
+
+            else:
+                self._Downloader = Download(self._URL,"/tmp",None)
+                self._Downloader.start()
+                self._DownloaderTimer = gobject.timeout_add(400, self.GObjectUpdateProcessInterval)
+
+     
+    def GObjectUpdateProcessInterval(self):
+        ret = True
+        if self._Screen.CurPage() == self:
+                if self._Downloader._stop == True:
+                    ret = False
+ 
+                dst_filename = self._Downloader.get_dest()
+                if self._Downloader.isFinished():
+                    if self._Downloader.isSuccessful():
+                        filename = self._URL.split("/")[-1].strip()
+                        local_dir = self._URL.split("raw.githubusercontent.com")
+                        menu_file = local_dir[1]
+                        local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+
+                        dl_file = os.path.join("/tmp",filename)
+                        if not os.path.exists(os.path.dirname(local_menu_file)):
+                            os.makedirs(os.path.dirname(local_menu_file))
+
+                        copyfile(dl_file, local_menu_file)
+                        with open(local_menu_file) as json_file:
+                            try:
+                                local_menu_json = json.load(json_file)
+                                self._Caller._MyStack.Push(local_menu_json["list"])
+                            except:
+                                pass
+
+                        ret = False
+
+                        self.Leave()
+                        
+                return ret
+        else:
+            return False
+    
+    def Leave(self):
+        if self._DownloaderTimer != -1:
+            gobject.source_remove(self._DownloaderTimer)
+        self._DownloaderTimer = -1
+            
+        if self._Downloader != None:
+            try:
+                self._Downloader.stop()
+            except:
+                print("user canceled ")
+            
+        self.ReturnToUpLevelPage()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        self._URL = None
+
+    def KeyDown(self,event):
+        if IsKeyMenuOrB(event.key):
+            self.Leave()
+
+    def Draw(self):
+        self.ClearCanvas()
+        self._LoadingLabel.NewCoord( (Width-self._LoadingLabel._Width)/2,(Height-44)/2)
+        self._LoadingLabel.Draw()
+
+        if self._img is not None:
+            self._CanvasHWND.blit(self._img,midRect(Width/2,
+                                       (Height-44)/2,
+                                       pygame.Surface.get_width(self._img),pygame.Surface.get_height(self._img),Width,Height-44))
+
+
 class ImageDownloadProcessPage(Page):
     _FootMsg = ["Nav.","","","Back","Cancel"]
     _DownloaderTimer = -1
@@ -67,7 +192,7 @@ class ImageDownloadProcessPage(Page):
     _TextColor = MySkinManager.GiveColor('Text')
     _img = None 
     _Downloader=None
- 
+    _DownloaderTimer=-1 
     def __init__(self):
         Page.__init__(self)        
         self._Icons = {}
@@ -563,6 +688,12 @@ class GameStorePage(Page):
         self._PreviewPage._Name = "preview"
         self._PreviewPage.Init()
 
+        self._LoadHousePage = LoadHousePage()
+        self._LoadHousePage._Screen = self._Screen
+        self._LoadHousePage._Name = "Warehouse"
+        self._LoadHousePage._Caller = self
+        self._LoadHousePage.Init()
+
 
     def ResetHouse(self):
         if self._PsIndex > len(self._MyList) -1:
@@ -584,6 +715,18 @@ class GameStorePage(Page):
             self._Screen._MsgBox.SetText("Done")
             self._Screen._MsgBox.Draw()
             self._Screen.SwapAndShow()
+
+    def LoadHouse(self):
+        if self._PsIndex > len(self._MyList) -1:
+            return
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
+
+            self._LoadHousePage._URL = cur_li._Value["file"]
+            self._Screen.PushPage(self._LoadHousePage)
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+
 
     def PreviewGame(self):
         if self._PsIndex > len(self._MyList) -1:
@@ -660,34 +803,24 @@ class GameStorePage(Page):
 	    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
             print(local_menu_file)
             if FileExists( local_menu_file ) == False:
-                print(local_menu_file, "non-existed")
-                gid,ret = config.RPC.urlDownloading(remote_file_url)
-		if  ret == False:
-	            gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
-		    self._Downloading = remote_file_url
-                    
-                    self._Screen._MsgBox.SetText("Loading")
-                    self._Screen._MsgBox.Draw()
-                    self._Screen.SwapAndShow()
-                    pygame.time.delay(800)
-                else:
-                    print(gid," url is downloading")
-                    self._Screen._MsgBox.SetText("Loading")
-                    self._Screen._MsgBox.Draw() 
-                    self._Screen.SwapAndShow()
-                    pygame.time.delay(400)
-
+                self.LoadHouse()
 	    else:
                 #read the local_menu_file, push into stack,display menu
 		self._Downloading = None
-		with open(local_menu_file) as json_file:
-		    local_menu_json = json.load(json_file)
-                    print(local_menu_json)
- 		    self._MyStack.Push(local_menu_json["list"])
+                try:
+		    with open(local_menu_file) as json_file:
+		        local_menu_json = json.load(json_file)
+                        print(local_menu_json)
+ 		        self._MyStack.Push(local_menu_json["list"])
 		
-		    self.SyncList()
-                    self._Screen.Draw()
-                    self._Screen.SwapAndShow() 
+		        self.SyncList()
+                        self._Screen.Draw()
+                        self._Screen.SwapAndShow()
+                except Exception as ex:
+                    print(ex)
+                    self._Screen._MsgBox.SetText("Open house failed ")
+                    self._Screen._MsgBox.Draw()
+                    self._Screen.SwapAndShow()
 		
 	elif cur_li._Value["type"] == "add_house":
             print("show keyboard to add ware house")
@@ -704,7 +837,7 @@ class GameStorePage(Page):
                 gid,ret = config.RPC.urlDownloading(remote_file_url)
                 if ret == False:
                     gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
-		    self._Downloading = remote_file_url
+		    self._Downloading = gid
                     print("stack length ",self._MyStack.Length())
                     if self._MyStack.Length() > 1:## not on the top list page
                         try:
@@ -747,7 +880,10 @@ class GameStorePage(Page):
                 if cur_li._Value["type"]=="tic80" and cur_li._ReadOnly == False:
                     game_sh = "/home/cpi/apps/Menu/51_TIC-80/TIC-80.sh"
                     self._Screen.RunEXE(game_sh)
-    
+
+    def OnAria2CompleteCb(self,gid):
+        print("OnAria2CompleteCb ", gid)
+ 
     def raw_github_com(self,_url):#eg: github.com/clockworkpi/warehouse
         if _url.startswith("github.com")== False:
             return False

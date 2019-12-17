@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import os
 import dbus
 import dbus.service
 import sys
@@ -7,7 +7,8 @@ import commands
 import logging
 import errno
 
-from wicd import misc 
+from wicd import misc
+import libs.websocket as websocket
 ##misc.to_bool
 ##misc.misc.noneToString
 ##misc.to_unicode
@@ -22,7 +23,6 @@ import gobject
 import socket
 import pygame
 from sys import exit
-import os
 
 #from beeprint import pp
 ########
@@ -478,6 +478,29 @@ def gobject_pygame_event_timer(main_screen):
     
     return True 
 
+@misc.threaded
+def aria2_ws(main_screen):
+    def on_message(ws, message):
+        print(message)
+
+    def on_error(ws, error):
+        print(error)
+
+    def on_close(ws):
+        print("### closed ###")
+    
+     
+    websocket.enableTrace(True)
+    try:
+        ws = websocket.WebSocketApp("ws://localhost:6800/jsonrpc",
+                              on_message = on_message,
+                              on_error = on_error,
+                              on_close = on_close)
+#    ws.on_open = on_open
+        ws.run_forever()
+    except:
+        return
+
 
 @misc.threaded
 def socket_thread(main_screen):
@@ -588,6 +611,7 @@ def big_loop():
 
 
     socket_thread(main_screen)
+    aria2_ws(main_screen)
     
     gobject_loop()
     
