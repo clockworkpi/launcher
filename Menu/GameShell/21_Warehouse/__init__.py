@@ -9,7 +9,7 @@ import gobject
 import sqlite3
 #from beeprint import pp
 from libs.roundrects import aa_round_rect
-from shutil import copyfile
+from shutil import copyfile,rmtree
 
 ## local UI import
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
@@ -372,7 +372,7 @@ class Aria2DownloadProcessPage(Page):
     
     def CheckDownload(self,aria2_gid):
         self._GID = aria2_gid 
-        self._DownloaderTimer = gobject.timeout_add(123, self.GObjectUpdateProcessInterval)
+        self._DownloaderTimer = gobject.timeout_add(234, self.GObjectUpdateProcessInterval)
         
     def KeyDown(self,event):
         if IsKeyMenuOrB(event.key):
@@ -461,7 +461,7 @@ class GameStoreListItem(InfoPageListItem):
         appdling_icon._ImgSurf = MyIconPool.GiveIconSurface("appdling")
         appdling_icon._CanvasHWND = self._CanvasHWND
         appdling_icon._Parent = self
-        app_icon.Init(0,0,MyIconPool.Width("appdling"),MyIconPool.Height("appdling"),0)
+        appdling_icon.Init(0,0,MyIconPool.Width("appdling"),MyIconPool.Height("appdling"),0)
 
         blackheart_icon = IconItem()
         blackheart_icon._ImgSurf = MyIconPool.GiveIconSurface("blackheart")
@@ -518,7 +518,7 @@ class GameStoreListItem(InfoPageListItem):
             self._Labels["Small"].Draw()
         
 
-        #pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
+        pygame.draw.line(self._Parent._CanvasHWND,MySkinManager.GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
  
 
 class GameStorePage(Page):
@@ -540,6 +540,8 @@ class GameStorePage(Page):
     _Downloading = None
     _aria2_db = "aria2tasks.db"
     _warehouse_db = "warehouse.db"
+    _GobjTimer = -1
+    
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
@@ -551,6 +553,23 @@ class GameStorePage(Page):
         ]
 	self._MyStack.Push(repos)
  
+    def GObjectUpdateProcessInterval(self):
+        ret = True
+        dirty = False
+        for x in self._MyList:
+            if x._Type == "launcher" or x._Type == "pico8" or x._Type == "tic80":
+                percent = config.RPC.getPercent(x._Value["file"])
+                if percent is not None:
+                    x.SetSmallText(str(percent)+"%")
+                    dirty = True
+                else:
+                    x.SetSmallText("")
+
+        if self._Screen.CurPage() == self and dirty == True:
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
+
+        return ret
 
     def SyncWarehouse(self):
         try:
@@ -617,14 +636,22 @@ class GameStorePage(Page):
             li._PosY   = start_y + last_height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFont15
+            li._Fonts["small"]  = self._ListFont12
             li._Active = False
             li._ReadOnly = True
             li._Value = u
             li._Type = u["type"]
             li.Init( u["title"] )
-
+            
             if stk_lev >1:
-                li._ReadOnly = False
+                remote_file_url = u["file"]
+                menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
+                local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+
+                if FileExists(local_menu_file):
+                    li._ReadOnly = False
+                else:
+                    li._ReadOnly = True
             elif stk_lev == 1:
                 if "status" in u:
                     if u["status"] == "complete":
@@ -634,6 +661,9 @@ class GameStorePage(Page):
                     li._ReadOnly = False
 
             last_height += li._Height
+            
+            if li._Type == "launcher" or li._Type == "pico8" or li._Type == "tic80":
+                li.SetSmallText("")
             
             self._MyList.append(li)
 
@@ -703,12 +733,18 @@ class GameStorePage(Page):
             remote_file_url = cur_li._Value["file"]
             menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
             local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
-            print(local_menu_file)
+            local_menu_file_path = os.path.dirname(local_menu_file)
+            print(local_menu_file_path)
+            local_jsons = glob.glob(local_menu_file_path+"/**/*.json")
             try:
                 if os.path.exists(local_menu_file):
                     os.remove(local_menu_file)
                 if os.path.exists(local_menu_file+".aria2"):
                     os.remove(local_menu_file+".aria2")
+
+                for x in local_jsons:
+                    os.remove(x)
+
             except Exception as ex:
                 print(ex)
 
@@ -733,11 +769,12 @@ class GameStorePage(Page):
             return
         cur_li = self._MyList[self._PsIndex]
         if cur_li._Value["type"] == "launcher" or cur_li._Value["type"] == "pico8" or cur_li._Value["type"] == "tic80":
-            print(cur_li._Value["shots"])
-            self._PreviewPage._URL = cur_li._Value["shots"]
-            self._Screen.PushPage(self._PreviewPage)
-            self._Screen.Draw()
-            self._Screen.SwapAndShow()
+            if "shots" in cur_li._Value:
+                print(cur_li._Value["shots"])
+                self._PreviewPage._URL = cur_li._Value["shots"]
+                self._Screen.PushPage(self._PreviewPage)
+                self._Screen.Draw()
+                self._Screen.SwapAndShow()
 
 
     def RemoveGame(self):
@@ -760,33 +797,27 @@ class GameStorePage(Page):
                 conn.close()
             except Exception as ex:
                 print(ex)
-        elif "gid" in cur_li._Value:
+        elif cur_li._Value["type"] == "launcher" or cur_li._Value["type"] == "pico8" or cur_li._Value["type"] == "tic80":  
+            remote_file_url = cur_li._Value["file"]
+            menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
+            local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+            local_menu_file_path = os.path.dirname(local_menu_file)
+            
+            gid,ret = config.RPC.urlDownloading(remote_file_url)
+            if ret == True:
+                config.RPC.remove(gid)
+
             try:
-                gid = cur_li._Value["gid"]
-                conn = sqlite3.connect(self._aria2_db)
-                conn.row_factory = dict_factory
-                c = conn.cursor()
-                ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
-                if ret != None:
-                    remote_file_url = ret["file"]
-                    menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
-                    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
-                    try:
-                        if os.path.exists(local_menu_file):
-                            os.remove(local_menu_file)
-                        if os.path.exists(local_menu_file+".aria2"):
-                            os.remove(local_menu_file+".aria2")
-                    except Exception as ex:
-                        print(ex)
-
-
-                c.execute("DELETE FROM tasks WHERE gid = '%s'" % gid )
-                conn.commit()
-                conn.close()
+                if os.path.exists(local_menu_file):
+                    os.remove(local_menu_file)
+                if os.path.exists(local_menu_file+".aria2"):
+                    os.remove(local_menu_file+".aria2")
+                if os.path.exists( os.path.join(local_menu_file_path,cur_li._Value["title"])):
+                    rmtree(os.path.join(local_menu_file_path,cur_li._Value["title"]) )
+                
             except Exception as ex:
                 print(ex)
-        
-      
+       
     def Click(self):
         if self._PsIndex > len(self._MyList) -1:
             return
@@ -839,6 +870,7 @@ class GameStorePage(Page):
                     gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
 		    self._Downloading = gid
                     print("stack length ",self._MyStack.Length())
+                    """
                     if self._MyStack.Length() > 1:## not on the top list page
                         try:
                             conn = sqlite3.connect(self._aria2_db)
@@ -849,6 +881,7 @@ class GameStorePage(Page):
                             conn.close()
                         except Exception as ex:
                             print("SQLITE3 ",ex)
+                    """
                 else:
                     print(config.RPC.tellStatus(gid,["status","totalLength","completedLength"]))
 
@@ -863,7 +896,8 @@ class GameStorePage(Page):
             else:
                 print("file downloaded")# maybe check it if is installed,then execute it
                 if cur_li._Value["type"]=="launcher" and cur_li._ReadOnly == False:
-                    game_sh = os.path.join( "%s/apps/Menu/21_Indie Games/" % os.path.expanduser('~'),cur_li._Value["title"],cur_li._Value["title"]+".sh")
+                    local_menu_file_path = os.path.dirname(local_menu_file)
+                    game_sh = os.path.join( local_menu_file_path, cur_li._Value["title"],cur_li._Value["title"]+".sh")
                     #game_sh = reconstruct_broken_string( game_sh)
                     print("run game: ",game_sh, os.path.exists(  game_sh))
                     self._Screen.RunEXE(game_sh)
@@ -928,6 +962,8 @@ class GameStorePage(Page):
                     c.execute(sql_insert)
                     conn.commit()
                     self.SyncList()
+                    self._Screen.Draw()
+                    self._Screen.SwapAndShow()
             conn.close()
         except Exception as ex:
             print(ex)
@@ -942,9 +978,11 @@ class GameStorePage(Page):
             self._FootMsg[2] = "Remove"
             self._FootMsg[1] = "UpdateWare"
         else:
-            self._FootMsg[2] = "Up"
-            self._FootMsg[1] = ""
-
+            self._FootMsg[2] = "Remove"
+            self._FootMsg[1] = "Preview"
+        
+        self._GobjTimer = gobject.timeout_add(500, self.GObjectUpdateProcessInterval)
+        
         self.SyncList()
  
     def OnReturnBackCb(self):
@@ -953,8 +991,8 @@ class GameStorePage(Page):
             self._FootMsg[2] = "Remove"
             self._FootMsg[1] = "UpdateWare"
         else:
-            self._FootMsg[2] = ""
-            self._FootMsg[1] = ""
+            self._FootMsg[2] = "Remove"
+            self._FootMsg[1] = "Preview"
 
         self.SyncList()
         self._Screen.Draw()
@@ -974,7 +1012,7 @@ class GameStorePage(Page):
                    self._FootMsg[2] = "Remove"
                    self._FootMsg[1] = "UpdateWare"
                else:
-                   self._FootMsg[2] = ""
+                   self._FootMsg[2] = "Remove"
                    self._FootMsg[1] = "Preview"
 
                self.SyncList()
@@ -985,6 +1023,7 @@ class GameStorePage(Page):
                 self.ReturnToUpLevelPage()
                 self._Screen.Draw()
                 self._Screen.SwapAndShow()
+                gobject.source_remove(self._GobjTimer)
 
         if IsKeyStartOrA(event.key):
             self.Click()
@@ -993,7 +1032,7 @@ class GameStorePage(Page):
                 self._FootMsg[2] = "Remove"
                 self._FootMsg[1] = "UpdateWare"
             else:
-                self._FootMsg[2] = ""
+                self._FootMsg[2] = "Remove"
                 self._FootMsg[1] = "Preview"
 
             self._Screen.Draw()
@@ -1002,23 +1041,18 @@ class GameStorePage(Page):
 
         if event.key == CurKeys["X"]:
             #print(self._MyStack.Length() )
-            if self._MyStack.Length() == 1 and self._PsIndex > 0:
-                self._Screen.PushPage(self._remove_page)
-                self._remove_page._StartOrA_Event = self.RemoveGame
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
+            if  self._PsIndex <= len(self._MyList) -1:
+                cur_li = self._MyList[self._PsIndex]
+                if  cur_li._Type != "dir":
+                    if self._MyStack.Length() == 1 and self._PsIndex == 0:
+                        pass
+                        #predefined source
+                    else:
+                        self._Screen.PushPage(self._remove_page)
+                        self._remove_page._StartOrA_Event = self.RemoveGame
+                        self._Screen.Draw()
+                        self._Screen.SwapAndShow()
                 return 
-
-            """
-            if self._MyStack.Length() > 1:
-               self._MyStack.Pop()
-               if self._MyStack.Length() == 1:
-                   self._FootMsg[2] = "Remove"
-                   self._FootMsg[1] = "UpdateWare"
-               else:
-                   self._FootMsg[2] = "Up"
-                   self._FootMsg[1] = "Preview"
-            """
 
             self.SyncList()
             self._Screen.Draw()

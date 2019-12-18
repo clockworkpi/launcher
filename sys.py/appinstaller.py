@@ -21,29 +21,37 @@ def dict_factory(cursor, row):
     return d
 
 @misc.threaded
-def game_install_thread(gid):
+def game_install_thread(aria2_result):
     try:
-        conn = sqlite3.connect(aria2_db)
-        conn.row_factory = dict_factory
-        c = conn.cursor()
-        ret = c.execute("SELECT * FROM tasks WHERE gid='%s'" % gid ).fetchone()
-        if ret == None:
-            conn.close()
+        #print("game_install_thread ",aria2_result)
+        if "files" in aria2_result:
+            if len(aria2_result["files"]) <= 0:
+                return
+        if "arm" not in platform.machine():
             return
 
-        c.execute("UPDATE tasks SET status='complete' WHERE gid='%s'" % gid)
-        conn.commit()
-        conn.close()
+        ret = aria2_result["files"][0]['uris']
 
-        remote_file_url = ret["file"]
+        remote_file_url = ret[0]['uri']
         menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
         local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
-        
-        if os.path.exists(local_menu_file) == True and "arm" in platform.machine():
-           gametype = ret["type"]
+        local_menu_file_path = os.path.dirname(local_menu_file)
+
+
+        if os.path.exists(local_menu_file) == True:
+
+           gametype = "launcher"
+
+           if local_menu_file.endswith(".tar.gz"):
+               gametype = "launcher"
+           if local_menu_file.endswith(".p8.png"):
+               gametype = "pico8"
+           if local_menu_file.endswith(".tic"):
+               gametype = "tic80"
+
            if gametype == "launcher":
                #tar zxvf 
-               _cmd = "tar zxvf '%s' -C %s" % (local_menu_file, "~/apps/Menu/21_Indie\ Games/")
+               _cmd = "tar zxvf '%s' -C %s" % (local_menu_file, local_menu_file_path)
                print(_cmd)
                os.system(_cmd)
            if gametype == "pico8":
@@ -57,10 +65,8 @@ def game_install_thread(gid):
 
 
     except Exception as ex:
-        print("Sqlite3 error: ",ex)
+        print("app install error: ",ex)
          
-        
-        
 
 def on_message(ws, message):
     global rpc
@@ -76,16 +82,17 @@ def on_message(ws, message):
 
     if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadComplete":
          gid = aria2_noti["params"][0]["gid"]
-         #msg = rpc.tellStatus(gid)
-         #ws.send(msg)
-         game_install_thread(gid)
+         msg = rpc.tellStatus(gid)
+         ws.send(msg)
+         #game_install_thread(gid)
     
     if "method" not in aria2_noti and "result" in aria2_noti:
-        if "status" in aria2_noti:
-             if aria2_noti["status"] == "error":
+        result = aria2_noti["result"]
+        if "status" in result:
+             if result["status"] == "error":
                  try:
-                     print(aria2_noti["errorMessage"])
-                     for x in aria2_noti["files"]:
+                     print(result["errorMessage"])
+                     for x in result["files"]:
                          if os.path.exists(x["path"]):
                              os.remove(x["path"])
                          if os.path.exists(x["path"]+".aria2"):
@@ -93,6 +100,8 @@ def on_message(ws, message):
 
                  except Exception as ex:
                      print(ex)
+             if result["status"] == "complete":
+                 game_install_thread(result)
 
        
 def on_error(ws, error):
