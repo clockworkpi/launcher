@@ -146,7 +146,11 @@ class LoadHousePage(Page):
                         ret = False
 
                         self.Leave()
-                        
+                    else:
+                        self._Screen._MsgBox.SetText("Fetch house failed")
+                        self._Screen._MsgBox.Draw()
+                        self._Screen.SwapAndShow()
+                        ret = False
                 return ret
         else:
             return False
@@ -183,7 +187,7 @@ class LoadHousePage(Page):
 
 
 class ImageDownloadProcessPage(Page):
-    _FootMsg = ["Nav.","","","Back","Cancel"]
+    _FootMsg = ["Nav.","","","Back",""]
     _DownloaderTimer = -1
     _Value = 0
     _URL = None
@@ -522,7 +526,7 @@ class GameStoreListItem(InfoPageListItem):
  
 
 class GameStorePage(Page):
-    _FootMsg =  ["Nav","UpdateWare","Up","Back","Select"]
+    _FootMsg =  ["Nav","Update","Up","Back","Select"]
     _MyList = []
     _ListFont12 = MyLangManager.TrFont("notosanscjk12")
     _ListFont15 = MyLangManager.TrFont("varela15")
@@ -546,11 +550,12 @@ class GameStorePage(Page):
         Page.__init__(self)
         self._Icons = {}
 	self._MyStack = RPCStack()
-	#title path type
-
+	#title file type
+        ## Two level url , only github.com
+        
         repos = [
-            {"title":"github.com/cuu/gamestore","file":"https://raw.githubusercontent.com/cuu/gamestore/master/index.json","type":"source"}
-        ]
+        {"title":"github.com/clockworkpi/warehouse","file":"https://raw.githubusercontent.com/clockworkpi/warehouse/master/index.json","type":"source"}
+       ]
 	self._MyStack.Push(repos)
  
     def GObjectUpdateProcessInterval(self):
@@ -666,7 +671,12 @@ class GameStorePage(Page):
                 li.SetSmallText("")
             
             self._MyList.append(li)
-
+            
+            if self._PsIndex > len(self._MyList) - 1:
+                self._PsIndex = len(self._MyList) - 1
+            if self._PsIndex < 0:
+                self._PsIndex = 0   
+            
         
     def Init(self):
         if self._Screen != None:
@@ -696,7 +706,7 @@ class GameStorePage(Page):
         self._Scroller._PosX = self._Width - 10
         self._Scroller._PosY = 2
         self._Scroller.Init()
-        self._Scroller.SetCanvasHWND(self._HWND)
+        self._Scroller.SetCanvasHWND(self._CanvasHWND)
  
         self._remove_page = YesCancelConfirmPage()
         self._remove_page._Screen = self._Screen
@@ -705,9 +715,9 @@ class GameStorePage(Page):
         self._remove_page._Name ="Are you sure?"
         self._remove_page.Init()
 
-
         self._Keyboard = Keyboard()
         self._Keyboard._Name = "Enter warehouse addr"
+        self._Keyboard._FootMsg = ["Nav.","Add","ABC","Backspace","Enter"]
         self._Keyboard._Screen = self._Screen
         self._Keyboard.Init()
         self._Keyboard.SetPassword("github.com/clockworkpi/warehouse")
@@ -976,7 +986,7 @@ class GameStorePage(Page):
         print("OnLoadCb")
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
-            self._FootMsg[1] = "UpdateWare"
+            self._FootMsg[1] = "Update"
         else:
             self._FootMsg[2] = "Remove"
             self._FootMsg[1] = "Preview"
@@ -989,7 +999,7 @@ class GameStorePage(Page):
 
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
-            self._FootMsg[1] = "UpdateWare"
+            self._FootMsg[1] = "Update"
         else:
             self._FootMsg[2] = "Remove"
             self._FootMsg[1] = "Preview"
@@ -1010,10 +1020,13 @@ class GameStorePage(Page):
                self._MyStack.Pop()
                if self._MyStack.Length() == 1:
                    self._FootMsg[2] = "Remove"
-                   self._FootMsg[1] = "UpdateWare"
+                   self._FootMsg[1] = "Update"
                else:
                    self._FootMsg[2] = "Remove"
                    self._FootMsg[1] = "Preview"
+                   if self._MyStack.Length() == 2:
+                       self._FootMsg[2] = ""
+                       self._FootMsg[1] = ""
 
                self.SyncList()
                self._Screen.Draw()
@@ -1030,10 +1043,14 @@ class GameStorePage(Page):
 
             if self._MyStack.Length() == 1:
                 self._FootMsg[2] = "Remove"
-                self._FootMsg[1] = "UpdateWare"
+                self._FootMsg[1] = "Update"
             else:
                 self._FootMsg[2] = "Remove"
                 self._FootMsg[1] = "Preview"
+                if self._MyStack.Length() == 2:
+                    self._FootMsg[2] = ""
+                    self._FootMsg[1] = ""
+                
 
             self._Screen.Draw()
             self._Screen.SwapAndShow()

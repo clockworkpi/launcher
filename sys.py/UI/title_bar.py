@@ -374,7 +374,7 @@ class TitleBar(Widget):
         
         self._Icons["bluetooth"].Draw()
 
-        self._Icons["dlstatus"].Draw()
+        #self._Icons["dlstatus"].Draw()
        
  
         pygame.draw.line(self._CanvasHWND,self._SkinManager.GiveColor("Line"),(0,self._BarHeight),(self._Width,self._BarHeight),self._BorderWidth)
