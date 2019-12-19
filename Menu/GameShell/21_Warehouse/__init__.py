@@ -927,6 +927,9 @@ class GameStorePage(Page):
 
     def OnAria2CompleteCb(self,gid):
         print("OnAria2CompleteCb ", gid)
+        self.SyncList()
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
  
     def raw_github_com(self,_url):#eg: github.com/clockworkpi/warehouse
         if _url.startswith("github.com")== False:

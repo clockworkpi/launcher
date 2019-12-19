@@ -23,6 +23,7 @@ import gobject
 import socket
 import pygame
 from sys import exit
+import json
 
 #from beeprint import pp
 ########
@@ -481,7 +482,21 @@ def gobject_pygame_event_timer(main_screen):
 @misc.threaded
 def aria2_ws(main_screen):
     def on_message(ws, message):
-        print(message)
+        print("run.py aria2_ws on_message: ",message)
+        try:
+            aria2_noti = json.loads(message)
+            if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadError":
+                gid = aria2_noti["params"][0]["gid"]
+
+            if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadComplete":
+                gid = aria2_noti["params"][0]["gid"]
+                on_comp_cb = getattr(main_screen._CurrentPage,"OnAria2CompleteCb",None)
+                if on_comp_cb != None:
+                    if callable( on_comp_cb ):
+                        main_screen._CurrentPage.OnAria2CompleteCb(gid)
+                #game_install_thread(gid)
+        except Exception as ex:
+            print(ex)
 
     def on_error(ws, error):
         print(error)
@@ -490,7 +505,7 @@ def aria2_ws(main_screen):
         print("### closed ###")
     
      
-    websocket.enableTrace(True)
+    #websocket.enableTrace(True)
     try:
         ws = websocket.WebSocketApp("ws://localhost:6800/jsonrpc",
                               on_message = on_message,
