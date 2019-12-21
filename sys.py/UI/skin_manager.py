@@ -28,9 +28,21 @@ class SkinManager(object):
 
     def __init__(self):
         self.Init()
+    
+    def configExists(self):
+        if FileExists(config.SKIN+"/config.ini"):
+            self._Config = CaseConfigParser()
+            fname = config.SKIN+"/config.ini"        
+            try:
+                return self._Config.read(fname)
+            except Exception, e:
+                print("skin config.ini read error %s" % str(e))
+                return
+        else:
+            print("no skin config.ini file to read")
+            return
 
     def ConvertToRGB(self,hexstr):
-        
         h = hexstr.lstrip('#')
         return tuple(int(h[i:i+2], 16) for i in (0, 2 ,4))
     
@@ -40,18 +52,28 @@ class SkinManager(object):
         if not SkinManager._Fonts:
             self.SetFonts()
     
-    def SetFonts(self):
+    def SetFonts(self):          
         if not pygame.font.get_init():
             pygame.font.init()
-            
+        
         skinpath = config.SKIN+"/truetype"
         fonts_path = {}
         fonts_path["varela"]   = "%s/VarelaRound-Regular.ttf" % skinpath
-        print(fonts_path["varela"])
         fonts_path["veramono"] = "%s/VeraMono.ttf" % skinpath
         fonts_path["noto"]     = "%s/NotoSansMono-Regular.ttf" % skinpath
         fonts_path["notocjk"]     = "%s/NotoSansCJK-Regular.ttf" % skinpath
-    
+        
+        if self.configExists():
+            if "Font_Paths" in self._Config.sections():
+                font_opts = self._Config.options("Font_Paths")
+                for i in fonts_path:
+                    if i in font_opts:
+                        try:
+                            fonts_path[i] = skinpath+"/"+self._Config.get("Font_Paths", i)+".ttf"
+                        except Exception, e:
+                            print("error in Font_Paths %s" % str(e))
+                            continue
+        
         for i in range(10,29):
           self._Fonts["varela%d"%i] = pygame.font.Font(fonts_path["varela"],i)
           
@@ -84,29 +106,19 @@ class SkinManager(object):
         Colors["White"] = pygame.Color(255, 255, 255)
         Colors["Black"] = pygame.Color(0, 0, 0)
 
-        SkinManager._Colors = Colors
-
-        self._Config = CaseConfigParser()
-
-        fname = config.SKIN+"/config.ini"
-
-        try:
-            self._Config.read(fname)
-        except Exception, e:
-            print("read skin config.cfg error %s" % str(e))
-            return
-        else:
+        if self.configExists():
             if "Colors" in self._Config.sections():
                 colour_opts = self._Config.options("Colors")
-#                print(colour_opts)
-                for i in SkinManager._Colors:
+                for i in Colors:
                     if i in colour_opts:
                         try:
-                            SkinManager._Colors[i] = self.ConvertToRGB(
+                            Colors[i] = self.ConvertToRGB(
                                 self._Config.get("Colors", i))
                         except Exception, e:
                             print("error in ConvertToRGB %s" % str(e))
                             continue
+        
+        SkinManager._Colors = Colors
     
     def GiveFont(self,name):
         return SkinManager._Fonts[name]
@@ -161,5 +173,3 @@ def InitMySkinManager():
     
 
 InitMySkinManager()
-
-
