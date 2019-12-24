@@ -355,7 +355,7 @@ def event_process(event,main_screen):
                 release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
-                os.exelp("python","python"," "+myscriptname)
+                os.execlp("python","python"," "+myscriptname)
                 sys.exit(-1)
             return
 
@@ -381,7 +381,7 @@ def event_process(event,main_screen):
                 release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
-                os.exelp("python","python"," "+myscriptname)
+                os.execlp("python","python"," "+myscriptname)
             return
         if event.type == RESTARTUI:
             pygame.quit()
@@ -392,7 +392,7 @@ def event_process(event,main_screen):
             release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             os.chdir( GetExePath())
-            os.exelp("python","python"," "+myscriptname)
+            os.execlp("python","python"," "+myscriptname)
             return
         if event.type == RUNSH:
             pygame.quit()
