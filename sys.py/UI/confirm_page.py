@@ -62,13 +62,13 @@ class ConfirmPage(Page):
     _BGWidth     = 0
     _BGHeight    = 0
     _Parent      = None
-    
+ 
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
         self._CanvasHWND = None
         self._MyList = []
-        
+
     def Reset(self):
         self._MyList[0].SetText(self._ConfirmText)
         self._MyList[0]._PosX = (self._Width - self._MyList[0]._Width)/2

@@ -20,7 +20,7 @@ from lang_manager import MyLangManager
 from util_funcs  import midRect,SwapAndShow
 from skin_manager import MySkinManager
 from widget      import Widget
-from config import Battery
+from config import Battery,RPC
 
 from libs.roundrects import aa_round_rect
 
@@ -50,6 +50,13 @@ class TitleBar(Widget):
     def __init__(self):
         self._Icons = {}
 
+    def Redraw(self):
+        #self.CheckBatteryStat()
+        #self.SyncSoundVolume()
+        #self.CheckBluetooth()
+        #self.UpdateWifiStrength()
+        self.UpdateDownloadStatus()
+        SwapAndShow()
 
     def GObjectRoundRobin(self):
         if self._InLowBackLight < 0:
@@ -57,7 +64,8 @@ class TitleBar(Widget):
             self.SyncSoundVolume()
             self.CheckBluetooth()
             self.UpdateWifiStrength()
-            
+            self.UpdateDownloadStatus()
+ 
             SwapAndShow()
 #            print("TitleBar Gobjectroundrobin")
         elif self._InLowBackLight >= 0:
@@ -67,11 +75,20 @@ class TitleBar(Widget):
                 self.SyncSoundVolume()
                 self.CheckBluetooth()
                 self.UpdateWifiStrength()
+                self.UpdateDownloadStatus()
                 SwapAndShow() 
                 self._InLowBackLight = 0
         
         return True
-    
+
+    def UpdateDownloadStatus(self):
+        resp = RPC.getGlobalStat()
+        
+        if( int(resp["numActive"]) > 0):
+           self._Icons["dlstatus"]._IconIndex = 1
+        elif( int(resp["numActive"]) == 0):
+           self._Icons["dlstatus"]._IconIndex = 0
+       
     def UpdateWifiStrength(self):
         self.Draw(self._Title)
         
@@ -166,11 +183,11 @@ class TitleBar(Widget):
                     self._Icons["battery_charging"]._IconIndex = cap_ge
                     self._Icons["battery"] = self._Icons["battery_charging"]
             
-                    print("Charging %d" % cap_ge)
+                    #print("Charging %d" % cap_ge)
                 else:
                     self._Icons["battery_discharging"]._IconIndex = cap_ge
                     self._Icons["battery"] = self._Icons["battery_discharging"]
-                    print("Discharging %d" % cap_ge)
+                    #print("Discharging %d" % cap_ge)
                     
                 
         return True
@@ -264,6 +281,15 @@ class TitleBar(Widget):
 
         self._Icons["round_corners"] = round_corners
         
+        dlstatus =  MultiIconItem()
+        dlstatus._MyType = ICON_TYPES["STAT"]
+        dlstatus._Parent = self
+        dlstatus._ImageName = icon_base_path+"dlstatus18.png"
+        dlstatus.Adjust(start_x+self._icon_width+self._icon_width+8,self._icon_height/2+(self._BarHeight-self._icon_height)/2,self._icon_width,self._icon_height,0)
+        
+        self._Icons["dlstatus"] = dlstatus
+        self.UpdateDownloadStatus()
+
         if is_wifi_connected_now():
             print("wifi is connected")
             print( wifi_strength())
@@ -312,6 +338,8 @@ class TitleBar(Widget):
 
         start_x = Width-time_text_size[0]-self._ROffset-self._icon_width*3 # near by the time_text
         
+        self._Icons["dlstatus"].NewCoord(start_x - self._icon_width*2,self._icon_height/2+(self._BarHeight-self._icon_height)/2)
+
         self._Icons["bluetooth"].NewCoord(start_x - self._icon_width,self._icon_height/2+(self._BarHeight-self._icon_height)/2)
         
         self._Icons["sound"].NewCoord(start_x, self._icon_height/2+(self._BarHeight-self._icon_height)/2)
@@ -345,7 +373,10 @@ class TitleBar(Widget):
         self._Icons["battery"].Draw()
         
         self._Icons["bluetooth"].Draw()
-        
+
+        #self._Icons["dlstatus"].Draw()
+       
+ 
         pygame.draw.line(self._CanvasHWND,self._SkinManager.GiveColor("Line"),(0,self._BarHeight),(self._Width,self._BarHeight),self._BorderWidth)
 
         if self._HWND != None:

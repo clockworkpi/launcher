@@ -21,3 +21,4 @@ screenshots/*
 *.log
 .DS_Store
 sys.py/.*
+sys.py/*.db

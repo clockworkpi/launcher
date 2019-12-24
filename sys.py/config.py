@@ -2,6 +2,7 @@
 import os
 import platform
 from UI.util_funcs   import FileExists,ArmSystem
+from pyaria2_rpc.pyaria2 import Xmlrpc
 
 CurKeySet = "GameShell" ## >>>    PC or GameShell   <<<
 
@@ -9,7 +10,6 @@ DontLeave = False
 
 BackLight = "/proc/driver/backlight"
 Battery   = "/sys/class/power_supply/axp20x-battery/uevent"
-
 
 MPD_socket = "/tmp/mpd.socket"
 
@@ -21,6 +21,7 @@ SKIN=None
 
 ButtonsLayout="xbox"
 
+RPC = None
 ## three timer values in seconds: dim screen, close screen,PowerOff
 ## zero means no action
 PowerLevels = {}
@@ -34,7 +35,7 @@ PowerLevel = "balance_saving"
 def PreparationInAdv():
     global SKIN,ButtonsLayout
     global PowerLevel
-    
+    global RPC 
     if SKIN != None:
         return
 
@@ -71,7 +72,8 @@ def PreparationInAdv():
             ArmSystem("sudo iw wlan0 set power_save on > /dev/null")
     else:
         ArmSystem("sudo iw wlan0 set power_save off >/dev/null")
-
+    
+    RPC = Xmlrpc('localhost', 6800) 
 PreparationInAdv()
 ##sys.py/.powerlevel
 

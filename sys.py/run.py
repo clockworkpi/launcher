@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import os
 import dbus
 import dbus.service
 import sys
@@ -7,7 +7,8 @@ import commands
 import logging
 import errno
 
-from wicd import misc 
+from wicd import misc
+import libs.websocket as websocket
 ##misc.to_bool
 ##misc.misc.noneToString
 ##misc.to_unicode
@@ -22,7 +23,7 @@ import gobject
 import socket
 import pygame
 from sys import exit
-import os
+import json
 
 #from beeprint import pp
 ########
@@ -163,11 +164,9 @@ def RestoreLastBackLightBrightness(main_screen):
                 f.seek(0)
                 f.write(str( last_brt ))
                 f.truncate()
-                f.close()
-                last_brt = -1
-            else:                
-                f.close()
 
+            f.close() 
+            last_brt = -1
     try:
         f = open("/proc/driver/led1","w")
     except IOError:
@@ -198,7 +197,6 @@ def InspectionTeam(main_screen):
     
     if cur_time - everytime_keydown > time_1 and passout_time_stage == 0:
         print("timeout, dim screen %d" % int(cur_time - everytime_keydown))
-
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -226,7 +224,6 @@ def InspectionTeam(main_screen):
     
     elif cur_time - everytime_keydown > time_2 and passout_time_stage == 1:
         print("timeout, close screen %d" % int(cur_time - everytime_keydown))
-        
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -482,6 +479,43 @@ def gobject_pygame_event_timer(main_screen):
     
     return True 
 
+@misc.threaded
+def aria2_ws(main_screen):
+    def on_message(ws, message):
+        print("run.py aria2_ws on_message: ",message)
+        try:
+            aria2_noti = json.loads(message)
+            if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadError":
+                gid = aria2_noti["params"][0]["gid"]
+
+            if "method" in aria2_noti and aria2_noti["method"] == "aria2.onDownloadComplete":
+                gid = aria2_noti["params"][0]["gid"]
+                on_comp_cb = getattr(main_screen._CurrentPage,"OnAria2CompleteCb",None)
+                if on_comp_cb != None:
+                    if callable( on_comp_cb ):
+                        main_screen._CurrentPage.OnAria2CompleteCb(gid)
+                #game_install_thread(gid)
+        except Exception as ex:
+            print(ex)
+
+    def on_error(ws, error):
+        print(error)
+
+    def on_close(ws):
+        print("### closed ###")
+    
+     
+    #websocket.enableTrace(True)
+    try:
+        ws = websocket.WebSocketApp("ws://localhost:6800/jsonrpc",
+                              on_message = on_message,
+                              on_error = on_error,
+                              on_close = on_close)
+#    ws.on_open = on_open
+        ws.run_forever()
+    except:
+        return
+
 
 @misc.threaded
 def socket_thread(main_screen):
@@ -540,8 +574,17 @@ def socket_thread(main_screen):
                                 api_cb = getattr(i._CmdPath,"API",None)
                                 if api_cb != None:
                                     if callable(api_cb):
-                                        i._CmdPath.API(main_screen)   
-                
+                                        i._CmdPath.API(main_screen)
+
+            if tokens[0].lower() == "redraw": #echo "redraw titlebar" | socat - UNIX-CONNECT:/tmp/gameshell
+                if len(tokens) > 1:
+                    area = tokens[1].lower()
+                    if area == "titlebar":
+                        if hasattr(main_screen._TitleBar,'Redraw'):
+                             if main_screen._TitleBar.Redraw != None and callable(main_screen._TitleBar.Redraw):
+                                  main_screen._TitleBar.Redraw()
+                    
+
 def big_loop():
     global sound_patch,gobject_flash_led1
     
@@ -583,6 +626,7 @@ def big_loop():
 
 
     socket_thread(main_screen)
+    aria2_ws(main_screen)
     
     gobject_loop()
     

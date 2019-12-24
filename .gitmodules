@@ -1,0 +1,3 @@
+[submodule "sys.py/pyaria2_rpc"]
+	path = sys.py/pyaria2_rpc
+	url = https://github.com/cuu/pyaria2_rpc.git

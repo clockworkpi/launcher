@@ -187,7 +187,7 @@ class DownloadProcessPage(Page):
         self._Downloader = Download(url,dst_dir,None)
         self._Downloader.start()
         
-        self._DownloaderTimer = gobject.timeout_add(100, self.GObjectUpdateProcessInterval)
+        self._DownloaderTimer = gobject.timeout_add(200, self.GObjectUpdateProcessInterval)
         
     def KeyDown(self,event):
         if IsKeyMenuOrB(event.key):
