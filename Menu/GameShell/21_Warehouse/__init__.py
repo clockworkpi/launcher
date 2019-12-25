@@ -920,6 +920,7 @@ class GameStorePage(Page):
                         self._Screen._MsgBox.SetText("Purchase pico8")
                         self._Screen._MsgBox.Draw()
                         self._Screen.SwapAndShow()
+                        pygame.time.delay(800)
                   
                 if cur_li._Value["type"]=="tic80" and cur_li._ReadOnly == False:
                     game_sh = "/home/cpi/apps/Menu/51_TIC-80/TIC-80.sh"
