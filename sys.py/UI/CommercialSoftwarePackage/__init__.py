@@ -272,7 +272,8 @@ class MyCommercialSoftwarePackage(object):
         
         os.chdir(json_config["GameDir"])
         for i,v in enumerate(json_config["MD5"]):
-            os.system("unzip -o %s" %v) ## auto overwrite 
+            if FileExists(v):
+                os.system("unzip -o %s" %v) ## auto overwrite 
         
         if "Post-Up" in json_config:
             if FileExists(self._InvokeDir):
