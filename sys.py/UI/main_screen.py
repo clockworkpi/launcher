@@ -539,12 +539,15 @@ class MainScreen(Widget):
                     elif self.IsCommercialPackage( os.path.join(_dir,i)):
                         data = None
                         em = MyCommercialSoftwarePackage()
+                        
+                        with open(os.path.join(_dir,i) +"/"+commercialsoftware_flag) as f:
+                            data = json.load(f)
+                        
                         if FileExists( _dir+"/"+i+"/.done"):
                             print(_dir+"/"+i+"/.done")
                             em._Done = os.path.realpath(_dir+"/"+i+"/"+i2+".sh")
+                            em._ComPkgInfo = data
                         else:
-                            with open(os.path.join(_dir,i) +"/"+commercialsoftware_flag) as f:
-                                data = json.load(f)
                             em._ComPkgInfo = data
                             em._Done = ""
                         
