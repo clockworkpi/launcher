@@ -960,23 +960,28 @@ class GameStorePage(Page):
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
             else:
-                valid_url= self.raw_github_com(inputed)
-                
-                if valid_url == False:
+                if "github.com/clockworkpi/warehouse" in inputed:
                     self._Screen._MsgBox.SetText("Warehouse existed!")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
                 else:
-                    sql_insert = """ INSERT INTO warehouse(title,file,type) VALUES(
+                    valid_url= self.raw_github_com(inputed)
+                
+                    if valid_url == False:
+                        self._Screen._MsgBox.SetText("Warehouse url error!")
+                        self._Screen._MsgBox.Draw()
+                        self._Screen.SwapAndShow()
+                    else:
+                        sql_insert = """ INSERT INTO warehouse(title,file,type) VALUES(
                                      '%s',
                                      '%s',
                                      'source');""" % (inputed,valid_url)
 
-                    c.execute(sql_insert)
-                    conn.commit()
-                    self.SyncList()
-                    self._Screen.Draw()
-                    self._Screen.SwapAndShow()
+                        c.execute(sql_insert)
+                        conn.commit()
+                        self.SyncList()
+                        self._Screen.Draw()
+                        self._Screen.SwapAndShow()
             conn.close()
         except Exception as ex:
             print(ex)
