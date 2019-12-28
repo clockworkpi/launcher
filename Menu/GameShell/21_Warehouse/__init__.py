@@ -59,7 +59,6 @@ class RPCStack:
 
 class LoadHousePage(Page):
     _FootMsg = ["Nav.","","","Back","Cancel"]
-    _DownloaderTimer = -1
     _Value = 0
     _URL = None
     _ListFontObj = MyLangManager.TrFont("varela18")
@@ -188,7 +187,6 @@ class LoadHousePage(Page):
 
 class ImageDownloadProcessPage(Page):
     _FootMsg = ["Nav.","","","Back",""]
-    _DownloaderTimer = -1
     _Value = 0
     _URL = None
     _ListFontObj = MyLangManager.TrFont("varela13")
@@ -344,35 +342,36 @@ class Aria2DownloadProcessPage(Page):
         self._SizeLabel.Init("0/0Kb",MyLangManager.TrFont("varela12"))
         self._SizeLabel.SetColor( self._URLColor )
  
+    @property
     def GObjectUpdateProcessInterval(self):
+        downloaded = 0
         if self._Screen.CurPage() == self and self._GID is not None:
                 self._Value =  config.RPC.tellStatus(self._GID)
-	        
+            
                 downloaded = 0
                 total = 0
-	
-		if self._Value["status"] == "waiting":
-                    self._FileNameLabel.SetText( "waiting to download..." )
-                if self._Value["status"] == "paused":
-                    self._FileNameLabel.SetText( "download paused..." )
-                if self._Value["status"] == "error":
-                    self._FileNameLabel.SetText("download errors,cancel it please")
-                
-                if self._Value["status"] == "active":
-                    downloaded = self._Value["completedLength"]
-                    total      = self._Value["totalLength"]
 
-                    downloaded = downloaded/1000.0/1000.0
-                    total      = total/1000.0/1000.0
-                
-                self._SizeLabel.SetText( "%.2f" % downloaded+"/"+ "%.2f" % total +"Mb")
-                
-                print("Progress: %d%%" % (self._Value))
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-                return True
-        else:
-            return False
+        if self._Value["status"] == "waiting":
+            self._FileNameLabel.SetText("waiting to download...")
+        if self._Value["status"] == "paused":
+            self._FileNameLabel.SetText("download paused...")
+        if self._Value["status"] == "error":
+            self._FileNameLabel.SetText("download errors,cancel it please")
+
+        if self._Value["status"] == "active":
+            downloaded = self._Value["completedLength"]
+            total = self._Value["totalLength"]
+
+            downloaded = downloaded / 1000.0 / 1000.0
+            total = total / 1000.0 / 1000.0
+
+        self._SizeLabel.SetText("%.2f" % downloaded+"/"+"%.2f" % total+"Mb")
+
+        print("Progress: %d%%" % (self._Value))
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        return True
+
     
     def CheckDownload(self,aria2_gid):
         self._GID = aria2_gid 
@@ -549,14 +548,14 @@ class GameStorePage(Page):
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
-	      self._MyStack = RPCStack()
-	      #title file type
+        self._MyStack = RPCStack()
+          #title file type
         ## Two level url , only github.com
         
         repos = [
-        {"title":"github.com/clockworkpi/warehouse","file":"https://raw.githubusercontent.com/clockworkpi/warehouse/master/index.json","type":"source"}
-       ]
-	      self._MyStack.Push(repos)
+         {"title":"github.com/clockworkpi/warehouse","file":"https://raw.githubusercontent.com/clockworkpi/warehouse/master/index.json","type":"source"}
+        ]
+        self._MyStack.Push(repos)
  
     def GObjectUpdateProcessInterval(self):
         ret = True
@@ -837,24 +836,24 @@ class GameStorePage(Page):
         #    return
 
         print("cur_li._Value",cur_li._Value)
-	
-	if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
-	    remote_file_url = cur_li._Value["file"]
-	    menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
-	    local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+    
+    if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
+        remote_file_url = cur_li._Value["file"]
+        menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
+        local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
             print(local_menu_file)
             if FileExists( local_menu_file ) == False:
                 self.LoadHouse()
-	    else:
+        else:
                 #read the local_menu_file, push into stack,display menu
-		self._Downloading = None
+        self._Downloading = None
                 try:
-		    with open(local_menu_file) as json_file:
-		        local_menu_json = json.load(json_file)
+            with open(local_menu_file) as json_file:
+                local_menu_json = json.load(json_file)
                         print(local_menu_json)
- 		        self._MyStack.Push(local_menu_json["list"])
-		
-		        self.SyncList()
+                self._MyStack.Push(local_menu_json["list"])
+        
+                self.SyncList()
                         self._Screen.Draw()
                         self._Screen.SwapAndShow()
                 except Exception as ex:
@@ -862,23 +861,23 @@ class GameStorePage(Page):
                     self._Screen._MsgBox.SetText("Open house failed ")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
-		
-	elif cur_li._Value["type"] == "add_house":
+        
+    elif cur_li._Value["type"] == "add_house":
             print("show keyboard to add ware house")
             self._Screen.PushCurPage()
             self._Screen.SetCurPage( self._Keyboard )
  
         else:
-	    #download the game probably
-	    remote_file_url = cur_li._Value["file"]
+        #download the game probably
+        remote_file_url = cur_li._Value["file"]
             menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
             local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
             
-	    if FileExists( local_menu_file ) == False:
+        if FileExists( local_menu_file ) == False:
                 gid,ret = config.RPC.urlDownloading(remote_file_url)
                 if ret == False:
                     gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
-		    self._Downloading = gid
+            self._Downloading = gid
                     print("stack length ",self._MyStack.Length())
                     """
                     if self._MyStack.Length() > 1:## not on the top list page
