@@ -826,58 +826,57 @@ class GameStorePage(Page):
                 
             except Exception as ex:
                 print(ex)
-       
+
     def Click(self):
         if self._PsIndex > len(self._MyList) -1:
             return
-        
+
         cur_li = self._MyList[self._PsIndex]
         #if cur_li._Active == True:
         #    return
 
         print("cur_li._Value",cur_li._Value)
-    
-    if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
-        remote_file_url = cur_li._Value["file"]
-        menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
-        local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
+
+        if cur_li._Value["type"] == "source" or cur_li._Value["type"] == "dir":
+            remote_file_url = cur_li._Value["file"]
+            menu_file = remote_file_url.split("raw.githubusercontent.com")[1] #assume master branch
+            local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
             print(local_menu_file)
             if FileExists( local_menu_file ) == False:
                 self.LoadHouse()
-        else:
-                #read the local_menu_file, push into stack,display menu
-        self._Downloading = None
+            else:
+            #read the local_menu_file, push into stack,display menu
+                self._Downloading = None
                 try:
-            with open(local_menu_file) as json_file:
-                local_menu_json = json.load(json_file)
+                    with open(local_menu_file) as json_file:
+                        local_menu_json = json.load(json_file)
                         print(local_menu_json)
-                self._MyStack.Push(local_menu_json["list"])
-        
-                self.SyncList()
-                        self._Screen.Draw()
-                        self._Screen.SwapAndShow()
+                        self._MyStack.Push(local_menu_json["list"])
+
+                    self.SyncList()
+                    self._Screen.Draw()
+                    self._Screen.SwapAndShow()
                 except Exception as ex:
                     print(ex)
                     self._Screen._MsgBox.SetText("Open house failed ")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
-        
-    elif cur_li._Value["type"] == "add_house":
+
+        elif cur_li._Value["type"] == "add_house":
             print("show keyboard to add ware house")
             self._Screen.PushCurPage()
             self._Screen.SetCurPage( self._Keyboard )
- 
         else:
-        #download the game probably
-        remote_file_url = cur_li._Value["file"]
+            #download the game probably
+            remote_file_url = cur_li._Value["file"]
             menu_file = remote_file_url.split("raw.githubusercontent.com")[1]
             local_menu_file = "%s/aria2download%s" % (os.path.expanduser('~'),menu_file )
-            
-        if FileExists( local_menu_file ) == False:
+
+            if FileExists( local_menu_file ) == False:
                 gid,ret = config.RPC.urlDownloading(remote_file_url)
                 if ret == False:
                     gid = config.RPC.addUri( remote_file_url, options={"out": menu_file})
-            self._Downloading = gid
+                    self._Downloading = gid
                     print("stack length ",self._MyStack.Length())
                     """
                     if self._MyStack.Length() > 1:## not on the top list page
@@ -894,14 +893,13 @@ class GameStorePage(Page):
                 else:
                     print(config.RPC.tellStatus(gid,["status","totalLength","completedLength"]))
 
-                self._Screen._MsgBox.SetText("Getting the game now")
-                self._Screen._MsgBox.Draw() 
-                self._Screen.SwapAndShow()
+                    self._Screen._MsgBox.SetText("Getting the game now")
+                    self._Screen._MsgBox.Draw()
+                    self._Screen.SwapAndShow()
 
-                pygame.time.delay(800)
-                self._Screen._TitleBar.Redraw()
+                    pygame.time.delay(800)
+                    self._Screen._TitleBar.Redraw()
 
-               
             else:
                 print("file downloaded")# maybe check it if is installed,then execute it
                 if cur_li._Value["type"]=="launcher" and cur_li._ReadOnly == False:
@@ -920,7 +918,7 @@ class GameStorePage(Page):
                         self._Screen._MsgBox.Draw()
                         self._Screen.SwapAndShow()
                         pygame.time.delay(800)
-                  
+
                 if cur_li._Value["type"]=="tic80" and cur_li._ReadOnly == False:
                     game_sh = "/home/cpi/apps/Menu/51_TIC-80/TIC-80.sh"
                     self._Screen.RunEXE(game_sh)
