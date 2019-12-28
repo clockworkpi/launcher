@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FIRM=`cat /proc/driver/brcmf_fw`
+FIRM=$(cat /proc/driver/brcmf_fw)
 
 if [[ $FIRM =~ .*a0.* ]]
 then
