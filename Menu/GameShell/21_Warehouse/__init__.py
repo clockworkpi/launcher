@@ -497,7 +497,7 @@ class GameStoreListItem(InfoPageListItem):
             self._Icons["ware"].NewCoord( 4, (self._Height - self._Icons["ware"]._Height)/2 )
             self._Icons["ware"].DrawTopLeft()
         
-        if self._Type == "launcher" or self._Type == "pico8":
+        if self._Type == "launcher" or self._Type == "pico8" or self._Type == "tic80":
             _icon = "app"
             if self._ReadOnly == True:
                 _icon = "appdling"
@@ -549,14 +549,14 @@ class GameStorePage(Page):
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
-	self._MyStack = RPCStack()
-	#title file type
+	      self._MyStack = RPCStack()
+	      #title file type
         ## Two level url , only github.com
         
         repos = [
         {"title":"github.com/clockworkpi/warehouse","file":"https://raw.githubusercontent.com/clockworkpi/warehouse/master/index.json","type":"source"}
        ]
-	self._MyStack.Push(repos)
+	      self._MyStack.Push(repos)
  
     def GObjectUpdateProcessInterval(self):
         ret = True
