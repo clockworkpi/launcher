@@ -544,7 +544,9 @@ class GameStorePage(Page):
     _aria2_db = "aria2tasks.db"
     _warehouse_db = "warehouse.db"
     _GobjTimer = -1
-    
+
+    _Scrolled_cnt = 0
+
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
@@ -671,10 +673,7 @@ class GameStorePage(Page):
             
             self._MyList.append(li)
             
-            if self._PsIndex > len(self._MyList) - 1:
-                self._PsIndex = len(self._MyList) - 1
-            if self._PsIndex < 0:
-                self._PsIndex = 0   
+        self.RefreshPsIndex()
             
         
     def Init(self):
@@ -724,7 +723,7 @@ class GameStorePage(Page):
 
         self._PreviewPage = ImageDownloadProcessPage()
         self._PreviewPage._Screen = self._Screen
-        self._PreviewPage._Name = "preview"
+        self._PreviewPage._Name = "Preview"
         self._PreviewPage.Init()
 
         self._LoadHousePage = LoadHousePage()
@@ -1002,7 +1001,6 @@ class GameStorePage(Page):
         self.SyncList()
  
     def OnReturnBackCb(self):
-
         if self._MyStack.Length() == 1:
             self._FootMsg[2] = "Remove"
             self._FootMsg[1] = "Update"
@@ -1011,6 +1009,8 @@ class GameStorePage(Page):
             self._FootMsg[1] = "Preview"
 
         self.SyncList()
+        self.RestoreScrolled()
+
         self._Screen.Draw()
         self._Screen.SwapAndShow()
        
@@ -1019,6 +1019,34 @@ class GameStorePage(Page):
         self._Screen.Draw()
         self._Screen.SwapAndShow()
         """
+
+    def ScrollDown(self):
+        if len(self._MyList) == 0:
+            return
+        self._PsIndex += 1
+        if self._PsIndex >= len(self._MyList):
+            self._PsIndex = len(self._MyList)-1
+
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._PosY+cur_li._Height > self._Height:
+            for i in range(0, len(self._MyList)):
+                self._MyList[i]._PosY -= self._MyList[i]._Height
+
+            self._Scrolled_cnt -= self._MyList[i]._Height
+
+    def ScrollUp(self):
+        if len(self._MyList) == 0:
+            return
+        self._PsIndex -= 1
+        if self._PsIndex < 0:
+            self._PsIndex = 0
+        cur_li = self._MyList[self._PsIndex]
+        if cur_li._PosY < 0:
+            for i in range(0, len(self._MyList)):
+                self._MyList[i]._PosY += self._MyList[i]._Height
+
+            self._Scrolled_cnt += self._MyList[i]._Height
+
     def KeyDown(self,event):
         if IsKeyMenuOrB(event.key):
 
@@ -1091,12 +1119,16 @@ class GameStorePage(Page):
             self.ScrollUp()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
+
         if event.key == CurKeys["Down"]:
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-    
+    def RestoreScrolled(self):
+        for i in range(0, len(self._MyList)):
+            self._MyList[i]._PosY += self._Scrolled_cnt
+
     def Draw(self):
 
         self.ClearCanvas()
