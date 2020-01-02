@@ -17,7 +17,7 @@ from icon_item   import IconItem
 from multi_icon_item import MultiIconItem
 from icon_pool   import MyIconPool
 from lang_manager import MyLangManager
-from util_funcs  import midRect,SwapAndShow
+from util_funcs  import midRect,SwapAndShow,FileExists
 from skin_manager import MySkinManager
 from widget      import Widget
 from config import Battery,RPC
@@ -284,7 +284,8 @@ class TitleBar(Widget):
         dlstatus =  MultiIconItem()
         dlstatus._MyType = ICON_TYPES["STAT"]
         dlstatus._Parent = self
-        dlstatus._ImageName = icon_base_path+"dlstatus18.png"
+        if FileExists(icon_base_path+"dlstatus18.png"):
+            dlstatus._ImageName = icon_base_path+"dlstatus18.png"
         dlstatus.Adjust(start_x+self._icon_width+self._icon_width+8,self._icon_height/2+(self._BarHeight-self._icon_height)/2,self._icon_width,self._icon_height,0)
         
         self._Icons["dlstatus"] = dlstatus
