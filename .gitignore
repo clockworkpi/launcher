@@ -22,3 +22,4 @@ screenshots/*
 .DS_Store
 sys.py/.*
 sys.py/*.db
+launcher.sublime-workspace
