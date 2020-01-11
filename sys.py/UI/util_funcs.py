@@ -12,6 +12,7 @@ import subprocess
 import string
 from Xlib import X,display
 import config
+from constants   import Width,Height
 
 def get_git_revision_hash():
     return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
@@ -109,6 +110,13 @@ def DrawText(canvas,text, x,y,width,height,canWidth,canHeight,fontObj):# text fo
 
 
 def SwapAndShow():
+    screen = pygame.display.get_surface()
+    if config.GlobalScale > 1:
+        tmp = pygame.transform.scale(config.GlobalCanvas,(Width*config.GlobalScale,Height*config.GlobalScale))
+        screen.blit(tmp,(0,0,Width*config.GlobalScale,Height*config.GlobalScale))
+    elif config.GlobalScale == 1:
+        screen.blit(config.GlobalCanvas,(0,0,Width,Height))
+        
     pygame.display.update()
 
 def ArmSystem(cmd):

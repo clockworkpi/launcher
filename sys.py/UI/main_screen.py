@@ -20,7 +20,7 @@ from page        import Page,PageStack
 from title_bar   import TitleBar
 from foot_bar    import FootBar
 from constants   import Width,Height
-from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable
+from util_funcs  import midRect,FileExists,ReplaceSuffix,ReadTheFileContent,CmdClean,MakeExecutable,SwapAndShow
 from keys_def    import CurKeys
 from label       import Label
 from untitled_icon import UntitledIcon
@@ -361,7 +361,7 @@ class MainScreen(Widget):
             return
         if self._HWND != None:
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width,self._Height))
-            pygame.display.update()
+            SwapAndShow()
             
     def ExtraName(self,name):
         ## extra name like 1_xxx to be => xxx, 
