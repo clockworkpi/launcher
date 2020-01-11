@@ -85,6 +85,8 @@ def PreparationInAdv():
             GlobalScale = 2
         if "480x640" in modes:
             GlobalScale = 2
+    else:
+        GlobalScale = 1
     
     RPC = Xmlrpc('localhost', 6800)
 PreparationInAdv()
