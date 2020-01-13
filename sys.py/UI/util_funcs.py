@@ -112,8 +112,8 @@ def DrawText(canvas,text, x,y,width,height,canWidth,canHeight,fontObj):# text fo
 def SwapAndShow():
     screen = pygame.display.get_surface()
     if config.GlobalScale > 1:
-        tmp = pygame.transform.scale(config.GlobalCanvas,(Width*config.GlobalScale,Height*config.GlobalScale))
-        screen.blit(tmp,(0,0,Width*config.GlobalScale,Height*config.GlobalScale))
+        pygame.transform.scale(config.GlobalCanvas,(Width*config.GlobalScale,Height*config.GlobalScale),config.GlobalCanvas2)
+        screen.blit(config.GlobalCanvas2,(0,0,Width*config.GlobalScale,Height*config.GlobalScale))
     elif config.GlobalScale == 1:
         screen.blit(config.GlobalCanvas,(0,0,Width,Height))
         

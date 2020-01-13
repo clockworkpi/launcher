@@ -663,6 +663,7 @@ if __name__ == '__main__':
         exit()
 
     config.GlobalCanvas = pygame.Surface((Width,Height),0,32)
+    config.GlobalCanvas2 = pygame.Surface(SCREEN_SIZE ,0,32)
     
     crt_screen = CreateByScreen()
     crt_screen.Init()

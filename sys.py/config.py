@@ -34,6 +34,7 @@ PowerLevels["balance_saving"] = [40,0,0]
 PowerLevel = "balance_saving"
 
 GlobalCanvas=None
+GlobalCanvas2=None
 GlobalScale = 1
 
 def PreparationInAdv():
