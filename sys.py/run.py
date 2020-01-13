@@ -640,7 +640,7 @@ if __name__ == '__main__':
     os.chdir( os.path.dirname(os.path.realpath(__file__)) )
     
     SCREEN_SIZE = (Width*config.GlobalScale,Height*config.GlobalScale)
-    screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
+    screen = pygame.display.set_mode(SCREEN_SIZE,pygame.DOUBLEBUF | pygame.HWSURFACE, 32)
 
     pygame.event.set_allowed(None) 
     pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])

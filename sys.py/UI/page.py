@@ -106,7 +106,7 @@ class Page(Widget):
     _FootMsg = ["Nav", "", "", "", "Enter"]  # Default Page Foot info
     _Wallpaper = None
     _SelectedIconTopOffset = 20
-    _EasingDur = 30
+    _EasingDur = 20/config.GlobalScale
     _Padding = pygame.Rect(0, 0, 0, 0)  # x,y,w,h
     _Margin = pygame.Rect(0, 0, 0, 0)
     _ScrollStep = 1
