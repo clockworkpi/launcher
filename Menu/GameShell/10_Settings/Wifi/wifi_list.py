@@ -10,7 +10,7 @@ from wicd import misc
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.util_funcs import midRect,SwapAndShow
+from UI.util_funcs import midRect,SwapAndShow,FileExists,ReadTheFileContent
 from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.confirm_page import ConfirmPage
@@ -82,7 +82,11 @@ class WifiInfoPage(Page):
                     self._AList["ip"]["value"] = ip
             
             self._AList["bssid"]["value"] = self._Wireless.GetWirelessProperty(self._NetworkId,"bssid")
-        
+            if FileExists("/sys/class/net/wlan0/address"):
+                self._AList["mac_addr"]["value"] = ReadTheFileContent("/sys/class/net/wlan0/address").strip().upper()
+            else:
+                self._AList["mac_addr"]["value"] = ""
+
         start_x  = 0
         start_y  = 0
         
@@ -130,10 +134,16 @@ class WifiInfoPage(Page):
         bssid["key"] = "bssid"
         bssid["label"] = "BSSID"
         bssid["value"] = ""
-        
+
+        mac_addr = {}
+        mac_addr["key"] = "mac_addr"
+        mac_addr["label"] = "MAC ADDR"
+        mac_addr["value"] = ""
+       
         self._AList["ip"] = ip
         self._AList["bssid"] = bssid
-        
+        self._AList["mac_addr"] = mac_addr
+
         self.GenList()
 
         self._DisconnectConfirmPage = WifiDisconnectConfirmPage()
