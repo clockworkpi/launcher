@@ -585,7 +585,7 @@ def socket_thread(main_screen):
                                   main_screen._TitleBar.Redraw()
                     
 
-def big_loop():
+def big_loop(screen):
     global sound_patch,gobject_flash_led1
     
     title_bar = TitleBar()
@@ -639,8 +639,8 @@ if __name__ == '__main__':
     
     os.chdir( os.path.dirname(os.path.realpath(__file__)) )
     
-    SCREEN_SIZE = (Width,Height)
-    screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
+    SCREEN_SIZE = (Width*config.GlobalScale,Height*config.GlobalScale)
+    screen = pygame.display.set_mode(SCREEN_SIZE,pygame.DOUBLEBUF | pygame.HWSURFACE, 32)
 
     pygame.event.set_allowed(None) 
     pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
@@ -662,10 +662,12 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
+    config.GlobalCanvas = pygame.Surface((Width,Height),0,32)
+    config.GlobalCanvas2 = pygame.Surface(SCREEN_SIZE ,0,32)
     
     crt_screen = CreateByScreen()
     crt_screen.Init()
-    crt_screen._HWND = screen 
+    crt_screen._HWND = config.GlobalCanvas
     
-    big_loop()
+    big_loop(config.GlobalCanvas)
     
