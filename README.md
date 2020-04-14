@@ -46,7 +46,7 @@ sudo apt-get -y install mpd ncmpcpp git libuser
 sudo apt-get -y install python-wicd  wicd wicd-curses python-pycurl python-alsaaudio python-pygame python-gobject python-xlib   
 
 sudo apt-get -y install python-pip   
-sudo pip install validators numpy requests python-mpd2
+sudo pip install validators numpy requests python-mpd2 beeprint
 ```
 
 ### With pip install and virtualenv
