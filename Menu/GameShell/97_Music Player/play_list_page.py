@@ -235,9 +235,10 @@ class PlayListPage(Page):
                         self._MyList[i]._PosY += self._Scrolled * self._MyList[i]._Height
             
     def Click(self):
+        self.RefreshPsIndex()
         if len(self._MyList) == 0:
             return
-        
+         
         cur_li = self._MyList[self._PsIndex]
         play_pos_id = myvars.Poller.play(self._PsIndex)
 

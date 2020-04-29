@@ -196,6 +196,7 @@ class MusicLibListPage(Page):
         self._Scroller.Init()
         
     def Click(self):
+        self.RefreshPsIndex()
         if len(self._MyList) == 0:
             return
         
