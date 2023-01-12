@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import pygame
 import sys
@@ -24,19 +24,19 @@ class ListPage(Page):
 
     _Icons = {}
     _Selector=None
-    
+
     _FootMsg = ["Nav","","","Back","Enter"]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
 
     _Scroller = None
-    
+
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}
         self._CanvasHWND = None
         self._MyList = []
-        
+
     def Init(self):
         self._PosX = self._Index * self._Screen._Width
         self._Width = self._Screen._Width
@@ -68,13 +68,14 @@ class ListPage(Page):
                          ["","ButtonsLayout","Buttons Layout"],
                          ["","Skins","Theme Manager"],
                          ["","LauncherGo","Switch to LauncherGo"],
+                         ["","LauncherGodot","Switch to LauncherGodot"],
                          ["","Lima","GPU Driver Switch"],
                          ["","GateWay","Network gateway switch"]]
 
         start_x  = 0
         start_y  = 0
 
-        
+
         sys.path.append(myvars.basepath)# add self as import path
         for i,v in enumerate(alist):
             li = ListItem()
@@ -88,7 +89,7 @@ class ListPage(Page):
                 li.Init(v[2])
             else:
                 li.Init(v[1])
-            
+
             #if v[1] == "Wifi" or v[1] == "Sound" or v[1] == "Brightness" or v[1] == "Storage" or v[1] == "Update" or v[1] == "About" or v[1] == "PowerOFF" or v[1] == "HelloWorld":
             if FileExists(myvars.basepath+"/"+ v[1]):
                 li._LinkObj = __import__(v[1])
@@ -96,7 +97,7 @@ class ListPage(Page):
                 if init_cb != None:
                     if callable(init_cb):
                         li._LinkObj.Init(self._Screen)
-                
+
                 self._MyList.append(li)
 
         self._Scroller = ListScroller()
@@ -113,13 +114,13 @@ class ListPage(Page):
                 if callable(api_cb):
                     cur_li._LinkObj.API(self._Screen)
 
-        
+
     def KeyDown(self,event):
         if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-        
+
         if event.key == CurKeys["Up"]:
             self.ScrollUp()
             self._Screen.Draw()
@@ -128,22 +129,22 @@ class ListPage(Page):
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
-        
+
 
         if IsKeyStartOrA(event.key):
             self.Click()
-            
+
     def Draw(self):
         self.ClearCanvas()
 
         if len(self._MyList) * ListItem._Height > self._Height:
             self._Ps._Width = self._Width - 11
-            
+
             self._Ps.Draw()
-            
+
             for i in self._MyList:
                 i.Draw()
-        
+
             self._Scroller.UpdateSize( len(self._MyList)*ListItem._Height, self._PsIndex*ListItem._Height)
             self._Scroller.Draw()
         else:
@@ -152,4 +153,4 @@ class ListPage(Page):
             for i in self._MyList:
                 i.Draw()
 
-            
+
