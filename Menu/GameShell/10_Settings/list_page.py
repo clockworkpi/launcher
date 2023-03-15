@@ -69,7 +69,9 @@ class ListPage(Page):
                          ["","Skins","Theme Manager"],
                          ["","LauncherGo","Switch to LauncherGo"],
                          ["","Lima","GPU Driver Switch"],
-                         ["","GateWay","Network gateway switch"]]
+                         ["","GateWay","Network gateway switch"],
+                         ["","BranchSelect","Git Branch Select"]
+                        ]
 
         start_x  = 0
         start_y  = 0
